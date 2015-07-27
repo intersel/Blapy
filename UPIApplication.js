@@ -40,6 +40,11 @@
 	theUPIApplication.prototype.InitApplication	= function() 
 	{
 		this._log('InitApplication');
+		
+		//change href on upi-link
+		$('[data-upi-link]').each(function() {
+			$(this).attr("href",'#/'+$(this).attr("href")); 
+		});
 
 		//Standard Routing definition
 		var app = Sammy('#'+this.myUIObjectID);
@@ -108,7 +113,7 @@
 	}
 
 	$.fn.UPIApplication = function(options) {
-
+		if (!this.length) alert("The jquery selector '"+this.selector+"' is void!?\n\n Can\'t start UPI application...\n\n :-(");
 		return this.each(function() {
 			var UPIApplication = new theUPIApplication($(this), options);
 			UPIApplication.InitApplication();	//start it
