@@ -6,6 +6,16 @@ Everyone using a (php) CMS that generates web pages and would like to transform 
 
 Everyone that would like to keep the way he builds websites but would like to have it behaves like an web application.
 
+#Why should I use that?!
+The concept of web application getting data through REST Api with a client application that is doing the job of connecting the whole 
+to build an application is generally a difficult job whereas PHP websites built on a standard CMS are easy to handle and do this job quite naturally...
+
+So, the idea is to provide a simple environment that don't change your habits when creating your website:
+* no complicated framework to understand like AngularJS to build your application
+* building the pages don't change from the old normal way
+* configuration is really simple and quite natural: quite nothing to do :-)
+
+
 #How does it work? the "Hello world" example...
 
 let's have a first html file test1.html 
@@ -13,8 +23,8 @@ let's have a first html file test1.html
 <body id="myUPIApplication">
   <p>I'm test1.html file</p>
   <ul>
-  	<li><a href="test1.html?action=update" data-upi-link="true">Hello World!</a></li>
-  	<li><a href="test2.html?action=update" data-upi-link="true">HowDy?</a></li>
+  	<li><a href="test1.html" data-upi-link="true">Hello World!</a></li>
+  	<li><a href="test2.html" data-upi-link="true">HowDy?</a></li>
   </ul>
   <div id="mainContainer" data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="helloWorld">
   	Hello World
@@ -27,8 +37,8 @@ and a second one test2.html that is quite the same (let's imagine these files ar
 <body id="myUPIApplication">
   <p>I am test2.html file</p>
   <ul>
-  	<li><a href="test1.html?action=update" data-upi-link="true">Hello World!</a></li>
-  	<li><a href="test2.html?action=update" data-upi-link="true">HowDy?</a></li>
+  	<li><a href="test1.html" data-upi-link="true">Hello World!</a></li>
+  	<li><a href="test2.html" data-upi-link="true">HowDy?</a></li>
   </ul>
   <div data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="HowDy?">
 	  How is it going?
@@ -51,8 +61,45 @@ You will then see that when clicking on the page links, only the 'data-upi-conta
 
 Tada! you've got a web application :-)
 
+General algorithm of UPI Application
+====================================
+
+The general algorithm of UPI Application is the following:
+* when a link is called (clicked), 
+  * get the new content of the new page through an ajax call
+  * get all the "upi-container" of the current page
+  * for each "upi-container" of the current page
+    * Get the "upi-container" with the same name ("upi-container-name") from the new page
+    * Compare "upi-container-content : is the "upi-container-content" different between the current one and the new one?
+      * if "yes", then change the "upi-container" with the new one
+
+How to configure my pages to become pages of a web application?
+===============================================================
+
+Follow these steps :
+* Identify the common blocks between your pages. When you use a CMS, these blocks are the one you identified when building your website.
+* Tell to UPIApplication that these blocks are the one that may be updated from page to page, using "data-upi-container" attribute set to true and giving a name to the container with the "data-upi-container-name" attribute.
+* Tell what are the links that may update your content using the "data-upi-link" attribute.
+* Call UPIApplication script...
+
+That's it: your blocks will be automatically updated from ajax calls to the other pages according to your configuration.
+
+
 .UPIApplication(options)
 ========================
+
+UPIApplication is the jQuery function that starts your web application.
+
+It can take 'options' as input with the following possible option parameters :
+* debug: (default:false) if true, then log things in the console
+* LogLevel: (default:3) log level: 1: error ; 2: warning; 3: notice
+* AlertError: (default:false) show an alert box on error messages if true
+* pageLoadedFunction: (default:null) function to call when the page is loaded
+* pageReadyFunction: (default:null) function to call when the page is ready
+* beforePageChange: (default:null) function to call when the page will have its content changed
+* afterPageChange: (default:null) function to call when the page had its content changed
+* onErrorOnPageChange: (default:null) function to call when the page got an error during change
+  
 
 
 LIBRARY DEPENDENCIES
