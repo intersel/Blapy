@@ -1,19 +1,21 @@
 # UPIApplication
-UPIApplication is a jQuery library that transforms a normal web site in an web application.
+UPIApplication is a jQuery library that transforms a normal web site in a web application.
 
 #Who could need it?
 Everyone using a (php) CMS that generates web pages and would like to transform his website to an application-like website, ie that does not reload each page during the user navigation but only the needed block within the page.
 
-Everyone that would like to keep the way he builds websites but would like to have it behaves like an web application.
+Everyone that would like to keep the way he builds websites but would like to have it behaves like a web application.
 
 #Why should I use that?!
 The concept of web application getting data through REST Api with a client application that is doing the job of connecting the whole 
 to build an application is generally a difficult job whereas PHP websites built on a standard CMS are easy to handle and do this job quite naturally...
+Except that we reload the pages... or we need to do ajax calls to update part of our pages...
 
-So, the idea is to provide a simple environment that don't change your habits when creating your website:
+So, the idea is to provide a simple environment that don't change your habits when creating your website without having the hassle of creating ajax calls:
 * no complicated framework to understand like AngularJS to build your application
 * building the pages don't change from the old normal way
 * configuration is really simple and quite natural: quite nothing to do :-)
+* the history of browsing is kept
 
 
 #How does it work? the "Hello world" example...
@@ -66,7 +68,7 @@ General algorithm of UPI Application
 
 The general algorithm of UPI Application is the following:
 * when a link is called (clicked), 
-  * get the new content of the new page through an ajax call
+  * get the new content from the clicked page through an ajax call
   * get all the "upi-container" of the current page
   * for each "upi-container" of the current page
     * Get the "upi-container" with the same name ("upi-container-name") from the new page
