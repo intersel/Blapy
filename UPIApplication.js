@@ -17,6 +17,7 @@
 				beforePageChange	: null,
 				afterPageChange		: null,
 				onErrorOnPageChange	: null,
+				theUPIApplication	: this,
 				
 		};
 
@@ -41,11 +42,6 @@
 	{
 		this._log('InitApplication');
 		
-		//change href on upi-link
-		$('[data-upi-link]').each(function() {
-			$(this).attr("href",'#/'+$(this).attr("href")); 
-		});
-
 		//Standard Routing definition
 		var app = Sammy('#'+this.myUIObjectID);
 		
@@ -56,7 +52,7 @@
 			//do nothing
 		});
 
-		app.get('#/:nameUrl', function() 
+		app.get(/\#\/(.*)/, function() 
 		{
 			if(!this.params['action']) this.params['action']='update';
 
@@ -120,6 +116,22 @@
 		});
 	};
 	
+	/**
+	* set # tag in the UPI Url
+	* returns 0 if none
+	*/
+	theUPIApplication.prototype.setUPIUrl = function ()
+	{
+		this._log('setUPIUrl');
+
+		//change href on upi-link
+		$('[data-upi-link]').each(function() {
+			if ($(this).attr("href").indexOf('#') == -1) {
+				$(this).attr("href",$(this).attr("href")+'#/'+$(this).attr("href"));
+			} 
+		});
+	}
+
 	
 	/* var & function definitions */	
 	var manageUPIApplication = {
@@ -138,6 +150,8 @@
             enterState:   
             {
                 init_function: function(){
+                	// set #tag to the UPI url
+            		this.opts.theUPIApplication.setUPIUrl();
 					if (this.opts.pageReadyFunction) this.opts.pageReadyFunction();
 				}
             },
