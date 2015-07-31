@@ -1,3 +1,32 @@
+/**
+ * -----------------------------------------------------------------------------------------
+ * INTERSEL - 4 cité d'Hauteville - 75010 PARIS
+ * RCS PARIS 488 379 660 - NAF 721Z
+ *
+ * File : UPIApplication.js
+ * UPIApplication : a jquery plugin that helps to handle and manage an ajax web application 
+ * 					from a usual way of generating web pages like with php or a standard CMS
+ *
+ * -----------------------------------------------------------------------------------------
+ * Modifications :
+ * - 2015/07/25 - E.Podvin - V1.0.0 - Creation
+ * - 2015/07/31 - E.Podvin - V1.0.1
+ * -----------------------------------------------------------------------------------------
+ *
+ * @copyright Intersel 2015
+ * @fileoverview : a jquery plugin that helps to handle and manage an ajax web application from a usual way of generating web pages like with php or a standard CMS
+ * @see {@link https://github.com/intersel/UPIApplication}
+ * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
+ * @version : 1.0.1
+ * -----------------------------------------------------------------------------------------
+ */
+
+/**
+ * How to use it :
+ * ===============
+ *
+ * see README.md content or consult it on https://github.com/intersel/UPIApplication
+ */
 
 (function($) {
  
@@ -47,11 +76,6 @@
 		
 		var myUIApplication = this;
 		
-		app.get('#/', function() 
-		{
-			//do nothing
-		});
-
 		app.get(/\#\/(.*)/, function() 
 		{
 			if(!this.params['action']) this.params['action']='update';
@@ -66,7 +90,8 @@
 		});
 		
 		this.myUIObject.iFSM(manageUPIApplication,this.opts);
-		app.run('#/');
+		//app.run('#/');
+		app.run(window.location.pathname+"#"+window.location.pathname);
 
 	};//
 	
@@ -141,6 +166,7 @@
             {
                 init_function: function(){
 					if (this.opts.pageLoadedFunction) this.opts.pageLoadedFunction();
+					this.myUIObject.trigger('UPIApplication_PageLoaded');
 				},
                 next_state: 'PageReady'
             },
@@ -151,14 +177,16 @@
             {
                 init_function: function(){
                 	// set #tag to the UPI url
-            		this.opts.theUPIApplication.setUPIUrl();
-					if (this.opts.pageReadyFunction) this.opts.pageReadyFunction();
+                	this.opts.theUPIApplication.setUPIUrl();
+                	if (this.opts.pageReadyFunction) this.opts.pageReadyFunction();
+					this.myUIObject.trigger('UPIApplication_PageReady');
 				}
             },
             loadUrl:   
             {
                 init_function: function(){
 					if (this.opts.beforePageChange) this.opts.beforePageChange();
+					this.myUIObject.trigger('UPIApplication_beforePageChange');
 				},
                 out_function: function(p,e,data){
 					var aFSM = this;
@@ -167,6 +195,7 @@
 					jQuery.ajax({
 						  type: 'GET', 
 						  url: aUrl, 
+						  data: "upicall=1&upiaction="+params.action,
 						  success: function(data, textStatus, jqXHR) {
 							aFSM.trigger('pageLoaded',{htmlPage:data,params:params});
 						  },
@@ -216,6 +245,7 @@
 				},
                 out_function: function(p,e,data){
 					if (this.opts.afterPageChange) this.opts.afterPageChange();
+					this.myUIObject.trigger('UPIApplication_afterPageChange');
 				},
                 next_state: 'PageReady',
             },
@@ -230,6 +260,7 @@
             {
                 init_function: function(){
 					if (this.opts.onErrorOnPageChange) this.opts.onErrorOnPageChange();
+					this.myUIObject.trigger('UPIApplication_ErrorOnPageChange');
 				},
                 next_state: 'PageReady',
             },
