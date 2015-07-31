@@ -81,8 +81,8 @@ Tada! you've got a web application :-)
   </div>
 ```
 * Tell to UPIApplication that these blocks are the one that may be updated from page to page :
-  * add a "data-upi-container" attribute set to true tells this container is a UPIApplication container, common for multiple pages
-  * give a name to the container with the "data-upi-container-name" attribute identifies each unique content 
+  * add a "data-upi-container" attribute set to true in order to configure this container as a UPIApplication container, container name that will be shared with multiple pages
+  * give a name identifier to the container with the "data-upi-container-name" attribute in order to identify this content as unique. Each page that has a unique content to be used to update block content should have a unique name identifier here.
 ```html
   <div id="myContainer"  data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="Howisitgoing">
 	  How is it going?
@@ -138,7 +138,7 @@ The general algorithm of UPI Application is the following:
 
 #.UPIApplication(options)
 
-UPIApplication is the jQuery function that starts your web application.
+UPIApplication is the jQuery function that starts your web application.	
 ```
 $("#<an id of the body tag>").UPIApplication(options);
 ```
@@ -154,7 +154,10 @@ Options is a javascript object. It can take as input the following possible opti
 * afterPageChange: (default:null) function to call when the page had its content changed
 * onErrorOnPageChange: (default:null) function to call when the page got an error during change
 
-##Example: $('#bodyId').UPIApplication({debug:true,LogLevel:2})
+##Example: 
+```
+$('#bodyId').UPIApplication({debug:true,LogLevel:2})
+```
 
 #.Triggered events
 UPIApplication generates the following events:
