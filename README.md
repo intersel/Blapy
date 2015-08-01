@@ -24,10 +24,10 @@ So, the idea is to provide a simple environment that don't change your habits wh
 * configuration is really simple and quite natural: it uses html5 "data" attributes to be configured and there is quite nothing to do from an existing website :-)
 * the history of browsing is kept
 
-#Have a look on the (really simple) demo
+#Have a look on the "Hello World" demo
 [Go and see the demo: http://www.intersel.net/demos/intersel/UPIApplication/demos/helloworld/](http://www.intersel.net/demos/intersel/UPIApplication/demos/helloworld/)
 
-#How does it work? the "Hello world" example...
+#How does it work?
 
 let's have a first html file test1.html with some blocks with special attributes we will see later on...
 ```html
@@ -42,8 +42,12 @@ let's have a first html file test1.html with some blocks with special attributes
   </div>
 </body>
 ```
+**Let's imagine now that you would like that the website loads and updates only the "mainContainer" part without updating the whole page when we click on the test2.html link...**
 
-and a second one test2.html that is quite the same (let's imagine these files are php generated...) with a new content in the "mainContainer" part :
+You know that you would need to call a URL in ajax, get the new content from the server and update the container with jQuery html function... 
+Perhaps meet some problem with the browser history when going back... etc... etc...
+
+With UPI Application, just create your second test2.html file as usual: it will be quite the same than test1.html (let's imagine the files are php generated...) with a new content in the "mainContainer" part :
 ```html
 <body id="myUPIApplication">
   <h1>I am test2.html file</h1>
@@ -58,10 +62,6 @@ and a second one test2.html that is quite the same (let's imagine these files ar
 ```
 
 These two html files will load and behave normally if you load them and click the links.
-
-**Let's imagine now that you would like that the website load and update only the "mainContainer" part without updating the whole page...**
-
-You know that you would need to call a URL in ajax, get the new content and update the container...
  
 Well, just add at the end of your files this little script :
 

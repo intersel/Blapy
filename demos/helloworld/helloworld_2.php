@@ -12,6 +12,7 @@ include("header.php");
 	<div style="border:solid 1px blue;margin:20px;padding:20px;">
 		<div data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="How is it going?">
 			<h1>How is it going?</h1>
+			<p>Click on the "Hello world!" link to load back its content...</p> 
 		</div>
 	</div>
 	<div style="font-size:80%">

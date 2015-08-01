@@ -11,10 +11,11 @@ include("header.php");
 	<div style="border:solid 1px green;margin:20px;padding:20px;">
 		<div data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="HelloWorld">
 			<h1>Hello World!</h1>
+			<p>This is a "Hello World" content</p>
 		</div>
 	</div>	
 	<div style="font-size:80%">
-		<a href="index.php">normal "Hello World" Link</a> - <a href="helloworld_2.php">normal "How is it going" Link</a>
+		<a href="index.php">normal "Hello World" Link</a> - <a href="helloworld_2.php">normal "How is it going" Link</a><br>
 	</div>
 </body>
 <script>$("#myUPIApplication").append('<h3>HTML code of the page</h3>').append(jQuery('<pre />').text($('#myUPIApplication').html())) </script>
