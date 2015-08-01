@@ -1,6 +1,6 @@
 # UPIApplication
 UPIApplication is a jQuery plugin that helps you to handle and manage an ajax web application from a usual way of generating web pages like with php or a standard CMS.
-It may help you to transforms your "normal" web site in a web application, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
+It may help you to transform your "normal" web site in a web application, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
 
 #Who could need it?
 Everyone using a (php) CMS that generates web pages and would like to transform his website to an application-like website, ie that does not reload each page during the user navigation but only the needed block within the page.
@@ -146,14 +146,14 @@ $("#<an id of the body tag>").UPIApplication(options);
 
 ##Options
 Options is a javascript object. It can take as input the following possible option parameters :
-* debug: (default:false) if true, then log things in the console
-* LogLevel: (default:3) log level: 1: error ; 2: warning; 3: notice
-* AlertError: (default:false) show an alert box on error messages if true
-* pageLoadedFunction: (default:null) function to call when the page is loaded
-* pageReadyFunction: (default:null) function to call when the page is ready
-* beforePageChange: (default:null) function to call when the page will have its content changed
-* afterPageChange: (default:null) function to call when the page had its content changed
-* onErrorOnPageChange: (default:null) function to call when the page got an error during change
+* **debug**: (default:false) if true, then log things in the console
+* **LogLevel**: (default:3) log level: 1: error ; 2: warning; 3: notice
+* **AlertError**: (default:false) show an alert box on error messages if true
+* **pageLoadedFunction**: (default:null) function to call when the page is loaded
+* **pageReadyFunction**: (default:null) function to call when the page is ready
+* **beforePageChange**: (default:null) function to call when the page will have its content changed
+* **afterPageChange**: (default:null) function to call when the page had its content changed
+* **onErrorOnPageChange**: (default:null) function to call when the page got an error during change
 
 ##Example: 
 ```
@@ -162,11 +162,20 @@ $('#bodyId').UPIApplication({debug:true,LogLevel:2})
 
 #Triggered events
 UPIApplication generates the following events:
-* UPIApplication_PageLoaded - triggered when a page is fully and normally loaded. 
-* UPIApplication_PageReady - triggered when the page is ready, after a loading page or a change in the page.
-* UPIApplication_beforePageChange - triggered before a page content will change 
-* UPIApplication_afterPageChange- triggered after a page content has changed
-* UPIApplication_ErrorOnPageChange - triggered when an error occured during a page content change 
+* **UPIApplication_PageLoaded** - triggered when a page is fully and normally loaded. 
+* **UPIApplication_PageReady** - triggered when the page is ready, after a loading page or a change in the page.
+* **UPIApplication_beforePageChange** - triggered before a page content will change 
+* **UPIApplication_afterPageChange** - triggered after a page content has changed
+* **UPIApplication_ErrorOnPageChange** - triggered when an error occured during a page content change. 
+  * Parameters:
+    anError: the error message
+
+To listen to UPI events, you may use the jQuery 'on' function as in this example:
+```
+$("#myUPIApplication").on( "UPIApplication_ErrorOnPageChange", function(event,anError) {
+			  alert( anError );
+			}); 
+```
 
 #Sending events to UPI Application
 
@@ -212,12 +221,11 @@ To work properly, you need to include the following javascript library:
   * Sammy is a little framework to make web application providing simple but efficient 'route' services
 
 #FAQ
-##When a UPI link is called, do the server need to send a full HTML page with a body and ...
-No, you can optimize your code by only sending the useful UPI blocks. 
-
 If you have questions or unsolved problems, you can have a look on the our [FAQs](https://github.com/intersel/UPIApplication/wiki) 
 or leave a message on the [Issue board](https://github.com/intersel/UPIApplication/issues).
 
+##When a UPI link is called, do the server need to send a full HTML page with a body and ...
+No, you can optimize your code by only sending the useful UPI blocks. 
 
 #Contact
 If you have any ideas, feedback, requests or bug reports, you can reach me at github@intersel.org, 
