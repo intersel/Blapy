@@ -160,19 +160,42 @@ Options is a javascript object. It can take as input the following possible opti
 $('#bodyId').UPIApplication({debug:true,LogLevel:2})
 ```
 
-#.Triggered events
+#Triggered events
 UPIApplication generates the following events:
-## UPIApplication_PageLoaded
-triggered when a page is fully and normally loaded. 
-## UPIApplication_PageReady
-triggered when the page is ready, after a loading page or a change in the page.
-## UPIApplication_beforePageChange
-triggered before a page content will change 
-## UPIApplication_afterPageChange
-triggered after a page content has changed 
-## UPIApplication_ErrorOnPageChange
-triggered when an error occured during a page content change 
+* UPIApplication_PageLoaded - triggered when a page is fully and normally loaded. 
+* UPIApplication_PageReady - triggered when the page is ready, after a loading page or a change in the page.
+* UPIApplication_beforePageChange - triggered before a page content will change 
+* UPIApplication_afterPageChange- triggered after a page content has changed
+* UPIApplication_ErrorOnPageChange - triggered when an error occured during a page content change 
 
+#Sending events to UPI Application
+
+You can activate some features of UPI Application by sending events to it with the 'trigger' function of jQuery:
+```
+$('#< id of the body tag>').trigger(<anEvent>,{aUrl:<aURL to call>,params:<someParameters>)
+```
+
+##loadURL
+This event allows you to call a URL.
+
+```
+$('#< id of the body tag>').trigger('loadUrl',{aUrl:<aURL to call>,params:{action:<anAction>}})
+```
+###params
+* action
+  * 'update': update the UPI blocks from the URL
+###Example
+```
+$('#myUPIApplication').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action:'update'}})
+```
+
+#UPI parameters sent when calling a URL
+When UPI Application calls a 'UPI Link', the following parameters are sent as GET parameters:
+* upicall=1 - tells that the call is coming from UPI Application
+* upiaction=<anAction> -tells the kind of action that will be operated
+  * update: blocks will be updated
+  
+Knowing these parameters allow you to optimize the generated html returned by the server to the client, so sending back only the useful html blocks instead of the full html page. 
 
 #LIBRARY DEPENDENCIES
 To work properly, you need to include the following javascript library:
@@ -189,6 +212,8 @@ To work properly, you need to include the following javascript library:
   * Sammy is a little framework to make web application providing simple but efficient 'route' services
 
 #FAQ
+##When a UPI link is called, do the server need to send a full HTML page with a body and ...
+No, you can optimize your code by only sending the useful UPI blocks. 
 
 If you have questions or unsolved problems, you can have a look on the our [FAQs](https://github.com/intersel/UPIApplication/wiki) 
 or leave a message on the [Issue board](https://github.com/intersel/UPIApplication/issues).

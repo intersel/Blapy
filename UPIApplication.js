@@ -129,7 +129,7 @@
 		this._log('hashURL');
 
 		if (!aURL) aURL = window.location.href;
-		var results = new RegExp('[\#][/](.*)').exec(aURL);
+		var results = new RegExp('[\#](.*)').exec(aURL);
 		return results[1] || 0;
 	}
 
@@ -152,7 +152,9 @@
 		//change href on upi-link
 		$('[data-upi-link]').each(function() {
 			if ($(this).attr("href").indexOf('#') == -1) {
-				$(this).attr("href",$(this).attr("href")+'#/'+$(this).attr("href"));
+				var aHref = $(this).attr("href");
+				if(aHref.charAt(0) != '/') aHref = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1)+aHref;
+				$(this).attr("href",aHref+'#'+aHref);
 			} 
 		});
 	}
@@ -200,7 +202,7 @@
 							aFSM.trigger('pageLoaded',{htmlPage:data,params:params});
 						  },
 						  error: function(jqXHR, textStatus, errorThrown) {
-							aFSM.trigger('errorOnLoadingPage');
+							aFSM.trigger('errorOnLoadingPage',aUrl+': '+errorThrown);
 						  }
 						});
 				},
@@ -251,16 +253,9 @@
             },
             errorOnLoadingPage:   
             {
-                next_state: 'ErrorOnPageChange',
-            },
-        },
-        ErrorOnPageChange: 
-        {
-            enterState:   
-            {
-                init_function: function(){
-					if (this.opts.onErrorOnPageChange) this.opts.onErrorOnPageChange();
-					this.myUIObject.trigger('UPIApplication_ErrorOnPageChange');
+                init_function: function(p,e,data){
+					if (this.opts.onErrorOnPageChange) this.opts.onErrorOnPageChange(data);
+					this.myUIObject.trigger('UPIApplication_ErrorOnPageChange',[data]);
 				},
                 next_state: 'PageReady',
             },
