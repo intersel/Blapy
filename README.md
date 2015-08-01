@@ -1,19 +1,24 @@
 # UPIApplication
-UPIApplication is a jQuery plugin that helps you to handle and manage an ajax web application from a usual way of generating web pages like with php or a standard CMS.
-It may help you to transform your "normal" web site in a web application, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
+UPIApplication is a jQuery plugin that helps you to create and manage an ajax web application.
 
-#Who could need it?
+The web application is build from the usual way of generating web pages like with php or a standard CMS.
+
+So, it may help you to transform your "normal" web site in a web application too, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
+
+#Who may need it?
 Everyone using a (php) CMS that generates web pages and would like to transform his website to an application-like website, ie that does not reload each page during the user navigation but only the needed block within the page.
 
 Everyone that would like to keep the way he builds websites but would like to have it behaves like a web application.
 
+The ones who gave up with AngularJS and other javascript frameworks to build web app... like me ;-)
+
 #Why should I use that?!
-The concept of web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is generally a difficult job whereas PHP websites built on a standard CMS are easy to handle and do this job quite naturally...
+The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is generally a difficult job whereas PHP websites built on a standard CMS are easy to handle and do this job quite naturally...
 
 Except that we reload pages when clicking a link... or we need to do ajax calls to update part of our pages...
 
 So, the idea is to provide a simple environment that don't change your habits when creating your website without having the hassle of creating ajax calls:
-* no complicated framework to understand like AngularJS to build your application
+* no complicated framework to understand to build your application
 * no REST or Ajax url end points to develop
 * building the pages don't change from the old normal way
 * configuration is really simple and quite natural: it uses html5 "data" attributes to be configured and there is quite nothing to do from an existing website :-)
@@ -168,7 +173,7 @@ UPIApplication generates the following events:
 * **UPIApplication_afterPageChange** - triggered after a page content has changed
 * **UPIApplication_ErrorOnPageChange** - triggered when an error occured during a page content change. 
   * Parameters:
-    anError: the error message
+    * anError: the error message
 
 To listen to UPI events, you may use the jQuery 'on' function as in this example:
 ```
