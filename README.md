@@ -44,10 +44,10 @@ let's have a first html file test1.html with some blocks with special attributes
 ```
 **Let's imagine now that you would like that the website loads and updates only the "mainContainer" part without updating the whole page when we click on the test2.html link...**
 
-You know that you would need to call a URL in ajax, get the new content from the server and update the container with jQuery html function... 
+You surely know that you would need to call a URL in ajax, get the new content from the server and update the container with jQuery html function... 
 Perhaps meet some problem with the browser history when going back... etc... etc...
 
-With UPI Application, just create your second test2.html file as usual: it will be quite the same than test1.html (let's imagine the files are php generated...) with a new content in the "mainContainer" part :
+With UPI Application, just create a second test2.html file as usual: it will be quite the same than test1.html (let's imagine the files are php generated...) with a new content in the "mainContainer" part :
 ```html
 <body id="myUPIApplication">
   <h1>I am test2.html file</h1>
@@ -134,7 +134,7 @@ That's it: your blocks will be automatically updated by ajax calls to the other 
 #General algorithm of UPI Application
 
 The general algorithm of UPI Application is the following:
-* when a link is called (clicked) and it is "upi-link", 
+* when a link is called (clicked) and it is a "upi-link", 
   * get the new content from the clicked page through an ajax call
   * get all the "upi-container" of the current page
   * for each "upi-container" of the current page
@@ -163,7 +163,9 @@ Options is a javascript object. It can take as input the following possible opti
 
 ##Example: 
 ```
-$('#bodyId').UPIApplication({debug:true,LogLevel:2})
+	$( document ).ready(function() {
+		$('#bodyId').UPIApplication({debug:true,LogLevel:2})
+	});
 ```
 
 #Triggered events
@@ -178,9 +180,9 @@ UPIApplication generates the following events:
 
 To listen to UPI events, you may use the jQuery 'on' function as in this example:
 ```
-$("#myUPIApplication").on( "UPIApplication_ErrorOnPageChange", function(event,anError) {
-			  alert( anError );
-			}); 
+	$("#myUPIApplication").on( "UPIApplication_ErrorOnPageChange", function(event,anError) {
+		  alert( anError );
+	}); 
 ```
 
 #Sending events to UPI Application
@@ -190,7 +192,7 @@ You can activate some features of UPI Application by sending events to it with t
 $('#< id of the body tag>').trigger(<anEvent>,{aUrl:<aURL to call>,params:<someParameters>)
 ```
 
-##loadURL
+##"loadURL" event
 This event allows you to call a URL.
 
 ```
