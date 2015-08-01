@@ -6,9 +6,9 @@ The web application is build from the usual way of generating web pages like wit
 So, it may help you to transform your "normal" web site in a web application too, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
 
 #Who may need it?
-Everyone using a (php) CMS that generates web pages and would like to transform his website to an application-like website, ie that does not reload each page during the user navigation but only the needed block within the page.
+Everyone using a CMS that generates web pages from a server and would like to transform his website to a client application-like website, ie that does not reload each page during the user navigation but only the needed block within the page.
 
-Everyone that would like to keep the way he builds websites but would like to have it behaves like a web application.
+Everyone who would like to keep the way he builds websites but would like to have it behaves like a web application.
 
 The ones who gave up with AngularJS and other javascript frameworks to build web app... like me ;-)
 
