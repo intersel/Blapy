@@ -24,10 +24,12 @@ So, the idea is to provide a simple environment that don't change your habits wh
 * configuration is really simple and quite natural: it uses html5 "data" attributes to be configured and there is quite nothing to do from an existing website :-)
 * the history of browsing is kept
 
+#Have a look on the (really simple) demo
+[Go and see the demo: http://www.intersel.net/demos/intersel/UPIApplication/demos/helloworld/](http://www.intersel.net/demos/intersel/UPIApplication/demos/helloworld/)
 
 #How does it work? the "Hello world" example...
 
-let's have a first html file test1.html 
+let's have a first html file test1.html with some blocks with special attributes we will see later on...
 ```html
 <body id="myUPIApplication">
   <h1>I'm test1.html file</h1>
@@ -55,9 +57,11 @@ and a second one test2.html that is quite the same (let's imagine these files ar
 </body>
 ```
 
-This two html files will load and behave normally if you click the links.
+These two html files will load and behave normally if you load them and click the links.
 
-So, let's imagine you would like that the website load and update only the "mainContainer" part without updating the whole page... You know that you would need to call a URL in ajax, get the new content and update the container...
+**Let's imagine now that you would like that the website load and update only the "mainContainer" part without updating the whole page...**
+
+You know that you would need to call a URL in ajax, get the new content and update the container...
  
 Well, just add at the end of your files this little script :
 
@@ -72,10 +76,7 @@ Well, just add at the end of your files this little script :
 
 You will then see that when clicking on the page links, only the 'data-upi-container' block is changed without reloading the whole page! You can see that as the title has not changed... 
 
-Tada! you've got a web application :-)
-
-#Have a look on the demo
-[Go and see the demo: http://www.intersel.net/demos/intersel/UPIApplication/demos/helloworld_1.php](http://www.intersel.net/demos/intersel/UPIApplication/demos/helloworld_1.php)
+Tada! you've got a **client web application** :-)
 
 #How to configure my pages to become pages of a web application?
 
