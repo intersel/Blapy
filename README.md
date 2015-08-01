@@ -198,9 +198,11 @@ This event allows you to call a URL.
 ```
 $('#< id of the body tag>').trigger('loadUrl',{aUrl:<aURL to call>,params:{action:<anAction>}})
 ```
+
 ###params
 * action
   * 'update': update the UPI blocks from the URL
+
 ###Example
 ```
 $('#myUPIApplication').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action:'update'}})
