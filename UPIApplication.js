@@ -11,13 +11,14 @@
  * Modifications :
  * - 2015/07/25 - E.Podvin - V1.0.0 - Creation
  * - 2015/07/31 - E.Podvin - V1.0.1
+ * - 2015/08/02 - E.Podvin - V1.0.3 - append/prepend features on UPI blocks
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2015
- * @fileoverview : a jquery plugin that helps to handle and manage an ajax web application from a usual way of generating web pages like with php or a standard CMS
+ * @fileoverview : UPIApplication is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/UPIApplication}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.0.1
+ * @version : 1.0.3
  * -----------------------------------------------------------------------------------------
  */
 

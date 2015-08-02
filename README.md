@@ -207,11 +207,12 @@ To define a UPI Block, you need to use the following attributes:
 * **data-upi-link**: set to "true", tells that the current link has to be handled by UPI Application.
 
 ##Examples
+```html
 <ul>
 	<li><a href="content1.php" data-upi-link="true">Content 1</a></li>
 	<li><a href="content2.php" data-upi-link="true">Content 2</a></li>
 </ul
-
+```
 
 #Triggered events
 UPIApplication generates the following events:
