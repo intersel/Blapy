@@ -39,7 +39,7 @@
 		var $defaults = {
 				debug				: false, //if true, then log things in the console
 				LogLevel			: 3,	 // log level: 1: error ; 2: warning; 3: notice
-				AlertError			: false,
+				alertError			: false,
 				//function Hooks
 				pageLoadedFunction	: null,
 				pageReadyFunction	: null,
@@ -61,7 +61,7 @@
 		this.myUIObjectID = anObject.attr('id');
 		if (!this.myUIObjectID) alert('no defined Id on the given jQuery object... UPI Application can\'t work properly :-(');
 		
-	}
+	};
 
 	/**
 	 * InitApplication - init the UPI Application
@@ -74,7 +74,7 @@
 		//Standard Routing definition
 		var app = Sammy('#'+this.myUIObjectID);
 		
-		var myUIApplication = this;
+		var myUPIApplication = this;
 		
 		app.get(/\#\/(.*)/, function() 
 		{
@@ -84,7 +84,7 @@
 			{
 				case 'update': 
 				default:
-					myUIApplication.myUIObject.trigger('loadUrl',{aUrl:myUIApplication.hashURL(),params:this.params});
+					myUPIApplication.myUIObject.trigger('loadUrl',{aUrl:myUPIApplication.hashURL(),params:this.params,aObjectId:myUPIApplication.myUIObjectID});
 					break;
 			}
 		});
@@ -115,7 +115,7 @@
 		if (window.console && console.log)
 		{
 			console.log('[fsm] ' + message);
-			if ( (arguments[1] == 1) && this.opts.AlertError) alert(message);
+			if ( (arguments[1] == 1) && this.opts.alertError) alert(message);
 		}
 		
 	};//end of 
@@ -157,9 +157,8 @@
 				$(this).attr("href",aHref+'#'+aHref);
 			} 
 		});
-	}
+	};
 
-	
 	/* var & function definitions */	
 	var manageUPIApplication = {
         PageLoaded: 
@@ -191,13 +190,15 @@
 					this.myUIObject.trigger('UPIApplication_beforePageChange');
 				},
                 out_function: function(p,e,data){
-					var aFSM = this;
-					var aUrl=data.aUrl;
-					var params=data.params;
+					var aFSM 		= this;
+					var aUrl		= data.aUrl;
+					var aObjectId	= data.aObjectId;
+					var params		= data.params;
+					
 					jQuery.ajax({
 						  type: 'GET', 
 						  url: aUrl, 
-						  data: "upicall=1&upiaction="+params.action,
+						  data: "upicall=1&upiaction="+params.action+"&upiobjectid="+aObjectId,
 						  success: function(data, textStatus, jqXHR) {
 							aFSM.trigger('pageLoaded',{htmlPage:data,params:params});
 						  },
@@ -226,21 +227,43 @@
 						case 'update': 
 						default:
 							
-							$('[data-upi-container]').each(function(){
+							this.myUIObject.find('[data-upi-container]').each(function(){
+								
 								myContainer = $(this);
+								if (!params['force-update']) params['force-update']=0; 
 								containerName = myContainer.attr('data-upi-container-name');
+								
+								//get the UPI Container named <containerName>
 								aUPIContainer=jQuery(pageContent).filter('[data-upi-container-name="'+containerName+'"]')
 																 .add(jQuery(pageContent).find('[data-upi-container-name="'+containerName+'"]'));
 								
 								//container not found
-								if (!aUPIContainer || aUPIContainer.length == 0) return true;
-								
-								if ( !params['force-update'] 
-										&& aUPIContainer.attr('data-upi-container-content') == myContainer.attr('data-upi-container-content')
-									)
-									return true;
-									
-								myContainer.replaceWith(aUPIContainer[0].outerHTML)//replace content with the new one
+								if (!aUPIContainer || aUPIContainer.length == 0) 
+								{
+									//Do nothing
+								}
+								//standard update
+								else if (	!aUPIContainer.attr('data-upi-update') 
+										 ||	(aUPIContainer.attr('data-upi-update') == 'update')
+										)
+								{
+									if ( 	aUPIContainer.attr('data-upi-container-content') != myContainer.attr('data-upi-container-content')
+										||  ( params['force-update'] == 1 ) 
+										)
+										myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+								}
+								//append update
+								else if (aUPIContainer.attr('data-upi-update') == 'append')
+								{
+									aUPIContainer.prepend(myContainer.html());//we prepend the old content to the new one (~to append the new one to the old one ;-))
+									myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+								}
+								//prepend update
+								else if (aUPIContainer.attr('data-upi-update') == 'prepend')
+								{
+									aUPIContainer.append(myContainer.html());
+									myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+								}
 							});
 							break;
 					};//switch

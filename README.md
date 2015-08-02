@@ -147,7 +147,7 @@ The general algorithm of UPI Application is the following:
 
 UPIApplication is the jQuery function that starts your web application.	
 ```
-$("#<an id of the body tag>").UPIApplication(options);
+$("#<an id>").UPIApplication(options);
 ```
 
 ##Options
@@ -167,6 +167,51 @@ Options is a javascript object. It can take as input the following possible opti
 		$('#bodyId').UPIApplication({debug:true,LogLevel:2})
 	});
 ```
+
+##Remarks
+**UPIApplication absolutely needs to be called on an object with an "id" set.**
+
+That means that if you'd like to bind the UPIApplication the "body", you **have to** set an id on the body tag:
+```
+<body id="bodyId">
+...
+</body>
+```
+
+#UPI Blocks
+UPI Application blocks are the parts where you would like the content to be updated from external contents by UPI application.
+
+A UPI block may be any html tag where you have set UPI attributes that defines the behaviour as UPI blocks.
+
+To define a UPI Block, you need to use the following attributes:
+
+##Attributes
+
+* **data-upi-container**: set to "true", tells that the current html tag is UPI block
+* **data-upi-container-name**: gives the name of the UPI block. It will identify the block. 
+* **data-upi-container-content**: gives the subject of the content. It will identify the content of the block. 
+* **data-upi-update** (option, default:'update'): tells how UPI application should update the UPI block when an external page or content is loaded.
+  * **update**: if the container-name is found from the external content and its container-content is different from the current page, the UPI block of the current page has to be replaced by the new one
+  * **append**: if the container-name is found from the external content, the external content will be added to the end of the current UPI block content.
+  * **prepend**: if the container-name is found from the external content, the external content will be added before the current UPI block content.
+
+##Examples
+
+#UPI Links
+A UPI Link is a url link that should be handled by UPI application. A UPI link is attached to the html "<a>" tag.
+
+To define a UPI Block, you need to use the following attributes:
+
+##Attributes
+
+* **data-upi-link**: set to "true", tells that the current link has to be handled by UPI Application.
+
+##Examples
+<ul>
+	<li><a href="content1.php" data-upi-link="true">Content 1</a></li>
+	<li><a href="content2.php" data-upi-link="true">Content 2</a></li>
+</ul
+
 
 #Triggered events
 UPIApplication generates the following events:
@@ -236,7 +281,25 @@ or leave a message on the [Issue board](https://github.com/intersel/UPIApplicati
 
 ##When a UPI link is called, do the server need to send a full HTML page with a body and ...
 No, you can optimize your code by only sending the useful UPI blocks. 
-
+##Is it possible to set UPI blocks in "head" tags?
+Yes, but in order to have the UPI application see them, set an id on the html tag and call upi application on it:
+````
+<html id="myUPIApplication">
+<head>
+	<title 	data-upi-container="true" 
+			data-upi-container-name="Title" 
+			data-upi-container-content="myTitle">This is a title page</title>
+	<script>
+		$( document ).ready(function() {
+			$('#myUPIApplication').UPIApplication();
+		});
+	</script>
+</head>
+<body>
+  <!--  body part -->
+</body>
+</html>  
+```  
 #Contact
 If you have any ideas, feedback, requests or bug reports, you can reach me at github@intersel.org, 
 or via my website: http://www.intersel.fr
