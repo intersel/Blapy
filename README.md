@@ -81,15 +81,16 @@ Tada! you've got a **client web application** :-)
 #How to configure my pages to become pages of a web application?
 
 ##Identify the common blocks between your different pages
-* Identify the common blocks (div, p, ... html tags) between your pages. When you use a CMS, these blocks are the same one you identified when building your website.
+* Identify the common blocks (div, p, ... html tags) between your pages. When you use a CMS, these blocks are the same ones than those you identified when building your website.
 ```html
   <div id="myContainer">
 	  How is it going?
   </div>
 ```
-* Tell to UPIApplication that these blocks are the one that may be updated from page to page :
-  * add a "data-upi-container" attribute set to true in order to configure this container as a UPIApplication container, container name that will be shared with multiple pages
-  * give a name identifier to the container with the "data-upi-container-name" attribute in order to identify this content as unique. Each page that has a unique content to be used to update block content should have a unique name identifier here.
+* Tell to UPIApplication that these blocks are the ones that may be updated from page to page:
+  * add a "data-upi-container" attribute set to true in order to configure this container as a UPIApplication container
+  * give a name identifier to the container with the "data-upi-container-name" attribute in order to identify this content as unique. 
+  * give a content name to identify each unique page content to be used.
 ```html
   <div id="myContainer"  data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="Howisitgoing">
 	  How is it going?
@@ -99,11 +100,11 @@ Tada! you've got a **client web application** :-)
 You can create as many UPI containers as you need parts of your page to be updated.
 
 ##Identify the links that update contents
-* Identify the links pointing to pages that have contents you could use to update some content blocks of your current page.
+* Identify the links pointing to pages that have contents you would like to use to update the content blocks of your current page.
 ```html
 <a href="test1.html">Hello World!</a>
 ```
-* Tell the links that they need to be handled by UPIApplication using the "data-upi-link" attribute.
+* Tell the links that they need to be handled by UPIApplication by using the "data-upi-link" attribute.
 ```html
 <a href="test1.html" data-upi-link="true">Hello World!</a>
 ```
@@ -181,7 +182,7 @@ That means that if you'd like to bind the UPIApplication to the "body", you **ha
 #UPI Blocks
 UPI Application blocks are the parts where you would like the content to be updated from external contents by UPI application.
 
-A UPI block may be any html element where you have set UPI attributes that defines the behaviour as UPI blocks.
+A UPI block may be any html element where you have set UPI attributes that define the behaviour as UPI blocks.
 
 These attributes are analysed from the external UPI block in order to know how the updating process should be applied on the current block. 
 
