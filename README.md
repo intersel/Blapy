@@ -134,7 +134,7 @@ That's it: your blocks will be automatically updated by ajax calls to the other 
 #General algorithm of UPI Application
 
 The general algorithm of UPI Application is the following:
-* when a link is called (clicked) and it is a "upi-link", 
+* when a link is called (clicked) and if it is a "upi-link", 
   * get the new content from the clicked page through an ajax call
   * get all the "upi-container" of the current page
   * for each "upi-container" of the current page
@@ -146,7 +146,7 @@ The general algorithm of UPI Application is the following:
 #.UPIApplication(options)
 
 UPIApplication is the jQuery function that starts your web application.	
-```
+```javascript
 $("#<an id>").UPIApplication(options);
 ```
 
@@ -162,7 +162,7 @@ Options is a javascript object. It can take as input the following possible opti
 * **onErrorOnPageChange**: (default:null) function to call when the page got an error during change
 
 ##Example: 
-```
+```javascript
 	$( document ).ready(function() {
 		$('#bodyId').UPIApplication({debug:true,LogLevel:2})
 	});
@@ -171,8 +171,8 @@ Options is a javascript object. It can take as input the following possible opti
 ##Remarks
 **UPIApplication absolutely needs to be called on an object with an "id" set.**
 
-That means that if you'd like to bind the UPIApplication the "body", you **have to** set an id on the body tag:
-```
+That means that if you'd like to bind the UPIApplication to the "body", you **have to** set an id on the body element:
+```html
 <body id="bodyId">
 ...
 </body>
@@ -181,7 +181,9 @@ That means that if you'd like to bind the UPIApplication the "body", you **have 
 #UPI Blocks
 UPI Application blocks are the parts where you would like the content to be updated from external contents by UPI application.
 
-A UPI block may be any html tag where you have set UPI attributes that defines the behaviour as UPI blocks.
+A UPI block may be any html element where you have set UPI attributes that defines the behaviour as UPI blocks.
+
+These attributes are analysed from the external UPI block in order to know how the updating process should be applied on the current block. 
 
 To define a UPI Block, you need to use the following attributes:
 
@@ -191,11 +193,35 @@ To define a UPI Block, you need to use the following attributes:
 * **data-upi-container-name**: gives the name of the UPI block. It will identify the block. 
 * **data-upi-container-content**: gives the subject of the content. It will identify the content of the block. 
 * **data-upi-update** (option, default:'update'): tells how UPI application should update the UPI block when an external page or content is loaded.
-  * **update**: if the container-name is found from the external content and its container-content is different from the current page, the UPI block of the current page has to be replaced by the new one
-  * **append**: if the container-name is found from the external content, the external content will be added to the end of the current UPI block content.
-  * **prepend**: if the container-name is found from the external content, the external content will be added before the current UPI block content.
+  * **update**: if the container-name is found from the external content and its container-content is different from the current page, the UPI block of the current page is to be replaced by the new one
+  * **force-update**: if the container-name is found from the external content, the UPI block of the current page is to be replaced by the new one
+  * **append**: if the container-name is found from the external content, the external content should be added to the end of the current UPI block content.
+  * **prepend**: if the container-name is found from the external content, the external content should be added before the current UPI block content.
+  * **replace**: if the container-name is found from the external content, the external content should replace the current UPI block content.
+  * **remove**:  if the container-name is found from the external content, then the UPI block is to be removed.
+* **data-upi-applyon** (option, default:'all'): the external container will apply only on the UPI blocks contained in the given application id element.
 
 ##Examples
+```html
+		<div 	data-upi-container="true" 
+				data-upi-container-name="mainContainerApp3" 
+				data-upi-container-content="aContent2" 
+				data-upi-applyon="myUPIApp1,myUPIApp3"
+		>
+			<h3>a Content</h3>
+			This is content...
+		</div>
+```
+```html
+			<div 	data-upi-container="true" 
+					data-upi-container-name="submainContainerApp1" 
+					data-upi-container-content="aSubContent" 
+					data-upi-update="remove"
+			>
+			</div>
+```
+
+
 
 #UPI Links
 A UPI Link is a url link that should be handled by UPI application. A UPI link is attached to the html "<a>" tag.
@@ -225,7 +251,8 @@ UPIApplication generates the following events:
     * anError: the error message
 
 To listen to UPI events, you may use the jQuery 'on' function as in this example:
-```
+
+```javascript
 	$("#myUPIApplication").on( "UPIApplication_ErrorOnPageChange", function(event,anError) {
 		  alert( anError );
 	}); 
@@ -234,14 +261,14 @@ To listen to UPI events, you may use the jQuery 'on' function as in this example
 #Sending events to UPI Application
 
 You can activate some features of UPI Application by sending events to it with the 'trigger' function of jQuery:
-```
+```javascript
 $('#< id of the body tag>').trigger(<anEvent>,{aUrl:<aURL to call>,params:<someParameters>)
 ```
 
 ##"loadURL" event
 This event allows you to call a URL.
 
-```
+```javascript
 $('#< id of the body tag>').trigger('loadUrl',{aUrl:<aURL to call>,params:{action:<anAction>}})
 ```
 
@@ -256,9 +283,9 @@ $('#myUPIApplication').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action
 
 #UPI parameters sent when calling a URL
 When UPI Application calls a 'UPI Link', the following parameters are sent as GET parameters:
-* upicall=1 - tells that the call is coming from UPI Application
-* upiaction=<anAction> -tells the kind of action that will be operated
-  * update: blocks will be updated
+* **upicall**=1 - tells that the call is coming from UPI Application
+* **upiaction**=<anAction> -tells the kind of action that will be operated
+  * **update**: blocks will be updated
   
 Knowing these parameters allow you to optimize the generated html returned by the server to the client, so sending back only the useful html blocks instead of the full html page. 
 

@@ -132,7 +132,7 @@
 		if (!aURL) aURL = window.location.href;
 		var results = new RegExp('[\#](.*)').exec(aURL);
 		return results[1] || 0;
-	}
+	};
 
 	$.fn.UPIApplication = function(options) {
 		if (!this.length) alert("The jquery selector '"+this.selector+"' is void!?\n\n Can\'t start UPI application...\n\n :-(");
@@ -193,7 +193,7 @@
                 out_function: function(p,e,data){
 					var aFSM 		= this;
 					var aUrl		= data.aUrl;
-					var aObjectId	= data.aObjectId;
+					var aObjectId	= data.aObjectId?data.aObjectId:e.currentTarget.id;
 					var params		= data.params;
 					
 					jQuery.ajax({
@@ -222,6 +222,7 @@
                 init_function: function(p,e,data){
 					var pageContent	= data.htmlPage;
 					var params 		= data.params;
+					var aObjectId	= this.myUIObject.attr('id');
 					
 					switch(params['action'])
 					{
@@ -230,21 +231,34 @@
 							
 							this.myUIObject.find('[data-upi-container]').each(function(){
 								
-								myContainer = $(this);
+								var myContainer = $(this);
 								if (!params['force-update']) params['force-update']=0; 
-								containerName = myContainer.attr('data-upi-container-name');
+								var containerName = myContainer.attr('data-upi-container-name');
 								
 								//get the UPI Container named <containerName>
-								aUPIContainer=jQuery(pageContent).filter('[data-upi-container-name="'+containerName+'"]')
-																 .add(jQuery(pageContent).find('[data-upi-container-name="'+containerName+'"]'));
+								var aUPIContainer=jQuery(pageContent)
+												.filter('[data-upi-container-name="'+containerName+'"]')
+												.add(jQuery(pageContent)
+														.find('[data-upi-container-name="'+containerName+'"]')
+												).first();
 								
 								//container not found
 								if (!aUPIContainer || aUPIContainer.length == 0) 
 								{
-									//Do nothing
+									return;
 								}
+								else if (aUPIContainer.attr('data-upi-applyon') != undefined)
+								{
+									//if the container specifies the accepted applications and we're not processing the correct one (aObjectId), then exit
+									var aListOfApplications = aUPIContainer.attr('data-upi-applyon').split(","); 
+									if ( (aListOfApplications.length > 0)
+											&& ($.inArray(aObjectId,aListOfApplications) == -1)
+										) return;
+
+								}
+								
 								//standard update
-								else if (	!aUPIContainer.attr('data-upi-update') 
+								if (	!aUPIContainer.attr('data-upi-update') 
 										 ||	(aUPIContainer.attr('data-upi-update') == 'update')
 										)
 								{
@@ -252,6 +266,11 @@
 										||  ( params['force-update'] == 1 ) 
 										)
 										myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+								}
+								//append update
+								else if (aUPIContainer.attr('data-upi-update') == 'force-update')
+								{
+									myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
 								}
 								//append update
 								else if (aUPIContainer.attr('data-upi-update') == 'append')
@@ -264,6 +283,16 @@
 								{
 									aUPIContainer.append(myContainer.html());
 									myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+								}
+								//replace update
+								else if (aUPIContainer.attr('data-upi-update') == 'replace')
+								{
+									myContainer.replaceWith(aUPIContainer.html());//replace content with the new one
+								}
+								//replace update
+								else if (aUPIContainer.attr('data-upi-update') == 'remove')
+								{
+									myContainer.replaceWith('');//replace content with the new one
 								}
 							});
 							break;
