@@ -3,7 +3,7 @@ $defaultTitle = "Great! That's a new title of Hello World";
 include("header.php");
 ?>
 <body>
-	<h1>I am <b>helloworld_2.php</b> of "helloworld" demo file</h1>
+	<h1>I am <b><?php echo basename(__FILE__)?> file</b> of "helloworld" demo file</h1>
 	<p>Click on the "Hello world" link, it will then change the UPI content of the current page by the one of the page of this link</p>
 	
 	<ul>

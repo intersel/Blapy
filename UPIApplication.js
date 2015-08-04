@@ -12,13 +12,14 @@
  * - 2015/07/25 - E.Podvin - V1.0.0 - Creation
  * - 2015/07/31 - E.Podvin - V1.0.1
  * - 2015/08/02 - E.Podvin - V1.0.3 - append/prepend features on UPI blocks
+ * - 2015/08/04 - E.Podvin - V1.0.4 - fix on relative URL
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2015
  * @fileoverview : UPIApplication is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/UPIApplication}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.0.3
+ * @version : 1.0.4
  * -----------------------------------------------------------------------------------------
  */
 
@@ -154,8 +155,23 @@
 		$('[data-upi-link]').each(function() {
 			if ($(this).attr("href").indexOf('#') == -1) {
 				var aHref = $(this).attr("href");
-				if(aHref.charAt(0) != '/') aHref = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1)+aHref;
-				$(this).attr("href",aHref+'#'+aHref);
+				var hashHref;
+
+				if(aHref.charAt(0) != '/') 
+				{
+					var aBaseHref=$('base').attr('href');
+					if (aBaseHref)
+						aHref = aBaseHref+aHref;
+					else
+						aHref = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1)+aHref;
+				}
+				
+				if (aHref.indexOf("?") > 0)
+					hashHref = aHref.slice(0, aHref.indexOf("?"));
+				else 
+					hashHref = aHref;
+				
+				$(this).attr("href",hashHref+'#'+aHref);
 			} 
 		});
 	};
