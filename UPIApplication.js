@@ -45,7 +45,9 @@
 				//function Hooks
 				pageLoadedFunction	: null,
 				pageReadyFunction	: null,
-				beforePageChange	: null,
+				beforePageLoad		: null,
+				beforeContentChange	: null, //param: the UPI block whose content will change
+				afterContentChange	: null, //param: the UPI block whose content has changed
 				afterPageChange		: null,
 				onErrorOnPageChange	: null,
 				theUPIApplication	: this,
@@ -203,8 +205,8 @@
             loadUrl:   
             {
                 init_function: function(){
-					if (this.opts.beforePageChange) this.opts.beforePageChange();
-					this.myUIObject.trigger('UPIApplication_beforePageChange');
+					if (this.opts.beforePageLoad) this.opts.beforePageLoad();
+					this.myUIObject.trigger('UPIApplication_beforePageLoad');
 				},
                 out_function: function(p,e,data){
 					var aFSM 		= this;
@@ -239,6 +241,7 @@
 					var pageContent	= data.htmlPage;
 					var params 		= data.params;
 					var aObjectId	= this.myUIObject.attr('id');
+					var myFSM		= this;
 					
 					switch(params['action'])
 					{
@@ -273,6 +276,10 @@
 
 								}
 								
+								//alert that the content of the block will change
+								if (myFSM.opts.beforeContentChange) myFSM.opts.beforeContentChange(myContainer);
+								myFSM.myUIObject.trigger('UPIApplication_beforeContentChange',myContainer);
+								
 								//standard update
 								if (	!aUPIContainer.attr('data-upi-update') 
 										 ||	(aUPIContainer.attr('data-upi-update') == 'update')
@@ -281,36 +288,48 @@
 									if ( 	aUPIContainer.attr('data-upi-container-content') != myContainer.attr('data-upi-container-content')
 										||  ( params['force-update'] == 1 ) 
 										)
+									{
 										myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+										myContainer=aUPIContainer;
+									}	
 								}
 								//append update
 								else if (aUPIContainer.attr('data-upi-update') == 'force-update')
 								{
 									myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+									myContainer=aUPIContainer;
 								}
 								//append update
 								else if (aUPIContainer.attr('data-upi-update') == 'append')
 								{
 									aUPIContainer.prepend(myContainer.html());//we prepend the old content to the new one (~to append the new one to the old one ;-))
 									myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+									myContainer=aUPIContainer;
 								}
 								//prepend update
 								else if (aUPIContainer.attr('data-upi-update') == 'prepend')
 								{
 									aUPIContainer.append(myContainer.html());
 									myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+									myContainer=aUPIContainer;
 								}
 								//replace update
 								else if (aUPIContainer.attr('data-upi-update') == 'replace')
 								{
 									myContainer.replaceWith(aUPIContainer.html());//replace content with the new one
+									myContainer=aUPIContainer;
 								}
 								//replace update
 								else if (aUPIContainer.attr('data-upi-update') == 'remove')
 								{
 									myContainer.replaceWith('');//replace content with the new one
+									myContainer=null;
 								}
-							});
+
+								if (myFSM.opts.beforeContentChange) myFSM.opts.afterContentChange(myContainer);
+								myFSM.myUIObject.trigger('UPIApplication_afterContentChange',myContainer);
+
+							});//end of each
 							break;
 					};//switch
 				},

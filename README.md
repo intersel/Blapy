@@ -158,8 +158,10 @@ Options is a javascript object. It can take as input the following possible opti
 * **AlertError**: (default:false) show an alert box on error messages if true
 * **pageLoadedFunction**: (default:null) function to call when the page is loaded
 * **pageReadyFunction**: (default:null) function to call when the page is ready
-* **beforePageChange**: (default:null) function to call when the page will have its content changed
-* **afterPageChange**: (default:null) function to call when the page had its content changed
+* **beforePageLoad**: (default:null) function to call b efore the page load the new content
+* **beforeContentChange**: (default:null) function to call when a UPI bloc will have its content changed
+* **afterContentChange**: (default:null) function to call after a UPI bloc has its content changed
+* **afterPageChange**: (default:null) function to call when the page had all its content changed
 * **onErrorOnPageChange**: (default:null) function to call when the page got an error during change
 
 ##Example: 
@@ -242,11 +244,17 @@ To define a UPI Block, you need to use the following attributes:
 ```
 
 #Triggered events
-UPIApplication generates the following events:
+UPIApplication generates the following events on the UPI Application object:
 * **UPIApplication_PageLoaded** - triggered when a page is fully and normally loaded. 
 * **UPIApplication_PageReady** - triggered when the page is ready, after a loading page or a change in the page.
-* **UPIApplication_beforePageChange** - triggered before a page content will change 
-* **UPIApplication_afterPageChange** - triggered after a page content has changed
+* **UPIApplication_beforePageLoad** - triggered before a page load its new content.
+* **UPIApplication_beforePageChange** - triggered before a page content will change.
+* **UPIApplication_beforeContentChange** - triggered before a UPI block content change. 
+  * Parameters:
+    * the UPI block 
+* **UPIApplication_afterContentChange** - triggered after a a UPI block content has changed.
+  * Parameters:
+    * the UPI block 
 * **UPIApplication_ErrorOnPageChange** - triggered when an error occured during a page content change. 
   * Parameters:
     * anError: the error message
