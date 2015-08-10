@@ -14,13 +14,14 @@
  * - 2015/08/02 - E.Podvin - V1.0.3 - append/prepend features on UPI blocks
  * - 2015/08/04 - E.Podvin - V1.0.4 - fix on relative URL
  * - 2015/08/05 - E.Podvin - V1.0.5 - fix on a double pageready event sent
+ * - 2015/08/07 - E.Podvin - V1.0.6 - add event UPIApplication_doCustomChange
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2015
  * @fileoverview : UPIApplication is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/UPIApplication}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.0.4
+ * @version : 1.0.6
  * -----------------------------------------------------------------------------------------
  */
 
@@ -50,6 +51,7 @@
 				beforeContentChange	: null, //param: the UPI block whose content will change
 				afterContentChange	: null, //param: the UPI block whose content has changed
 				afterPageChange		: null,
+				doCustomChange		: null,
 				onErrorOnPageChange	: null,
 				theUPIApplication	: this,
 				
@@ -123,8 +125,8 @@
 			if ( (arguments[1] == 1) && this.opts.alertError) alert(message);
 		}
 		
-	};//end of 
-	
+	};//end Log
+
 	/**
 	* get the hash part of the URL
 	* returns 0 if none
@@ -138,6 +140,7 @@
 		return results[1] || 0;
 	};
 
+	//creation function of UPIApplication that embeds jQuery 
 	$.fn.UPIApplication = function(options) {
 		if (!this.length) alert("The jquery selector '"+this.selector+"' is void!?\n\n Can\'t start UPI application...\n\n :-(");
 		return this.each(function() {
@@ -282,7 +285,7 @@
 								
 								//alert that the content of the block will change
 								if (myFSM.opts.beforeContentChange) myFSM.opts.beforeContentChange(myContainer);
-								myFSM.myUIObject.trigger('UPIApplication_beforeContentChange',myContainer);
+								myContainer.trigger('UPIApplication_beforeContentChange',this.myUIObject);
 								
 								//standard update
 								if (	!aUPIContainer.attr('data-upi-update') 
@@ -323,15 +326,45 @@
 									myContainer.replaceWith(aUPIContainer.html());//replace content with the new one
 									myContainer=aUPIContainer;
 								}
-								//replace update
+								//custom update
+								else if (aUPIContainer.attr('data-upi-update') == 'custom')
+								{
+									if ( 	aUPIContainer.attr('data-upi-container-content') != myContainer.attr('data-upi-container-content')
+											||  ( params['force-update'] == 1 ) 
+										)
+									{
+										if (myFSM.opts.doCustomChange) myFSM.opts.doCustomChange(myContainer,aUPIContainer);
+										myContainer.trigger('UPIApplication_doCustomChange',aUPIContainer);
+									}
+								}
+								//remove update
 								else if (aUPIContainer.attr('data-upi-update') == 'remove')
 								{
 									myContainer.replaceWith('');//replace content with the new one
 									myContainer=null;
 								}
+								else
+								{
+									var pluginUpdateFunction = eval("myFSM.opts.theUPIApplication."+aUPIContainer.attr('data-upi-update'));
+									
+									if (pluginUpdateFunction)
+									{
+										if ( 	aUPIContainer.attr('data-upi-container-content') != myContainer.attr('data-upi-container-content')
+												||  ( params['force-update'] == 1 ) 
+												||  aUPIContainer.attr('data-upi-container-force-update') == "true" 
+											)
+										{
+											pluginUpdateFunction(myContainer,aUPIContainer);
+										}
+										
+									}
+									else myFSM._log(aUPIContainer.attr('data-upi-update')+' does not exist',1);
+								
+								}
 
-								if (myFSM.opts.beforeContentChange) myFSM.opts.afterContentChange(myContainer);
-								myFSM.myUIObject.trigger('UPIApplication_afterContentChange',myContainer);
+								if (myFSM.opts.afterContentChange) myFSM.opts.afterContentChange(myContainer);
+								//try to send to the new object the alert
+								$('#'+myContainer.attr('id')).trigger('UPIApplication_afterContentChange',myContainer);
 
 							});//end of each
 							break;

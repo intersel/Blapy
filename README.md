@@ -202,6 +202,8 @@ To define a UPI Block, you need to use the following attributes:
   * **prepend**: if the container-name is found from the external content, the external content should be added before the current UPI block content.
   * **replace**: if the container-name is found from the external content, the external content should replace the current UPI block content.
   * **remove**:  if the container-name is found from the external content, then the UPI block is to be removed.
+  * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined and send the UPIApplication_doCustomChange event.
+  * **<an animation plugin function name>**: if the container-name is found from the external content, function to call and apply to do the content change. 
 * **data-upi-applyon** (option, default:'all'): the external container will apply only on the UPI blocks contained in the given application id element.
 
 ##Examples
@@ -244,7 +246,7 @@ To define a UPI Block, you need to use the following attributes:
 ```
 
 #Triggered events
-UPIApplication generates the following events on the UPI Application object:
+UPIApplication generates the following events during the UPI Application object change processing:
 * **UPIApplication_PageLoaded** - triggered when a page is fully and normally loaded. 
 * **UPIApplication_PageReady** - triggered when the page is ready, after a loading page or a change in the page.
 * **UPIApplication_beforePageLoad** - triggered before a page load its new content.
@@ -255,6 +257,9 @@ UPIApplication generates the following events on the UPI Application object:
 * **UPIApplication_afterContentChange** - triggered after a a UPI block content has changed.
   * Parameters:
     * the UPI block 
+* **UPIApplication_doCustomChange** - triggered if data-upi-update='custom', sent to the object that should change its content
+  * Parameters:
+    * newObject : the new UPI Block 
 * **UPIApplication_ErrorOnPageChange** - triggered when an error occured during a page content change. 
   * Parameters:
     * anError: the error message

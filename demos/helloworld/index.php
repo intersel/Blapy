@@ -13,7 +13,7 @@ include("header.php");
 		<li><a href="helloworld_3.php" data-upi-link="true">Load from the optimized code</a></li>
 	</ul>
 	<div style="border:solid 1px green;margin:20px;padding:20px;">
-		<div data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="HelloWorld">
+		<div id="mainContainer" data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="HelloWorld">
 			<h1>Hello World!</h1>
 			<p>This is a "Hello World" content</p>
 		</div>

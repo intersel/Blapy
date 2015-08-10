@@ -9,10 +9,19 @@ $defaultTitle = "Optimized version... Great as well!";
 ?>
 <title 	data-upi-container="true" 
 		data-upi-container-name="Title" 
-		data-upi-container-content="<?php echo basename($_SERVER["SCRIPT_FILENAME"]);?>">
+		data-upi-container-content="<?php echo basename($_SERVER["SCRIPT_FILENAME"]);?>"
+		>
 	<?php echo $defaultTitle?>
 </title>
-<div data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="Optimized version">
+<div id="mainContainer" 
+		data-upi-container="true" 
+		data-upi-container-name="mainContainer" 
+		data-upi-container-content="Optimized version"
+		data-upi-update="fadeInOut"
+		data-upi-fadeout-delay="100"
+		data-upi-fadein-delay=400"
+		>
 	<h1>Good as well with an optimized version</h1>
-	<p>You can send an optimized version html code with only the useful UPI blocks</p> 
+	<p>You can update UPI block from an optimized version of html code with only the useful UPI blocks to be loaded</p> 
+	<p>and apply animation during content change</p>
 </div>

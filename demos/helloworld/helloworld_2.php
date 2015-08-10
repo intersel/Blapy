@@ -12,7 +12,7 @@ include("header.php");
 		<li><a href="helloworld_3.php" data-upi-link="true">Load from the optimized code</a></li>
 	</ul>
 	<div style="border:solid 1px blue;margin:20px;padding:20px;">
-		<div data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="How is it going?">
+		<div id="mainContainer" data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="How is it going?">
 			<h1>How is it going?</h1>
 			<p>Did you see that the title block was changed? The "&lt;title&gt;" is a UPI block too!</p> 
 			<p>Click on the "Hello world!" link to load back its content...</p> 
