@@ -4,7 +4,7 @@ include("header.php");
 ?>
 <body>
 	<h1>I am <b><?php echo basename(__FILE__)?> file</b> of "helloworld" demo file</h1>
-	<p>Click on the "Hello world" link, it will then change the UPI content of the current page by the one of the page of this link</p>
+	<p>Click on the <a href="index.php" data-upi-link="true">"Hello world"</a> link, it will then change the UPI content of the current page by the one coming from the page of this link</p>
 	
 	<ul>
 		<li><a href="index.php" data-upi-link="true">Hello World!</a></li>

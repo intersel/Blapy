@@ -4,7 +4,7 @@ include("header.php");
 ?>
 <body>
 	<h1>I am <b><?php echo basename(__FILE__)?> file</b> of "helloworld" demo file</h1>
-	<p>Click on the <a href="helloworld_2.php" data-upi-link="true">"How is it going?"</a> link, it will then change the UPI content of the current page by the one of the page of this link</p>
+	<p>Click on the <a href="helloworld_2.php" data-upi-link="true">"How is it going?"</a> link, it will then change the UPI content of the current page by the one coming from the page of this link</p>
 	<p>As you click... you will see that some blocks are updated<br> and this text is not... because it is not involved in a UPI block...</p>
 	<p>Meaning that <b>THE PAGE IS NOT RELOADED ;-) but ajaxified...</b></p> 
 	<ul>
