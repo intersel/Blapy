@@ -237,7 +237,7 @@ To define a UPI Block, you need to use the following attributes:
 
 
 #UPI Links
-A UPI Link is a url link that should be handled by UPI application. A UPI link is attached to the html "<a>" tag.
+A UPI Link is a url link that should be handled by UPI application. A UPI link is attached to the html "`<a>`" tag.
 
 To define a UPI Block, you need to use the following attributes:
 
@@ -306,7 +306,7 @@ $('#myUPIApplication').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action
 #UPI parameters sent when calling a URL
 When UPI Application calls a 'UPI Link', the following parameters are sent as GET parameters:
 * **upicall**=1 - tells that the call is coming from UPI Application
-* **upiaction**=<anAction> -tells the kind of action that will be operated
+* **upiaction**=[anAction] -tells the kind of action that will be operated
   * **update**: blocks will be updated
   
 Knowing these parameters allow you to optimize the generated html returned by the server to the client, so sending back only the useful html blocks instead of the full html page. 
@@ -335,6 +335,7 @@ To work properly, you need to include the following javascript library:
 	  * `<script type="text/javascript" src="extlib/jquery.attrchange.js"></script>`
 * [Sammy](http://sammyjs.org/)
   * Sammy is a little framework to make web application providing simple but efficient 'route' services
+    * `<script type="text/javascript" src="extlib/sammy/lib/sammy.js"></script>`
 
 #FAQ
 If you have questions or unsolved problems, you can have a look on the our [FAQs](https://github.com/intersel/UPIApplication/wiki) 
