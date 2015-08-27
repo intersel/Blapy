@@ -340,8 +340,9 @@
 								//remove update
 								else if (aUPIContainer.attr('data-upi-update') == 'remove')
 								{
+									var myContainerParent = myContainer.parent();
 									myContainer.replaceWith('');//replace content with the new one
-									myContainer=null;
+									myContainer=myContainerParent;
 								}
 								else
 								{
@@ -364,7 +365,8 @@
 
 								if (myFSM.opts.afterContentChange) myFSM.opts.afterContentChange(myContainer);
 								//try to send to the new object the alert
-								$('#'+myContainer.attr('id')).trigger('UPIApplication_afterContentChange',myContainer);
+								if (myContainer.attr('id'))
+									$('#'+myContainer.attr('id')).trigger('UPIApplication_afterContentChange',myContainer);
 
 							});//end of each
 							break;

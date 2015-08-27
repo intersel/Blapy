@@ -180,6 +180,15 @@ That means that if you'd like to bind the UPIApplication to the "body", you **ha
 </body>
 ```
 
+**You can have as many separate UPIApplication blocks as you like.**
+```javascript
+	$( document ).ready(function() {
+		$('#myUPIApp1,#myUPIApp2,#myUPIApp3').UPIApplication();
+	});
+```
+This way, you will be able to tell which application a UPI block should update when loaded. 
+See "data-upi-applyon" option on UPI blocks.
+
 #UPI Blocks
 UPI Application blocks are the parts where you would like the content to be updated from external contents by UPI application.
 
@@ -202,8 +211,8 @@ To define a UPI Block, you need to use the following attributes:
   * **replace**: if the container-name is found from the external content, the external content should replace the current UPI block content.
   * **remove**:  if the container-name is found from the external content, then the UPI block is to be removed.
   * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined and send the UPIApplication_doCustomChange event.
-  * **<an animation plugin function name>**: if the container-name is found from the external content, function to call and apply to do the content change. 
-* **data-upi-applyon** (option, default:'all'): the external container will apply only on the UPI blocks contained in the given application id element.
+  * **[an animation plugin function name]**: if the container-name is found from the external content, function to call and apply to do the content change. The available plugin functions may be found in the UPIApplication_AnimationPlugins.js file.
+* **data-upi-applyon** (option, default:'all'): By default, the UPI blocks loaded by a UPI link will be tried on all UPIApplication blocks. If defined, the external container will only be applied on the matched UPI blocks contained in the given application id element. 
 
 ##Examples
 ```html
@@ -301,6 +310,17 @@ When UPI Application calls a 'UPI Link', the following parameters are sent as GE
   * **update**: blocks will be updated
   
 Knowing these parameters allow you to optimize the generated html returned by the server to the client, so sending back only the useful html blocks instead of the full html page. 
+
+#UPI animation plugin functions
+
+It is possible to create its own animation plugin functions.
+
+The prototype of an animation plugin function is :
+```javascript
+theUPIApplication.prototype.myAnimationFunction = function (oldContainer,newContainer) {}
+```
+
+Have a look in the UPIApplication_AnimationPlugins.js and add your new functions in it inspired by the existing functions.
 
 #LIBRARY DEPENDENCIES
 To work properly, you need to include the following javascript library:

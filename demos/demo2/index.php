@@ -19,7 +19,8 @@ else if ($ChangeUPIBlock==-1)
 <body>
 	<h1>Some of the UPI Application features on UPI blocks</h1>
 	<p></p>
-	<div style="border:solid 1px green;margin:20px;padding:20px;" id="myUPIApp1">
+	<div style="border:solid 1px green;margin:20px;padding:0 20px 20px;" id="myUPIApp1">
+		<h4>"myUPIApp1" UPI blocks</h4>
 		<div 	data-upi-container="true" 
 				data-upi-container-name="mainContainerApp1" 
 				data-upi-container-content="aContent" 
@@ -47,7 +48,7 @@ else if ($ChangeUPIBlock==1)
 				data-upi-container-content="aSubContent" 
 				data-upi-update="force-update"
 		>
-		This is a Sub Content that will now be updated from APP3
+		This is a Sub Content that will now be updated from "mainContainerApp3" UPI block
 		</div>
 <?php 	
 }
@@ -95,10 +96,13 @@ else
 		<button onclick="$('#myUPIApp1').trigger('loadUrl',{aUrl:'index.php?ChangeUPIBlock=-1',params:{action:'update'}})">Reinitialize the UPI Block...</button>
 	</div>	
 	
-	<div style="border:solid 1px green;margin:20px;padding:20px;" id="myUPIApp3">
+	<div style="border:solid 1px green;margin:20px;padding:0px 20px 20px;" id="myUPIApp3">
+		<h4>"myUPIApp3" UPI blocks</h4>
+	
 		<ul>
-			<li><a href="content1_app3.php" data-upi-link="true">Content 1 for Application 3</a></li>
-			<li><a href="content2_app3.php" data-upi-link="true">Content 2 for Application 3</a></li>
+			<li><a href="content1_all_app.php" data-upi-link="true">Content 1 for any Application with a "mainContainerApp3" block</a></li>
+			<li><a href="content2_app3.php" data-upi-link="true">Content 2 only for "mainContainerApp3" block of 'myUPIApp3' application</a></li>
+			<li><a href="content3_app1.php" data-upi-link="true">Content 3 only for "mainContainerApp3" block of 'myUPIApp1' application</a></li>
 		</ul>
 		<div style="width:100%;">
 			<div style="padding:20px;border:solid 1px green;width:40%;float:left;">
