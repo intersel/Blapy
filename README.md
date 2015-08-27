@@ -13,14 +13,13 @@ Everyone who would like to keep the way he builds websites but would like to hav
 The ones who gave up with AngularJS and other javascript frameworks to build web app... like me ;-)
 
 #Why should I use that?!
-The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is generally a difficult job whereas PHP websites built on a standard CMS are easy to handle and do this job quite naturally...
-
-Except that we reload pages when clicking a link... or we need to do ajax calls to update part of our pages...
+The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is quite a difficult job... 
+Whereas PHP websites built on a standard CMS are easier to handle... The standard CMS does the page generation job quite naturally for years... Except that we reload pages when clicking a link... or we need to do ajax calls to dynamically update part of the pages...
 
 So, the idea is to provide a simple environment that don't change your habits when creating your website without having the hassle of creating ajax calls:
 * no complicated framework to understand to build your application
 * no REST or Ajax url end points to develop
-* building the pages don't change from the old normal way
+* building the pages don't change from the old normal way, meaning you can continue to use your standard LAMP and CMS environement
 * configuration is really simple and quite natural: it uses html5 "data" attributes to be configured and there is quite nothing to do from an existing website :-)
 * the history of browsing is kept
 
