@@ -95,7 +95,16 @@ else
 		<button onclick="$('#myUPIApp1').trigger('loadUrl',{aUrl:'index.php?ChangeUPIBlock=1',params:{action:'update'}})">Change UPI Block with two others blocks...</button>
 		<button onclick="$('#myUPIApp1').trigger('loadUrl',{aUrl:'index.php?ChangeUPIBlock=-1',params:{action:'update'}})">Reinitialize the UPI Block...</button>
 	</div>	
-	
+	<div style="border:solid 1px green;margin:20px;padding:0px 20px 20px;" id="myUPIApp2">
+		<h4>"myUPIApp2" UPI blocks</h4>
+		<div 	data-upi-container="true" 
+						data-upi-container-name="mainContainerApp2" 
+						data-upi-container-content="aContent_<?php echo time();?>" 
+				>
+					<b>Time is:</b> <?php echo time();?>
+					<script>setInterval(function(){ $('#myUPIApp2').trigger('loadUrl',{aUrl:'index.php',params:{action:'update'}}); }, 5000);</script>
+		</div>
+	</div>
 	<div style="border:solid 1px green;margin:20px;padding:0px 20px 20px;" id="myUPIApp3">
 		<h4>"myUPIApp3" UPI blocks</h4>
 	
