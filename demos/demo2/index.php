@@ -101,9 +101,13 @@ else
 						data-upi-container-name="mainContainerApp2" 
 						data-upi-container-content="aContent_<?php echo time();?>" 
 				>
-					<b>Time is:</b> <?php echo time();?>
-					<script>setInterval(function(){ $('#myUPIApp2').trigger('loadUrl',{aUrl:'index.php',params:{action:'update'}}); }, 5000);</script>
+					<b>Time is:</b> <?php echo date('d-M-Y H:m:s');?>
 		</div>
+		<script>
+			setInterval(function(){ 
+				$('#myUPIApp2').trigger('loadUrl',{aUrl:'index.php',params:{action:'update'}}); 
+				}, 1000);
+		</script>
 	</div>
 	<div style="border:solid 1px green;margin:20px;padding:0px 20px 20px;" id="myUPIApp3">
 		<h4>"myUPIApp3" UPI blocks</h4>
