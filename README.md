@@ -208,7 +208,7 @@ To define a UPI Block, you need to use the following attributes:
   * **force-update**: if the container-name is found from the external content, the UPI block of the current page is to be replaced by the new one
   * **append**: if the container-name is found from the external content, the external content should be added to the end of the current UPI block content.
   * **prepend**: if the container-name is found from the external content, the external content should be added before the current UPI block content.
-  * **replace**: if the container-name is found from the external content, the external content should replace the current UPI block content.
+  * **replace**: if the container-name is found from the external content, the inner content of the external content should replace the current UPI block content.
   * **remove**:  if the container-name is found from the external content, then the UPI block is to be removed.
   * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined and send the UPIApplication_doCustomChange event.
   * **[an animation plugin function name]**: if the container-name is found from the external content, function to call and apply to do the content change. The available plugin functions may be found in the UPIApplication_AnimationPlugins.js file.
@@ -237,13 +237,24 @@ To define a UPI Block, you need to use the following attributes:
 
 
 #UPI Links
-A UPI Link is a url link that should be handled by UPI application. A UPI link is attached to the html "`<a>`" tag.
+A UPI Link is a url link that should be handled by UPI application. 
 
-To define a UPI Block, you need to use the following attributes:
+A UPI link may be attached to the html "`<a>`" or "`<form>`" tags by specifying a "data-upi-link" attribute on it.
+
+It may be attached to other kind of tag, then you will have to specify the "data-upi-href" attribute to explicit the hyperlink.
+
+To define a UPI Link, here are its attributes:
 
 ##Attributes
 
-* **data-upi-link**: set to "true", tells that the current link has to be handled by UPI Application.
+* **data-upi-link**: tells that the current link has to be handled by UPI Application.
+  * set to "get" (or "true" or void), UPI Application will get the content of the link and will process the upi blocks matching with the current application content
+  * set to "post" (or "submit"), UPI Application will post to the server the data of the "input" found tags or the content of any tags with the attribute "data-upi-data" set to true, then will get the content of the server answer and will process the upi blocks matching with the current application content
+  * set to "put", same as "post", but will "put" the data to the server 
+
+**Remarks:** if data-upi-link is set to a form, the method configuration will be used if defined.
+
+* **data-upi-href**: tells the hyperlink to use
 
 ##Examples
 ```html

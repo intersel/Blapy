@@ -15,6 +15,7 @@
  * - 2015/08/04 - E.Podvin - V1.0.4 - fix on relative URL
  * - 2015/08/05 - E.Podvin - V1.0.5 - fix on a double pageready event sent
  * - 2015/08/07 - E.Podvin - V1.0.6 - add event UPIApplication_doCustomChange
+ * - 2015/08/29 - E.Podvin - V1.0.7 - add post data capabilities
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2015
@@ -95,6 +96,18 @@
 					break;
 			}
 		});
+		app.post(/\#\/(.*)/, function() 
+				{
+					if(!this.params['action']) this.params['action']='update';
+
+					switch(this.params['action'])
+					{
+						case 'update': 
+						default:
+							myUPIApplication.myUIObject.trigger('postData',{aUrl:myUPIApplication.hashURL(this.path),params:this.params,aObjectId:myUPIApplication.myUIObjectID});
+							break;
+					}
+				});
 		
 		this.myUIObject.iFSM(manageUPIApplication,this.opts);
 		//app.run('#/');
@@ -159,11 +172,24 @@
 
 		//change href on upi-link
 		$('[data-upi-link]').each(function() {
-			if ($(this).attr("href").indexOf('#') == -1) {
+			
+			if ($(this)[0].tagName == 'A')
 				var aHref = $(this).attr("href");
+			else if ($(this)[0].tagName == 'FORM')
+				var aHref = $(this).attr("action");
+			else 
+				var aHref = $(this).attr("data-upi-href");
+				
+			if (!aHref) return;//not valid... for now
+			
+			
+			if (aHref.indexOf('#') == -1) {
+				
 				var hashHref;
 
-				if(aHref.charAt(0) != '/') 
+				if( 	(aHref.charAt(0) != '/')
+					&& 	(aHref.substring(0,4) != "http")
+				  )
 				{
 					var aBaseHref=$('base').attr('href');
 					if (aBaseHref)
@@ -177,8 +203,14 @@
 				else 
 					hashHref = aHref;
 				
-				$(this).attr("href",hashHref+'#'+aHref);
+				if ($(this)[0].tagName == 'A')
+					$(this).attr("href",hashHref+'#'+aHref);
+				else if ($(this)[0].tagName == 'FORM')
+					$(this).attr("action",hashHref+'#'+aHref);
+				else 
+					$(this).attr("data-upi-href",hashHref+'#'+aHref);
 			} 
+
 		});
 	};
 
@@ -225,6 +257,35 @@
 						  type: 'GET', 
 						  url: aUrl, 
 						  data: "upicall=1&upiaction="+params.action+"&upiobjectid="+aObjectId,
+						  success: function(data, textStatus, jqXHR) {
+							aFSM.trigger('pageLoaded',{htmlPage:data,params:params});
+						  },
+						  error: function(jqXHR, textStatus, errorThrown) {
+							aFSM.trigger('errorOnLoadingPage',aUrl+': '+errorThrown);
+						  }
+						});
+				},
+                next_state: 'ProcessPageChange'
+
+            },
+            postData:   
+            {
+                init_function: function(){
+					if (this.opts.beforePageLoad) this.opts.beforePageLoad();
+					this.myUIObject.trigger('UPIApplication_beforePageLoad');
+				},
+                out_function: function(p,e,data){
+					var aFSM 		= this;
+					var aUrl		= data.aUrl;
+					var aObjectId	= data.aObjectId?data.aObjectId:e.currentTarget.id;
+					var params		= data.params;
+					
+					params = jQuery.extend( params, {upicall:"1",upiaction:params.action,upiobjectid:aObjectId});
+					
+					jQuery.ajax({
+						  type: 'POST', 
+						  url: aUrl, 
+						  data: params,
 						  success: function(data, textStatus, jqXHR) {
 							aFSM.trigger('pageLoaded',{htmlPage:data,params:params});
 						  },
