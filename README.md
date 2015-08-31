@@ -314,12 +314,14 @@ $('#<id of the blapy application tag>').trigger('loadUrl',{aUrl:<aURL to call>,p
   * 'update': update the Blapy blocks from the URL
 
 ###Example
-```
+```javascript
 $('#myBlapy').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action:'update'}})
 ```
 
 ##"postData" event
+```javascript
 $('#<id of the blapy application tag>').trigger('postData',{aUrl:<aURL to call>,params:{action:<anAction>},method:<http method>});
+```
 
 ###params
 * action
@@ -330,7 +332,7 @@ $('#<id of the blapy application tag>').trigger('postData',{aUrl:<aURL to call>,
   * 'delete'
 
 ###Example
-```
+```javascript
 $("#myBlapy").trigger('postData',{aUrl:"testForm.php",params:{fname:'couou',lname:'tatat'}})
 ```
 
