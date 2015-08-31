@@ -1,7 +1,7 @@
 # Blapy
 Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
 
-The web application is build from the usual way of generating web pages like with php or a standard CMS.
+The web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents and without coding any javascript.
 
 So, it may help you to transform your "normal" web site in a web application too, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
 
@@ -18,10 +18,11 @@ Whereas PHP websites built on a standard CMS are easier to handle... The standar
 
 So, the idea is to provide a simple environment that don't change your habits when creating your website without having the hassle of creating ajax calls:
 * no complicated framework to understand to build your application
-* no REST or Ajax url end points to develop
+* no REST or Ajax url end points to develop. You can do that if you like to do some but no need ;-)
 * building the pages don't change from the old normal way, meaning you can continue to use your standard LAMP and CMS environement
 * configuration is really simple and quite natural: it uses html5 "data" attributes to be configured and there is quite nothing to do from an existing website :-)
 * the history of browsing is kept
+* completly compliant with any existing html/js code
 
 #Have a look on the "Hello World" demo
 [Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
