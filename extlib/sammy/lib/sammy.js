@@ -207,7 +207,9 @@
       var s = [];
       $.each(this, function(k, v) {
         if (!_isFunction(v) || include_functions) {
-          s.push('"' + k + '": ' + v.toString());
+          var val=null;
+          if (v) val=v.toString();
+          s.push('"' + k + '": ' + val);
         }
       });
       return "Sammy.Object: {" + s.join(',') + "}";

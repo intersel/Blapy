@@ -348,47 +348,83 @@
 								if (myFSM.opts.beforeContentChange) myFSM.opts.beforeContentChange(myContainer);
 								myContainer.trigger('UPIApplication_beforeContentChange',this.myUIObject);
 								
+								var dataUpiUpdate = aUPIContainer.attr('data-upi-update');
+								var dataUpiUpdateRuleIsLocal = false;
+								if (myContainer.attr('data-upi-update-rule') == 'local')
+								{
+									dataUpiUpdate = myContainer.attr('data-upi-update');
+									dataUpiUpdateRuleIsLocal = true;
+								}
+								
 								//standard update
-								if (	!aUPIContainer.attr('data-upi-update') 
-										 ||	(aUPIContainer.attr('data-upi-update') == 'update')
+								if (	!dataUpiUpdate
+										 ||	(dataUpiUpdate== 'update')
 										)
 								{
 									if ( 	aUPIContainer.attr('data-upi-container-content') != myContainer.attr('data-upi-container-content')
 										||  ( params['force-update'] == 1 ) 
 										)
 									{
-										myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+										if (dataUpiUpdateRuleIsLocal)
+										{
+											myContainer.html(aUPIContainer.html());//replace content with the new one
+										}
+										else
+										{
+											myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+										}
 										myContainer=aUPIContainer;
 									}	
 								}
 								//append update
-								else if (aUPIContainer.attr('data-upi-update') == 'force-update')
+								else if (dataUpiUpdate== 'force-update')
 								{
-									myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+									if (dataUpiUpdateRuleIsLocal)
+									{
+										myContainer.html(aUPIContainer.html());//replace content with the new one
+									}
+									else
+									{
+										myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+									}
 									myContainer=aUPIContainer;
 								}
 								//append update
-								else if (aUPIContainer.attr('data-upi-update') == 'append')
+								else if (dataUpiUpdate== 'append')
 								{
 									aUPIContainer.prepend(myContainer.html());//we prepend the old content to the new one (~to append the new one to the old one ;-))
-									myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+									if (dataUpiUpdateRuleIsLocal)
+									{
+										myContainer.html(aUPIContainer.html());//replace content with the new one
+									}
+									else
+									{
+										myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+									}
 									myContainer=aUPIContainer;
 								}
 								//prepend update
-								else if (aUPIContainer.attr('data-upi-update') == 'prepend')
+								else if (dataUpiUpdate== 'prepend')
 								{
 									aUPIContainer.append(myContainer.html());
-									myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+									if (dataUpiUpdateRuleIsLocal)
+									{
+										myContainer.html(aUPIContainer.html());//replace content with the new one
+									}
+									else
+									{
+										myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+									}
 									myContainer=aUPIContainer;
 								}
 								//replace update
-								else if (aUPIContainer.attr('data-upi-update') == 'replace')
+								else if (dataUpiUpdate== 'replace')
 								{
-									myContainer.replaceWith(aUPIContainer.html());//replace content with the new one
+									myContainer.replaceWith(aUPIContainer.html());//replace content with the new inner one
 									myContainer=aUPIContainer;
 								}
 								//custom update
-								else if (aUPIContainer.attr('data-upi-update') == 'custom')
+								else if (dataUpiUpdate== 'custom')
 								{
 									if ( 	aUPIContainer.attr('data-upi-container-content') != myContainer.attr('data-upi-container-content')
 											||  ( params['force-update'] == 1 ) 
@@ -399,11 +435,30 @@
 									}
 								}
 								//remove update
-								else if (aUPIContainer.attr('data-upi-update') == 'remove')
+								else if (dataUpiUpdate== 'remove')
 								{
 									var myContainerParent = myContainer.parent();
 									myContainer.replaceWith('');//replace content with the new one
 									myContainer=myContainerParent;
+								}
+								//json update
+								else if (dataUpiUpdate== 'json')
+								{
+									var jsonData = aUPIContainer.html();
+									var htmlTpl = myContainer.find('[data-upi-container-tpl]');
+									if (htmlTpl.length == 0)
+									{
+										htmlTplContent = myContainer.html();
+										myContainer.prepend('<div style="display:none" data-upi-container-tpl="true">'+htmlTplContent+'</div>');
+									}
+									else
+									{
+										htmlTplContent=htmlTpl.html();
+									}
+									eval("jsonData="+jsonData);
+									var newHtml = json2html.transform(jsonData,  {'tag':'div','html':htmlTplContent} );
+									myContainer.html(htmlTpl[0].outerHTML+newHtml);//replace content with the new one
+									myContainer=aUPIContainer;
 								}
 								else
 								{

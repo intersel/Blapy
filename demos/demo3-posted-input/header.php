@@ -10,4 +10,5 @@
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/iFSM.js"></script>
+	<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>
 </head>
