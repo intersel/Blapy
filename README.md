@@ -349,6 +349,9 @@ To work properly, you need to include the following javascript library:
 * [Sammy](http://sammyjs.org/)
   * Sammy is a little framework to make web application providing simple but efficient 'route' services
     * `<script type="text/javascript" src="extlib/sammy/lib/sammy.js"></script>`
+* [json2html](http://json2html.com/)
+  * json2html is a javascript HTML templating library used to transform JSON objects into HTML using a template.
+	* `<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>`
 
 #FAQ
 If you have questions or unsolved problems, you can have a look on the our [FAQs](https://github.com/intersel/UPIApplication/wiki) 
