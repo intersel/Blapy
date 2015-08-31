@@ -401,7 +401,7 @@ Yes, but in order to have the Blapy see them, set an id on the html tag and call
 </html>  
 ```  
 ##How to define template variables in a template
-The syntax follows the one defined by json2html library : ${<myVariableName>} 
+The syntax follows the one defined by json2html library : ${myVariableName} 
 ###Example
 ```
 		First name: ${fname}<br>
