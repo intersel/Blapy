@@ -210,11 +210,12 @@ To define a Blapy Block, you need to use the following attributes:
   * **append**: if the container-name is found from the external content, the external content should be added to the end of the current Blapy block content.
   * **prepend**: if the container-name is found from the external content, the external content should be added before the current Blapy block content.
   * **replace**: if the container-name is found from the external content, the inner content of the external content should replace the current Blapy block content.
-  * **json**: the content of the current container is considered to be a template. If the container-name is found, then it is considered that the external content is a json object or an array of json objects. These json objects will be applied on the template. 
+  * **json**: the content of the current container is considered to be a template. If the container-name is found, then it is considered that the external content is a json object or an array of json objects. These json objects will be applied on the template.
+    * **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
   * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
   * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined and send the Blapy_doCustomChange event.
   * **[an animation plugin function name]**: if the container-name is found from the external content, function to call and apply to do the content change. The available plugin functions may be found in the Blapy_AnimationPlugins.js file.
-* **data-blapy-update-rule**: ['local'|'external' (default)], if 'local', will use the data-blapy-update rule defined in the current block, else will use the one defined in the external block
+* **data-blapy-update-rule**: ['local'|'external' (default)], if 'local', will use the data-blapy-update rule defined in the current block, else will use the one defined in the external block. Exception to the default value, a "json" block is always "local".
 * **data-blapy-applyon** (option, default:'all'): By default, the Blapy blocks loaded by a Blapy link will be tried on all Blapy blocks. If defined, the external container will only be applied on the matched Blapy blocks contained in the given application id element. 
 
 ##Examples
@@ -305,7 +306,7 @@ $('#< id of the body tag>').trigger(<anEvent>,{aUrl:<aURL to call>,params:<someP
 This event allows you to call a URL.
 
 ```javascript
-$('#< id of the body tag>').trigger('loadUrl',{aUrl:<aURL to call>,params:{action:<anAction>}})
+$('#<id of the blapy application tag>').trigger('loadUrl',{aUrl:<aURL to call>,params:{action:<anAction>}})
 ```
 
 ###params
@@ -316,6 +317,23 @@ $('#< id of the body tag>').trigger('loadUrl',{aUrl:<aURL to call>,params:{actio
 ```
 $('#myBlapy').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action:'update'}})
 ```
+
+##"postData" event
+$('#<id of the blapy application tag>').trigger('postData',{aUrl:<aURL to call>,params:{action:<anAction>},method:<http method>});
+
+###params
+* action
+  * 'update' (default) : update the Blapy blocks from the URL
+* method
+  * 'post' (default)
+  * 'put'
+  * 'delete'
+
+###Example
+```
+$('#myBlapy').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action:'update'}})
+```
+
 
 #Blapy parameters sent when calling a URL
 When Blapy calls a 'Blapy Link', the following parameters are sent as GET parameters:
@@ -337,7 +355,7 @@ theBlapy.prototype.myAnimationFunction = function (oldContainer,newContainer) {}
 Have a look in the Blapy_AnimationPlugins.js and add your new functions in it inspired by the existing functions.
 
 #LIBRARY DEPENDENCIES
-To work properly, you need to include the following javascript library:
+To work properly, you need to include the following javascript libraries:
 * jQuery (>= 1.10) `<script type="text/javascript" src="extlib/jquery-1.10.2.min.js"></script>`
 * [iFSM by intersel](https://github.com/intersel/iFSM/)
   * this library manages finite state machines and needs these libraries:
@@ -348,7 +366,7 @@ To work properly, you need to include the following javascript library:
 	  * a simple jQuery function to bind a listener function to any HTML element on attribute change
 	  * `<script type="text/javascript" src="extlib/jquery.attrchange.js"></script>`
 * [Sammy](http://sammyjs.org/)
-  * Sammy is a little framework to make web application providing simple but efficient 'route' services
+  * Sammy is a small framework to make web application providing simple but efficient 'route' services
     * `<script type="text/javascript" src="extlib/sammy/lib/sammy.js"></script>`
 * [json2html](http://json2html.com/)
   * json2html is a javascript HTML templating library used to transform JSON objects into HTML using a template.
@@ -362,7 +380,8 @@ or leave a message on the [Issue board](https://github.com/intersel/Blapy/issues
 No, you can optimize your code by only sending the useful Blapy blocks. 
 ##Is it possible to set Blapy blocks in "head" tags?
 Yes, but in order to have the Blapy see them, set an id on the html tag and call Blapy on it:
-````
+###Example
+```html
 <html id="myBlapy">
 <head>
 	<title 	data-blapy-container="true" 
@@ -379,6 +398,32 @@ Yes, but in order to have the Blapy see them, set an id on the html tag and call
 </body>
 </html>  
 ```  
+##How to define template variables in a template
+The syntax follows the one defined by json2html library : ${<myVariableName>} 
+###Example
+```
+		First name: ${fname}<br>
+		Last name: ${lname}<br>
+```
+		
+		
+##How to send several json objects to a json block
+You just defined an array the way you would do in javascript with your json objects
+
+```html
+	<div id="aForm" 
+		data-blapy-container="true" 
+		data-blapy-container-name="resultFormJson" 
+		data-blapy-container-content="resultFormJson"
+		data-blapy-update="json"
+	>
+	[
+	{fname: "Emmanuel",lname: "Durand"},
+	{fname: "Maryse",lname: "Dupond"}
+	]
+	</div>
+```
+
 #Contact
 If you have any ideas, feedback, requests or bug reports, you can reach me at github@intersel.org, 
 or via my website: http://www.intersel.fr

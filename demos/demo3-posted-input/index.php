@@ -30,17 +30,25 @@ include("header.php");
 	>
 	</div>
 	<h1>json templating</h1>
+	<h2>from a blapy block template definition</h2>
 	<div id="resultForm3" 
 		data-blapy-container="true" 
 		data-blapy-container-name="resultFormJson" 
 		data-blapy-container-content="resultFormJson"
 		data-blapy-update="json"
-		data-blapy-update-rule="local" 
 	>
-		<div data-blapy-container-tpl="true" style="display:none">
-		First name: ${fname}<br>
-		Last name: ${lname}<br>
-		</div>
+		<b>First name</b>: ${fname}<br>
+		<b>Last name</b>: ${lname}<br>
+	</div>
+	<h2>from a file template</h2>
+	<div id="resultForm4" 
+		data-blapy-container="true" 
+		data-blapy-container-name="resultForm2Json" 
+		data-blapy-container-content="resultForm2Json"
+		data-blapy-update="json"
+		data-blapy-template-file="form.tpl"
+		data-blapy-template-init="testInitForm.php"
+	>
 	</div>
 	
 </body>

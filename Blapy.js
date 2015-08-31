@@ -42,8 +42,8 @@
 	{
 		
 		var $defaults = {
-				debug				: false, //if true, then log things in the console
-				LogLevel			: 3,	 // log level: 1: error ; 2: warning; 3: notice
+				debug				: true, //if true, then log things in the console
+				LogLevel			: 1,	 // log level: 1: error ; 2: warning; 3: notice
 				alertError			: false,
 				//function Hooks
 				pageLoadedFunction	: null,
@@ -104,7 +104,7 @@
 					{
 						case 'update': 
 						default:
-							myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:this.params,aObjectId:myBlapy.myUIObjectID});
+							myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:this.params,aObjectId:myBlapy.myUIObjectID,method:"post"});
 							break;
 					}
 				});
@@ -214,6 +214,48 @@
 		});
 	};
 
+	/**
+	* prepare json templates
+	* 
+	* json templates are stored in a hidden div with a "data-blapy-container-tpl" attribute set
+	*/
+	theBlapy.prototype.setBlapyJsonTemplates = function ()
+	{
+		this._log('setBlapyJsonTemplates');
+		
+		var myBlapy = this;
+
+		//for any json template block
+		$('[data-blapy-update="json"]').each(function() {
+			var myContainer = $(this);
+			var htmlTpl = myContainer.find('[data-blapy-container-tpl]');
+			if (htmlTpl.length == 0)
+			{
+				htmlTplContent = myContainer.html();
+				
+				//if no template defined
+				if (htmlTplContent.replace(/\s{2,}/g, ' ').replace(/\t/g, ' ').toString().trim().replace(/(\r\n|\n|\r)/g,"") == "")
+				{
+					//look for partial template file
+					var tplFile = myContainer.attr("data-blapy-template-file");
+					if (myContainer.attr("data-blapy-template-file"))
+					{
+						$.get(tplFile, function(htmlTplContent) {
+							myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true">'+htmlTplContent+'</div>');
+						});
+					}	
+					
+					var aInitURL = myContainer.attr("data-blapy-template-init");
+					if (aInitURL)
+						$('#'+myBlapy.myUIObjectID).trigger('loadUrl',{aUrl:aInitURL});
+					
+				}
+				else
+					myContainer.html('<div style="display:none" data-blapy-container-tpl="true">'+htmlTplContent+'</div>');
+			}
+		});
+	};
+
 	/* var & function definitions */	
 	var manageBlapy = {
         PageLoaded: 
@@ -237,6 +279,9 @@
                 init_function: function(){
                 	// set #tag to the Blapy url
                 	this.opts.theBlapy.setBlapyUrl();
+                	// process json blocks
+                	this.opts.theBlapy.setBlapyJsonTemplates();
+                	
                 	if (this.opts.pageReadyFunction) this.opts.pageReadyFunction();
 					this.myUIObject.trigger('Blapy_PageReady');
 				}
@@ -252,6 +297,7 @@
 					var aUrl		= data.aUrl;
 					var aObjectId	= data.aObjectId?data.aObjectId:e.currentTarget.id;
 					var params		= data.params;
+					if (!params) params = {action:'update'}
 					
 					jQuery.ajax({
 						  type: 'GET', 
@@ -279,11 +325,14 @@
 					var aUrl		= data.aUrl;
 					var aObjectId	= data.aObjectId?data.aObjectId:e.currentTarget.id;
 					var params		= data.params;
+					if (!params) params = {action:'update'}
+					var method		= data.method;
+					if(!method) method = 'post';
 					
 					params = jQuery.extend( params, {blapycall:"1",blapyaction:params.action,blapyobjectid:aObjectId});
 					
 					jQuery.ajax({
-						  type: 'POST', 
+						  type: method, 
 						  url: aUrl, 
 						  data: params,
 						  success: function(data, textStatus, jqXHR) {
@@ -455,7 +504,17 @@
 									{
 										htmlTplContent=htmlTpl.html();
 									}
-									eval("jsonData="+jsonData);
+									
+									try
+									{
+										eval("jsonData="+jsonData);
+									}
+									catch(e)
+									{
+										myFSM._log('downloaded content can not be evaluated, so is not json data: '+jsonData,1);
+										return;
+									}
+									
 									var newHtml = json2html.transform(jsonData,  {'tag':'div','html':htmlTplContent} );
 									myContainer.html(htmlTpl[0].outerHTML+newHtml);//replace content with the new one
 									myContainer=aBlapyContainer;
