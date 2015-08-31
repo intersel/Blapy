@@ -1,13 +1,13 @@
-<script type="text/javascript" src="../../UPIApplication.js"></script>
-<script type="text/javascript" src="../../UPIApplication_AnimationPlugins.js"></script>
+<script type="text/javascript" src="../../Blapy.js"></script>
+<script type="text/javascript" src="../../Blapy_AnimationPlugins.js"></script>
 <script>
 	$( document ).ready(function() {
 
-		//start UPI Application
-		$('#myUPIApplication').UPIApplication();
+		//start Blapy
+		$('#myBlapy').Blapy();
 
 		//catch errors
-		$( "#myUPIApplication" ).on( "UPIApplication_ErrorOnPageChange", function(event,anError) {
+		$( "#myBlapy" ).on( "Blapy_ErrorOnPageChange", function(event,anError) {
 			  alert( anError );
 			});
 		

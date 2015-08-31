@@ -2,42 +2,42 @@
 $defaultTitle = "Posted input example";
 include("header.php");
 ?>
-<body id="myUPIApplication">
+<body id="myBlapy">
 	<h1>I am <b><?php echo basename(__FILE__)?> file</b> of "<?php echo $defaultTitle?>" demo file</h1>
 	<p>Fill the following form:</p>
-	<form name="myForm" action="testForm.php" data-upi-link="true" method="POST">
+	<form name="myForm" action="testForm.php" data-blapy-link="true" method="POST">
 		First name: <input type="text" name="fname"><br>
 		Last name: <input type="text" name="lname"><br>
 		<input type="submit" value="Send form data!">
 	</form> 
 	
-	<h1>UPI Block update</h1>
+	<h1>Blapy Block update</h1>
 	<div id="resultForm" 
-		data-upi-container="true" 
-		data-upi-container-name="resultForm" 
-		data-upi-container-content="resultForm" 
-		data-upi-update="update"
+		data-blapy-container="true" 
+		data-blapy-container-name="resultForm" 
+		data-blapy-container-content="resultForm" 
+		data-blapy-update="update"
 	>
 	</div>
 
-	<h1>UPI Block append</h1>
+	<h1>Blapy Block append</h1>
 	<div id="resultForm2" 
-		data-upi-container="true" 
-		data-upi-container-name="resultForm" 
-		data-upi-container-content="resultForm"
-		data-upi-update="append"
-		data-upi-update-rule="local" 
+		data-blapy-container="true" 
+		data-blapy-container-name="resultForm" 
+		data-blapy-container-content="resultForm"
+		data-blapy-update="append"
+		data-blapy-update-rule="local" 
 	>
 	</div>
 	<h1>json templating</h1>
 	<div id="resultForm3" 
-		data-upi-container="true" 
-		data-upi-container-name="resultFormJson" 
-		data-upi-container-content="resultFormJson"
-		data-upi-update="json"
-		data-upi-update-rule="local" 
+		data-blapy-container="true" 
+		data-blapy-container-name="resultFormJson" 
+		data-blapy-container-content="resultFormJson"
+		data-blapy-update="json"
+		data-blapy-update-rule="local" 
 	>
-		<div data-upi-container-tpl="true" style="display:none">
+		<div data-blapy-container-tpl="true" style="display:none">
 		First name: ${fname}<br>
 		Last name: ${lname}<br>
 		</div>

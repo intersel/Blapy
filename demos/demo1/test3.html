@@ -7,25 +7,25 @@
   <script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
   <script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
   <script type="text/javascript" src="../../extlib/iFSM/iFSM.js"></script>
-  <script type="text/javascript" src="../../UPIApplication.js"></script>
+  <script type="text/javascript" src="../../Blapy.js"></script>
 </head>
 <body id="myApplication">
 
 <h1>This is test3.html file</h1>
 
-<div id="header" data-upi-container="true" data-upi-container-name="header" data-upi-container-content="standardHeader3">
+<div id="header" data-blapy-container="true" data-blapy-container-name="header" data-blapy-container-content="standardHeader3">
 	<p>a Standard header 3</p>
-	<div id="menuHeader" data-upi-container="true" data-upi-container-name="menuHeader" data-upi-container-content="menuHeader2">
+	<div id="menuHeader" data-blapy-container="true" data-blapy-container-name="menuHeader" data-blapy-container-content="menuHeader2">
 		<ul>
-			<li><a href="index.html" data-upi-link="true">menu1</a></li>
-			<li><a href="test2.html" data-upi-link="true">menu2</a></li>
+			<li><a href="index.html" data-blapy-link="true">menu1</a></li>
+			<li><a href="test2.html" data-blapy-link="true">menu2</a></li>
 		</ul>
 	</div>
 </div>
-<div id="mainContainer" data-upi-container="true" data-upi-container-name="mainContainer" data-upi-container-content="helloWorld Test3">
+<div id="mainContainer" data-blapy-container="true" data-blapy-container-name="mainContainer" data-blapy-container-content="helloWorld Test3">
 	I'm a nice content of <b>"test3.html"</b> for "mainContainer"
 </div>
-<div id="footer" data-upi-container="true" data-upi-container-name="footer" data-upi-container-content="standardFooter2">
+<div id="footer" data-blapy-container="true" data-blapy-container-name="footer" data-blapy-container-content="standardFooter2">
 	<p>This is a new footer from test3</p>
 </div>
 
@@ -34,7 +34,7 @@
 
 <script>
 	$( document ).ready(function() {
-		$('#myApplication').UPIApplication();
+		$('#myApplication').Blapy();
 	});
 </script>
 

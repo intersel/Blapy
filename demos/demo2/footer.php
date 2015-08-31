@@ -1,9 +1,9 @@
-<script type="text/javascript" src="../../UPIApplication.js"></script>
+<script type="text/javascript" src="../../Blapy.js"></script>
 <script>
 	$( document ).ready(function() {
-		$('#myUPIApp1,#myUPIApp2,#myUPIApp3').UPIApplication();
+		$('#myBlapyApp1,#myBlapyApp2,#myBlapyApp3').Blapy();
 
-		$( "#myUPIApp1,#myUPIApp2,#myUPIApp3" ).on( "UPIApplication_ErrorOnPageChange", function(event,anError) {
+		$( "#myBlapyApp1,#myBlapyApp2,#myBlapyApp3" ).on( "Blapy_ErrorOnPageChange", function(event,anError) {
 			  alert( anError );
 			});
 	});

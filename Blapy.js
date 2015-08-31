@@ -3,24 +3,24 @@
  * INTERSEL - 4 cité d'Hauteville - 75010 PARIS
  * RCS PARIS 488 379 660 - NAF 721Z
  *
- * File : UPIApplication.js
- * UPIApplication : a jquery plugin that helps to handle and manage an ajax web application 
+ * File : Blapy.js
+ * Blapy : a jquery plugin that helps to handle and manage an ajax web application 
  * 					from a usual way of generating web pages like with php or a standard CMS
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
  * - 2015/07/25 - E.Podvin - V1.0.0 - Creation
  * - 2015/07/31 - E.Podvin - V1.0.1
- * - 2015/08/02 - E.Podvin - V1.0.3 - append/prepend features on UPI blocks
+ * - 2015/08/02 - E.Podvin - V1.0.3 - append/prepend features on Blapy blocks
  * - 2015/08/04 - E.Podvin - V1.0.4 - fix on relative URL
  * - 2015/08/05 - E.Podvin - V1.0.5 - fix on a double pageready event sent
- * - 2015/08/07 - E.Podvin - V1.0.6 - add event UPIApplication_doCustomChange
+ * - 2015/08/07 - E.Podvin - V1.0.6 - add event Blapy_doCustomChange
  * - 2015/08/29 - E.Podvin - V1.0.7 - add post data capabilities
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2015
- * @fileoverview : UPIApplication is a jQuery plugin that helps you to create and manage an ajax web application.
- * @see {@link https://github.com/intersel/UPIApplication}
+ * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
+ * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
  * @version : 1.0.6
  * -----------------------------------------------------------------------------------------
@@ -30,7 +30,7 @@
  * How to use it :
  * ===============
  *
- * see README.md content or consult it on https://github.com/intersel/UPIApplication
+ * see README.md content or consult it on https://github.com/intersel/Blapy
  */
 
 (function($) {
@@ -38,7 +38,7 @@
 	/**
 	* 
 	**/	
-	var theUPIApplication = window.theUPIApplication = function (anObject, options)
+	var theBlapy = window.theBlapy = function (anObject, options)
 	{
 		
 		var $defaults = {
@@ -49,12 +49,12 @@
 				pageLoadedFunction	: null,
 				pageReadyFunction	: null,
 				beforePageLoad		: null,
-				beforeContentChange	: null, //param: the UPI block whose content will change
-				afterContentChange	: null, //param: the UPI block whose content has changed
+				beforeContentChange	: null, //param: the Blapy block whose content will change
+				afterContentChange	: null, //param: the Blapy block whose content has changed
 				afterPageChange		: null,
 				doCustomChange		: null,
 				onErrorOnPageChange	: null,
-				theUPIApplication	: this,
+				theBlapy	: this,
 				
 		};
 
@@ -67,22 +67,22 @@
 		 */
 		this.myUIObject	= anObject;
 		this.myUIObjectID = anObject.attr('id');
-		if (!this.myUIObjectID) alert('no defined Id on the given jQuery object... UPI Application can\'t work properly :-(');
+		if (!this.myUIObjectID) alert('no defined Id on the given jQuery object... Blapy can\'t work properly :-(');
 		
 	};
 
 	/**
-	 * InitApplication - init the UPI Application
+	 * InitApplication - init the Blapy
 	 * public method
 	 */
-	theUPIApplication.prototype.InitApplication	= function() 
+	theBlapy.prototype.InitApplication	= function() 
 	{
 		this._log('InitApplication');
 		
 		//Standard Routing definition
 		var app = Sammy('#'+this.myUIObjectID);
 		
-		var myUPIApplication = this;
+		var myBlapy = this;
 		
 		app.get(/\#\/(.*)/, function() 
 		{
@@ -92,7 +92,7 @@
 			{
 				case 'update': 
 				default:
-					myUPIApplication.myUIObject.trigger('loadUrl',{aUrl:myUPIApplication.hashURL(),params:this.params,aObjectId:myUPIApplication.myUIObjectID});
+					myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL(),params:this.params,aObjectId:myBlapy.myUIObjectID});
 					break;
 			}
 		});
@@ -104,12 +104,12 @@
 					{
 						case 'update': 
 						default:
-							myUPIApplication.myUIObject.trigger('postData',{aUrl:myUPIApplication.hashURL(this.path),params:this.params,aObjectId:myUPIApplication.myUIObjectID});
+							myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:this.params,aObjectId:myBlapy.myUIObjectID});
 							break;
 					}
 				});
 		
-		this.myUIObject.iFSM(manageUPIApplication,this.opts);
+		this.myUIObject.iFSM(manageBlapy,this.opts);
 		//app.run('#/');
 		app.run(window.location.pathname+"#"+window.location.pathname);
 
@@ -125,7 +125,7 @@
 	 * 			- 3 : it's a notice
 	 * 
 	 */
-	theUPIApplication.prototype._log = function (message) {
+	theBlapy.prototype._log = function (message) {
 		/*global console:true */
 
 		if (!this.opts.debug) return;
@@ -144,7 +144,7 @@
 	* get the hash part of the URL
 	* returns 0 if none
 	*/
-	theUPIApplication.prototype.hashURL = function (aURL)
+	theBlapy.prototype.hashURL = function (aURL)
 	{
 		this._log('hashURL');
 
@@ -153,32 +153,32 @@
 		return results[1] || 0;
 	};
 
-	//creation function of UPIApplication that embeds jQuery 
-	$.fn.UPIApplication = function(options) {
-		if (!this.length) alert("The jquery selector '"+this.selector+"' is void!?\n\n Can\'t start UPI application...\n\n :-(");
+	//creation function of Blapy that embeds jQuery 
+	$.fn.Blapy = function(options) {
+		if (!this.length) alert("The jquery selector '"+this.selector+"' is void!?\n\n Can\'t start Blapy...\n\n :-(");
 		return this.each(function() {
-			var UPIApplication = new theUPIApplication($(this), options);
-			UPIApplication.InitApplication();	//start it
+			var Blapy = new theBlapy($(this), options);
+			Blapy.InitApplication();	//start it
 		});
 	};
 	
 	/**
-	* set # tag in the UPI Url
+	* set # tag in the Blapy Url
 	* returns 0 if none
 	*/
-	theUPIApplication.prototype.setUPIUrl = function ()
+	theBlapy.prototype.setBlapyUrl = function ()
 	{
-		this._log('setUPIUrl');
+		this._log('setBlapyUrl');
 
-		//change href on upi-link
-		$('[data-upi-link]').each(function() {
+		//change href on blapy-link
+		$('[data-blapy-link]').each(function() {
 			
 			if ($(this)[0].tagName == 'A')
 				var aHref = $(this).attr("href");
 			else if ($(this)[0].tagName == 'FORM')
 				var aHref = $(this).attr("action");
 			else 
-				var aHref = $(this).attr("data-upi-href");
+				var aHref = $(this).attr("data-blapy-href");
 				
 			if (!aHref) return;//not valid... for now
 			
@@ -208,21 +208,21 @@
 				else if ($(this)[0].tagName == 'FORM')
 					$(this).attr("action",hashHref+'#'+aHref);
 				else 
-					$(this).attr("data-upi-href",hashHref+'#'+aHref);
+					$(this).attr("data-blapy-href",hashHref+'#'+aHref);
 			} 
 
 		});
 	};
 
 	/* var & function definitions */	
-	var manageUPIApplication = {
+	var manageBlapy = {
         PageLoaded: 
         {
              enterState:
             {
                 init_function: function(){
 					if (this.opts.pageLoadedFunction) this.opts.pageLoadedFunction();
-					this.myUIObject.trigger('UPIApplication_PageLoaded');
+					this.myUIObject.trigger('Blapy_PageLoaded');
 				},
            },
            loadUrl:   //no load URL at first load of the page (generated by sammy)
@@ -235,17 +235,17 @@
             enterState:   
             {
                 init_function: function(){
-                	// set #tag to the UPI url
-                	this.opts.theUPIApplication.setUPIUrl();
+                	// set #tag to the Blapy url
+                	this.opts.theBlapy.setBlapyUrl();
                 	if (this.opts.pageReadyFunction) this.opts.pageReadyFunction();
-					this.myUIObject.trigger('UPIApplication_PageReady');
+					this.myUIObject.trigger('Blapy_PageReady');
 				}
             },
             loadUrl:   
             {
                 init_function: function(){
 					if (this.opts.beforePageLoad) this.opts.beforePageLoad();
-					this.myUIObject.trigger('UPIApplication_beforePageLoad');
+					this.myUIObject.trigger('Blapy_beforePageLoad');
 				},
                 out_function: function(p,e,data){
 					var aFSM 		= this;
@@ -256,7 +256,7 @@
 					jQuery.ajax({
 						  type: 'GET', 
 						  url: aUrl, 
-						  data: "upicall=1&upiaction="+params.action+"&upiobjectid="+aObjectId,
+						  data: "blapycall=1&blapyaction="+params.action+"&blapyobjectid="+aObjectId,
 						  success: function(data, textStatus, jqXHR) {
 							aFSM.trigger('pageLoaded',{htmlPage:data,params:params});
 						  },
@@ -272,7 +272,7 @@
             {
                 init_function: function(){
 					if (this.opts.beforePageLoad) this.opts.beforePageLoad();
-					this.myUIObject.trigger('UPIApplication_beforePageLoad');
+					this.myUIObject.trigger('Blapy_beforePageLoad');
 				},
                 out_function: function(p,e,data){
 					var aFSM 		= this;
@@ -280,7 +280,7 @@
 					var aObjectId	= data.aObjectId?data.aObjectId:e.currentTarget.id;
 					var params		= data.params;
 					
-					params = jQuery.extend( params, {upicall:"1",upiaction:params.action,upiobjectid:aObjectId});
+					params = jQuery.extend( params, {blapycall:"1",blapyaction:params.action,blapyobjectid:aObjectId});
 					
 					jQuery.ajax({
 						  type: 'POST', 
@@ -316,28 +316,28 @@
 						case 'update': 
 						default:
 							
-							this.myUIObject.find('[data-upi-container]').each(function(){
+							this.myUIObject.find('[data-blapy-container]').each(function(){
 								
 								var myContainer = $(this);
 								if (!params['force-update']) params['force-update']=0; 
-								var containerName = myContainer.attr('data-upi-container-name');
+								var containerName = myContainer.attr('data-blapy-container-name');
 								
-								//get the UPI Container named <containerName>
-								var aUPIContainer=jQuery(pageContent)
-												.filter('[data-upi-container-name="'+containerName+'"]')
+								//get the Blapy Container named <containerName>
+								var aBlapyContainer=jQuery(pageContent)
+												.filter('[data-blapy-container-name="'+containerName+'"]')
 												.add(jQuery(pageContent)
-														.find('[data-upi-container-name="'+containerName+'"]')
+														.find('[data-blapy-container-name="'+containerName+'"]')
 												).first();
 								
 								//container not found
-								if (!aUPIContainer || aUPIContainer.length == 0) 
+								if (!aBlapyContainer || aBlapyContainer.length == 0) 
 								{
 									return;
 								}
-								else if (aUPIContainer.attr('data-upi-applyon') != undefined)
+								else if (aBlapyContainer.attr('data-blapy-applyon') != undefined)
 								{
 									//if the container specifies the accepted applications and we're not processing the correct one (aObjectId), then exit
-									var aListOfApplications = aUPIContainer.attr('data-upi-applyon').split(","); 
+									var aListOfApplications = aBlapyContainer.attr('data-blapy-applyon').split(","); 
 									if ( (aListOfApplications.length > 0)
 											&& ($.inArray(aObjectId,aListOfApplications) == -1)
 										) return;
@@ -346,110 +346,110 @@
 								
 								//alert that the content of the block will change
 								if (myFSM.opts.beforeContentChange) myFSM.opts.beforeContentChange(myContainer);
-								myContainer.trigger('UPIApplication_beforeContentChange',this.myUIObject);
+								myContainer.trigger('Blapy_beforeContentChange',this.myUIObject);
 								
-								var dataUpiUpdate = aUPIContainer.attr('data-upi-update');
-								var dataUpiUpdateRuleIsLocal = false;
-								if (myContainer.attr('data-upi-update-rule') == 'local')
+								var dataBlapyUpdate = aBlapyContainer.attr('data-blapy-update');
+								var dataBlapyUpdateRuleIsLocal = false;
+								if (myContainer.attr('data-blapy-update-rule') == 'local')
 								{
-									dataUpiUpdate = myContainer.attr('data-upi-update');
-									dataUpiUpdateRuleIsLocal = true;
+									dataBlapyUpdate = myContainer.attr('data-blapy-update');
+									dataBlapyUpdateRuleIsLocal = true;
 								}
 								
 								//standard update
-								if (	!dataUpiUpdate
-										 ||	(dataUpiUpdate== 'update')
+								if (	!dataBlapyUpdate
+										 ||	(dataBlapyUpdate== 'update')
 										)
 								{
-									if ( 	aUPIContainer.attr('data-upi-container-content') != myContainer.attr('data-upi-container-content')
+									if ( 	aBlapyContainer.attr('data-blapy-container-content') != myContainer.attr('data-blapy-container-content')
 										||  ( params['force-update'] == 1 ) 
 										)
 									{
-										if (dataUpiUpdateRuleIsLocal)
+										if (dataBlapyUpdateRuleIsLocal)
 										{
-											myContainer.html(aUPIContainer.html());//replace content with the new one
+											myContainer.html(aBlapyContainer.html());//replace content with the new one
 										}
 										else
 										{
-											myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+											myContainer.replaceWith(aBlapyContainer[0].outerHTML);//replace content with the new one
 										}
-										myContainer=aUPIContainer;
+										myContainer=aBlapyContainer;
 									}	
 								}
 								//append update
-								else if (dataUpiUpdate== 'force-update')
+								else if (dataBlapyUpdate== 'force-update')
 								{
-									if (dataUpiUpdateRuleIsLocal)
+									if (dataBlapyUpdateRuleIsLocal)
 									{
-										myContainer.html(aUPIContainer.html());//replace content with the new one
+										myContainer.html(aBlapyContainer.html());//replace content with the new one
 									}
 									else
 									{
-										myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+										myContainer.replaceWith(aBlapyContainer[0].outerHTML);//replace content with the new one
 									}
-									myContainer=aUPIContainer;
+									myContainer=aBlapyContainer;
 								}
 								//append update
-								else if (dataUpiUpdate== 'append')
+								else if (dataBlapyUpdate== 'append')
 								{
-									aUPIContainer.prepend(myContainer.html());//we prepend the old content to the new one (~to append the new one to the old one ;-))
-									if (dataUpiUpdateRuleIsLocal)
+									aBlapyContainer.prepend(myContainer.html());//we prepend the old content to the new one (~to append the new one to the old one ;-))
+									if (dataBlapyUpdateRuleIsLocal)
 									{
-										myContainer.html(aUPIContainer.html());//replace content with the new one
+										myContainer.html(aBlapyContainer.html());//replace content with the new one
 									}
 									else
 									{
-										myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+										myContainer.replaceWith(aBlapyContainer[0].outerHTML);//replace content with the new one
 									}
-									myContainer=aUPIContainer;
+									myContainer=aBlapyContainer;
 								}
 								//prepend update
-								else if (dataUpiUpdate== 'prepend')
+								else if (dataBlapyUpdate== 'prepend')
 								{
-									aUPIContainer.append(myContainer.html());
-									if (dataUpiUpdateRuleIsLocal)
+									aBlapyContainer.append(myContainer.html());
+									if (dataBlapyUpdateRuleIsLocal)
 									{
-										myContainer.html(aUPIContainer.html());//replace content with the new one
+										myContainer.html(aBlapyContainer.html());//replace content with the new one
 									}
 									else
 									{
-										myContainer.replaceWith(aUPIContainer[0].outerHTML);//replace content with the new one
+										myContainer.replaceWith(aBlapyContainer[0].outerHTML);//replace content with the new one
 									}
-									myContainer=aUPIContainer;
+									myContainer=aBlapyContainer;
 								}
 								//replace update
-								else if (dataUpiUpdate== 'replace')
+								else if (dataBlapyUpdate== 'replace')
 								{
-									myContainer.replaceWith(aUPIContainer.html());//replace content with the new inner one
-									myContainer=aUPIContainer;
+									myContainer.replaceWith(aBlapyContainer.html());//replace content with the new inner one
+									myContainer=aBlapyContainer;
 								}
 								//custom update
-								else if (dataUpiUpdate== 'custom')
+								else if (dataBlapyUpdate== 'custom')
 								{
-									if ( 	aUPIContainer.attr('data-upi-container-content') != myContainer.attr('data-upi-container-content')
+									if ( 	aBlapyContainer.attr('data-blapy-container-content') != myContainer.attr('data-blapy-container-content')
 											||  ( params['force-update'] == 1 ) 
 										)
 									{
-										if (myFSM.opts.doCustomChange) myFSM.opts.doCustomChange(myContainer,aUPIContainer);
-										myContainer.trigger('UPIApplication_doCustomChange',aUPIContainer);
+										if (myFSM.opts.doCustomChange) myFSM.opts.doCustomChange(myContainer,aBlapyContainer);
+										myContainer.trigger('Blapy_doCustomChange',aBlapyContainer);
 									}
 								}
 								//remove update
-								else if (dataUpiUpdate== 'remove')
+								else if (dataBlapyUpdate== 'remove')
 								{
 									var myContainerParent = myContainer.parent();
 									myContainer.replaceWith('');//replace content with the new one
 									myContainer=myContainerParent;
 								}
 								//json update
-								else if (dataUpiUpdate== 'json')
+								else if (dataBlapyUpdate== 'json')
 								{
-									var jsonData = aUPIContainer.html();
-									var htmlTpl = myContainer.find('[data-upi-container-tpl]');
+									var jsonData = aBlapyContainer.html();
+									var htmlTpl = myContainer.find('[data-blapy-container-tpl]');
 									if (htmlTpl.length == 0)
 									{
 										htmlTplContent = myContainer.html();
-										myContainer.prepend('<div style="display:none" data-upi-container-tpl="true">'+htmlTplContent+'</div>');
+										myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true">'+htmlTplContent+'</div>');
 									}
 									else
 									{
@@ -458,31 +458,31 @@
 									eval("jsonData="+jsonData);
 									var newHtml = json2html.transform(jsonData,  {'tag':'div','html':htmlTplContent} );
 									myContainer.html(htmlTpl[0].outerHTML+newHtml);//replace content with the new one
-									myContainer=aUPIContainer;
+									myContainer=aBlapyContainer;
 								}
 								else
 								{
-									var pluginUpdateFunction = eval("myFSM.opts.theUPIApplication."+aUPIContainer.attr('data-upi-update'));
+									var pluginUpdateFunction = eval("myFSM.opts.theBlapy."+aBlapyContainer.attr('data-blapy-update'));
 									
 									if (pluginUpdateFunction)
 									{
-										if ( 	aUPIContainer.attr('data-upi-container-content') != myContainer.attr('data-upi-container-content')
+										if ( 	aBlapyContainer.attr('data-blapy-container-content') != myContainer.attr('data-blapy-container-content')
 												||  ( params['force-update'] == 1 ) 
-												||  aUPIContainer.attr('data-upi-container-force-update') == "true" 
+												||  aBlapyContainer.attr('data-blapy-container-force-update') == "true" 
 											)
 										{
-											pluginUpdateFunction(myContainer,aUPIContainer);
+											pluginUpdateFunction(myContainer,aBlapyContainer);
 										}
 										
 									}
-									else myFSM._log(aUPIContainer.attr('data-upi-update')+' does not exist',1);
+									else myFSM._log(aBlapyContainer.attr('data-blapy-update')+' does not exist',1);
 								
 								}
 
 								if (myFSM.opts.afterContentChange) myFSM.opts.afterContentChange(myContainer);
 								//try to send to the new object the alert
 								if (myContainer.attr('id'))
-									$('#'+myContainer.attr('id')).trigger('UPIApplication_afterContentChange',myContainer);
+									$('#'+myContainer.attr('id')).trigger('Blapy_afterContentChange',myContainer);
 
 							});//end of each
 							break;
@@ -490,7 +490,7 @@
 				},
                 out_function: function(p,e,data){
 					if (this.opts.afterPageChange) this.opts.afterPageChange();
-					this.myUIObject.trigger('UPIApplication_afterPageChange');
+					this.myUIObject.trigger('Blapy_afterPageChange');
 				},
                 next_state: 'PageReady',
             },
@@ -498,7 +498,7 @@
             {
                 init_function: function(p,e,data){
 					if (this.opts.onErrorOnPageChange) this.opts.onErrorOnPageChange(data);
-					this.myUIObject.trigger('UPIApplication_ErrorOnPageChange',[data]);
+					this.myUIObject.trigger('Blapy_ErrorOnPageChange',[data]);
 				},
                 next_state: 'PageReady',
             },

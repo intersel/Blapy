@@ -3,14 +3,14 @@
  * INTERSEL - 4 cité d'Hauteville - 75010 PARIS
  * RCS PARIS 488 379 660 - NAF 721Z
  *
- * File : UPIApplication_AnimationPlugins.js
- * UPIApplication : UPI Application plugin functions to animate content changes
+ * File : Blapy_AnimationPlugins.js
+ * Blapy : Blapy plugin functions to animate content changes
  * 
  * plugin functions
  * - fadeInOut
  * 
  * How to add a new plugin function:
- *	theUPIApplication.prototype.myNewFunction = function (oldContainer,newContainer) {
+ *	theBlapy.prototype.myNewFunction = function (oldContainer,newContainer) {
  *    /* do your change stuff here
  *  }
  * 
@@ -21,8 +21,8 @@
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2015
- * @fileoverview : UPI Application function plugins to animate contents
- * @see {@link https://github.com/intersel/UPIApplication}
+ * @fileoverview : Blapy function plugins to animate contents
+ * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
  * @version : 1.0.0
  * -----------------------------------------------------------------------------------------
@@ -33,13 +33,13 @@
 	 * @param oldContainer
 	 * @param newContainer
 	 * 
-	 * parameters for UPI Application block:
-	 * - data-upi-fadein-delay
-	 * - data-upi-fadeout-delay
+	 * parameters for Blapy block:
+	 * - data-blapy-fadein-delay
+	 * - data-blapy-fadeout-delay
 	 */
-	theUPIApplication.prototype.rightOutIn = function (oldContainer,newContainer) {
-		var fadeOutDelay = parseInt(newContainer.attr('data-upi-fadeout-delay'));
-		var fadeInDelay = parseInt(newContainer.attr('data-upi-fadein-delay'));
+	theBlapy.prototype.rightOutIn = function (oldContainer,newContainer) {
+		var fadeOutDelay = parseInt(newContainer.attr('data-blapy-fadeout-delay'));
+		var fadeInDelay = parseInt(newContainer.attr('data-blapy-fadein-delay'));
 		if (!fadeOutDelay) fadeOutDelay = 500;
 		if (!fadeInDelay) fadeInDelay = 500;
 		
@@ -66,13 +66,13 @@
 	 * @param oldContainer
 	 * @param newContainer
 	 * 
-	 * parameters for UPI Application block:
-	 * - data-upi-fadein-delay
-	 * - data-upi-fadeout-delay
+	 * parameters for Blapy block:
+	 * - data-blapy-fadein-delay
+	 * - data-blapy-fadeout-delay
 	 */
-	theUPIApplication.prototype.fadeInOut = function (oldContainer,newContainer) {
-		var fadeOutDelay = parseInt(newContainer.attr('data-upi-fadeout-delay'));
-		var fadeInDelay = parseInt(newContainer.attr('data-upi-fadein-delay'));
+	theBlapy.prototype.fadeInOut = function (oldContainer,newContainer) {
+		var fadeOutDelay = parseInt(newContainer.attr('data-blapy-fadeout-delay'));
+		var fadeInDelay = parseInt(newContainer.attr('data-blapy-fadein-delay'));
 		if (!fadeOutDelay) fadeOutDelay = 500;
 		if (!fadeInDelay) fadeInDelay = 500;
 		
