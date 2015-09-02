@@ -384,7 +384,7 @@ or leave a message on the [Issue board](https://github.com/intersel/Blapy/issues
 
 ## When a Blapy link is called, do the server need to send a full HTML page with a body and ...
 No, you can optimize your code by only sending the useful Blapy blocks. 
-##Is it possible to set Blapy blocks in "head" tags?
+## Is it possible to set Blapy blocks in "head" tags?
 Yes, but in order to have the Blapy see them, set an id on the html tag and call Blapy on it:
 ### Example
 ```html
