@@ -3,7 +3,11 @@
   "title": "create and manage ajax web application without javascript coding",
   "description": "Blapy is a jQuery plugin that helps you to create and manage an ajax web application. The web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents and without coding any javascript.",
   "keywords": [
-    "Application",
+  	"jquery-plugin",
+  	"ecosystem:jquery",
+    "Web App",
+    "Web applications",
+    "dynamic web",
     "Ajax"
   ],
   "version": "1.0.7",
@@ -27,6 +31,7 @@
   "bugs": "https://github.com/intersel/Blapy/issues",
   "homepage": "https://github.com/intersel/Blapy",
   "docs": "https://github.com/intersel/Blapy/",
+  "repository": "https://github.com/intersel/Blapy/",
   "demo": "http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/",
   "download": "https://github.com/intersel/Blapy/archive/master.zip",
   "dependencies": 
