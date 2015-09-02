@@ -1,26 +1,26 @@
 # Blapy
-Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
+Blapy is a jQuery plugin that helps you to create and manage an ajax web application without coding any javascript to do it.
 
 The web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents and without coding any javascript.
 
 So, it may help you to transform your "normal" web site in a web application too, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
 
 #Who may need it?
-Everyone using a CMS that generates web pages from a server and would like to transform his website to a client application-like website, ie that does not reload each page during the user navigation but only the needed block within the page.
+Everyone using a CMS that generates web pages from a server and would like to transform his website to a client application-like website, ie that does not reload each page during the user navigation but only the needed blocks within the page.
 
 Everyone who would like to keep the way he builds websites but would like to have it behaves like a web application.
 
 The ones who gave up with AngularJS and other javascript frameworks to build web app... like me ;-)
 
 #Why should I use that?!
-The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is quite a difficult job... 
+The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is quite a difficult job with a steep learning curve... 
 Whereas PHP websites built on a standard CMS are easier to handle... The standard CMS does the page generation job quite naturally for years... Except that we reload pages when clicking a link... or we need to do ajax calls to dynamically update part of the pages...
 
 So, the idea is to provide a simple environment that don't change your habits when creating your website without having the hassle of creating ajax calls:
-* no complicated framework to understand to build your application
-* no REST or Ajax url end points to develop. You can do that if you like to do some but no need ;-)
-* building the pages don't change from the old normal way, meaning you can continue to use your standard LAMP and CMS environement
-* configuration is really simple and quite natural: it uses html5 "data" attributes to be configured and there is quite nothing to do from an existing website :-)
+* no difficult framework to understand how to build a web application
+* no REST or Ajax url end points to develop. Of course, you can do that if you like to do your application that way ;-)
+* building the pages don't change from the "static" usual way of doing a website, meaning you can continue to use your standard LAMP and CMS environement
+* configuration is simple and quite natural: it uses html5 "data" attributes to be configured and there is quite nothing to do from an existing website :-)
 * the history of browsing is kept
 * completly compliant with any existing html/js code
 
@@ -28,6 +28,10 @@ So, the idea is to provide a simple environment that don't change your habits wh
 [Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
 
 #How does it work?
+
+The main simple idea is to automatically and dynamically bind and update html blocks in ajax during the web navigation from page to page. 
+
+Rules defined on the html blocks with data attributes will specify how the blocks should be updated with their new dynamic contents.
 
 let's have a first html file test1.html with some blocks with special attributes we will see later on...
 ```html
@@ -89,8 +93,8 @@ Tada! you've got a **client web application** :-)
 ```
 * Tell to Blapy that these blocks are the ones that may be updated from page to page:
   * add a "data-blapy-container" attribute set to true in order to configure this container as a Blapy container
-  * give a name identifier to the container with the "data-blapy-container-name" attribute in order to identify this content as unique. 
-  * give a content name to identify each unique page content to be used.
+  * give a name identifier to the container with the "data-blapy-container-name" attribute in order to identify this content block as unique. 
+  * give a content name to identify each unique page content to be used with the "data-blapy-container-content" attribute.
 ```html
   <div id="myContainer"  data-blapy-container="true" data-blapy-container-name="mainContainer" data-blapy-container-content="Howisitgoing">
 	  How is it going?
@@ -108,7 +112,7 @@ You can create as many Blapy containers as you need parts of your page to be upd
 ```html
 <a href="test1.html" data-blapy-link="true">Hello World!</a>
 ```
-* Call Blapy script attaching it to the body of your page... The body tag should have an "id" attribute and jQuery should be called on this object.
+* Call Blapy jquery script on the body of your page (or any main div in your page)... **The html block should have an "id" attribute**.
 ```html
 <html>
 ...
