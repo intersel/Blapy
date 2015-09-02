@@ -1,5 +1,5 @@
 {
-  "name": "Blapy",
+  "name": "blapy",
   "title": "create and manage ajax web application without javascript coding",
   "description": "Blapy is a jQuery plugin that helps you to create and manage an ajax web application. The web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents and without coding any javascript.",
   "keywords": [
@@ -10,7 +10,7 @@
     "dynamic web",
     "Ajax"
   ],
-  "version": "1.0.7",
+  "version": "1.0.7.0",
   "author": {
     "name": "Emmanuel Podvin",
     "url": "http://fr.linkedin.com/in/podvin"

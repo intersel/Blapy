@@ -5,14 +5,14 @@ The web application is built the usual way of generating web pages like with php
 
 So, it may help you to transform your "normal" web site in a web application too, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
 
-#Who may need it?
+# Who may need it?
 Everyone using a CMS that generates web pages from a server and would like to transform his website to a client application-like website, ie that does not reload each page during the user navigation but only the needed blocks within the page.
 
 Everyone who would like to keep the way he builds websites but would like to have it behaves like a web application.
 
 The ones who gave up with AngularJS and other javascript frameworks to build web app... like me ;-)
 
-#Why should I use that?!
+# Why should I use that?!
 The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is quite a difficult job with a steep learning curve... 
 Whereas PHP websites built on a standard CMS are easier to handle... The standard CMS does the page generation job quite naturally for years... Except that we reload pages when clicking a link... or we need to do ajax calls to dynamically update part of the pages...
 
@@ -24,10 +24,10 @@ So, the idea is to provide a simple environment that don't change your habits wh
 * the history of browsing is kept
 * completly compliant with any existing html/js code
 
-#Have a look on the "Hello World" demo
+# Have a look on the "Hello World" demo
 [Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
 
-#How does it work?
+# How does it work?
 
 The main simple idea is to automatically and dynamically bind and update html blocks in ajax during the web navigation from page to page. 
 
@@ -82,9 +82,9 @@ You will then see that when clicking on the page links, only the 'data-blapy-con
 
 Tada! you've got a **client web application** :-)
 
-#How to configure my pages to become pages of a web application?
+# How to configure my pages to become pages of a web application?
 
-##Identify the common blocks between your different pages
+## Identify the common blocks between your different pages
 * Identify the common blocks (div, p, ... html tags) between your pages. When you use a CMS, these blocks are the same ones than those you identified when building your website.
 ```html
   <div id="myContainer">
@@ -103,7 +103,7 @@ Tada! you've got a **client web application** :-)
 
 You can create as many Blapy containers as you need parts of your page to be updated.
 
-##Identify the links that update contents
+## Identify the links that update contents
 * Identify the links pointing to pages that have contents you would like to use to update the content blocks of your current page.
 ```html
 <a href="test1.html">Hello World!</a>
@@ -136,7 +136,7 @@ That's it: your blocks will be automatically updated by ajax calls to the other 
 
 
 
-#General algorithm of Blapy
+# General algorithm of Blapy
 
 The general algorithm of Blapy is the following:
 * when a link is called (clicked) and if it is a "blapy-link", 
@@ -148,14 +148,14 @@ The general algorithm of Blapy is the following:
       * if "yes", then change the "blapy-container" with the new one
 
 
-#.Blapy(options)
+# .Blapy(options)
 
 Blapy is the jQuery function that starts your web application.	
 ```javascript
 $("#<an id>").Blapy(options);
 ```
 
-##Options
+## Options
 Options is a javascript object. It can take as input the following possible option parameters :
 * **debug**: (default:false) if true, then log things in the console
 * **LogLevel**: (default:3) log level: 1: error ; 2: warning; 3: notice
@@ -168,14 +168,14 @@ Options is a javascript object. It can take as input the following possible opti
 * **afterPageChange**: (default:null) function to call when the page had all its content changed
 * **onErrorOnPageChange**: (default:null) function to call when the page got an error during change
 
-##Example: 
+## Example: 
 ```javascript
 	$( document ).ready(function() {
 		$('#bodyId').Blapy({debug:true,LogLevel:2})
 	});
 ```
 
-##Remarks
+## Remarks
 **Blapy absolutely needs to be called on an object with an "id" set.**
 
 That means that if you'd like to bind Blapy to the "body", you **have to** set an id on the body element:
@@ -194,7 +194,7 @@ That means that if you'd like to bind Blapy to the "body", you **have to** set a
 This way, you will be able to tell which application a Blapy block should update when loaded. 
 See "data-blapy-applyon" option on Blapy blocks.
 
-#Blapy Blocks
+# Blapy Blocks
 Blapy blocks are the parts where you would like the content to be updated from external contents downloaded through ajax calls by Blapy.
 
 A Blapy block may be any html element where you have set Blapy attributes that define the behaviour as Blapy blocks.
@@ -203,7 +203,7 @@ These attributes are analysed from the external Blapy block in order to know how
 
 To define a Blapy Block, you need to use the following attributes:
 
-##Attributes
+## Attributes
 
 * **data-blapy-container**: set to "true", tells that the current html tag is Blapy block
 * **data-blapy-container-name**: gives the name of the Blapy block. It will identify the block. 
@@ -222,7 +222,7 @@ To define a Blapy Block, you need to use the following attributes:
 * **data-blapy-update-rule**: ['local'|'external' (default)], if 'local', will use the data-blapy-update rule defined in the current block, else will use the one defined in the external block. Exception to the default value, a "json" block is always "local".
 * **data-blapy-applyon** (option, default:'all'): By default, the Blapy blocks loaded by a Blapy link will be tried on all Blapy blocks. If defined, the external container will only be applied on the matched Blapy blocks contained in the given application id element. 
 
-##Examples
+## Examples
 ```html
 		<div 	data-blapy-container="true" 
 				data-blapy-container-name="mainContainerApp3" 
@@ -244,7 +244,7 @@ To define a Blapy Block, you need to use the following attributes:
 
 
 
-#Blapy Links
+# Blapy Links
 A Blapy Link is a url link that should be handled by Blapy. 
 
 A Blapy link may be attached to the html "`<a>`" or "`<form>`" tags by specifying a "data-blapy-link" attribute on it.
@@ -253,7 +253,7 @@ It may be attached to other kind of tag, then you will have to specify the "data
 
 To define a Blapy Link, here are its attributes:
 
-##Attributes
+## Attributes
 
 * **data-blapy-link**: tells that the current link has to be handled by Blapy.
   * set to "get" (or "true" or void), Blapy will get the content of the link and will process the blapy blocks matching with the current application content
@@ -264,7 +264,7 @@ To define a Blapy Link, here are its attributes:
 
 * **data-blapy-href**: tells the hyperlink to use
 
-##Examples
+## Examples
 ```html
 <ul>
 	<li><a href="content1.php" data-blapy-link="true">Content 1</a></li>
@@ -272,7 +272,7 @@ To define a Blapy Link, here are its attributes:
 </ul
 ```
 
-#Triggered events
+# Triggered events
 Blapy generates the following events during the Blapy object change processing:
 * **Blapy_PageLoaded** - triggered when a page is fully and normally loaded. 
 * **Blapy_PageReady** - triggered when the page is ready, after a loading page or a change in the page.
@@ -299,35 +299,35 @@ To listen to Blapy events, you may use the jQuery 'on' function as in this examp
 	}); 
 ```
 
-#Sending events to Blapy
+# Sending events to Blapy
 
 You can activate some features of Blapy by sending events to it with the 'trigger' function of jQuery:
 ```javascript
 $('#< id of the body tag>').trigger(<anEvent>,{aUrl:<aURL to call>,params:<someParameters>)
 ```
 
-##"loadURL" event
+## "loadURL" event
 This event allows you to call a URL.
 
 ```javascript
 $('#<id of the blapy application tag>').trigger('loadUrl',{aUrl:<aURL to call>,params:{action:<anAction>}})
 ```
 
-###params
+### params
 * action
   * 'update': update the Blapy blocks from the URL
 
-###Example
+### Example
 ```javascript
 $('#myBlapy').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action:'update'}})
 ```
 
-##"postData" event
+## "postData" event
 ```javascript
 $('#<id of the blapy application tag>').trigger('postData',{aUrl:<aURL to call>,params:{action:<anAction>},method:<http method>});
 ```
 
-###params
+### params
 * action
   * 'update' (default) : update the Blapy blocks from the URL
 * method
@@ -335,13 +335,13 @@ $('#<id of the blapy application tag>').trigger('postData',{aUrl:<aURL to call>,
   * 'put'
   * 'delete'
 
-###Example
+### Example
 ```javascript
 $("#myBlapy").trigger('postData',{aUrl:"testForm.php",params:{fname:'couou',lname:'tatat'}})
 ```
 
 
-#Blapy parameters sent when calling a URL
+# Blapy parameters sent when calling a URL
 When Blapy calls a 'Blapy Link', the following parameters are sent as GET parameters:
 * **blapycall**=1 - tells that the call is coming from Blapy
 * **blapyaction**=[anAction] -tells the kind of action that will be operated
@@ -349,7 +349,7 @@ When Blapy calls a 'Blapy Link', the following parameters are sent as GET parame
   
 Knowing these parameters allow you to optimize the generated html returned by the server to the client, so sending back only the useful html blocks instead of the full html page. 
 
-#Blapy animation plugin functions
+# Blapy animation plugin functions
 
 It is possible to create its own animation plugin functions.
 
@@ -360,7 +360,7 @@ theBlapy.prototype.myAnimationFunction = function (oldContainer,newContainer) {}
 
 Have a look in the Blapy_AnimationPlugins.js and add your new functions in it inspired by the existing functions.
 
-#LIBRARY DEPENDENCIES
+# LIBRARY DEPENDENCIES
 To work properly, you need to include the following javascript libraries:
 * jQuery (>= 1.10) `<script type="text/javascript" src="extlib/jquery-1.10.2.min.js"></script>`
 * [iFSM by intersel](https://github.com/intersel/iFSM/)
@@ -378,15 +378,15 @@ To work properly, you need to include the following javascript libraries:
   * json2html is a javascript HTML templating library used to transform JSON objects into HTML using a template.
 	* `<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>`
 
-#FAQ
+# FAQ
 If you have questions or unsolved problems, you can have a look on the our [FAQs](https://github.com/intersel/Blapy/wiki) 
 or leave a message on the [Issue board](https://github.com/intersel/Blapy/issues).
 
-##When a Blapy link is called, do the server need to send a full HTML page with a body and ...
+## When a Blapy link is called, do the server need to send a full HTML page with a body and ...
 No, you can optimize your code by only sending the useful Blapy blocks. 
 ##Is it possible to set Blapy blocks in "head" tags?
 Yes, but in order to have the Blapy see them, set an id on the html tag and call Blapy on it:
-###Example
+### Example
 ```html
 <html id="myBlapy">
 <head>
@@ -404,16 +404,16 @@ Yes, but in order to have the Blapy see them, set an id on the html tag and call
 </body>
 </html>  
 ```  
-##How to define template variables in a template
+## How to define template variables in a template
 The syntax follows the one defined by json2html library : ${myVariableName} 
-###Example
+### Example
 ```
 		First name: ${fname}<br>
 		Last name: ${lname}<br>
 ```
 		
 		
-##How to send several json objects to a json block
+## How to send several json objects to a json block
 You just defined an array the way you would do in javascript with your json objects
 
 ```html
@@ -430,6 +430,6 @@ You just defined an array the way you would do in javascript with your json obje
 	</div>
 ```
 
-#Contact
+# Contact
 If you have any ideas, feedback, requests or bug reports, you can reach me at github@intersel.org, 
 or via my website: http://www.intersel.fr
