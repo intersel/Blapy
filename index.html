@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Blapy by intersel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Blapy</h1>
+      <h2 class="project-tagline">Create dynamic web applications by configuring html blocks and using a simple function call to jQuery.</h2>
+      <a href="https://github.com/intersel/Blapy" class="btn">View on GitHub</a>
+      <a href="https://github.com/intersel/Blapy/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/intersel/Blapy/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="blapy" class="anchor" href="#blapy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blapy</h1>
+
+<p>Blapy is a jQuery plugin that helps you to create and manage an ajax web application without coding any javascript to do it.</p>
+
+<p>The web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents and without coding any javascript.</p>
+
+<p>So, it may help you to transform your "normal" web site in a web application too, creating easily ajax/rest calls without the hassle of changing the way you develop websites.</p>
+
+<h1>
+<a id="who-may-need-it" class="anchor" href="#who-may-need-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>Who may need it?</h1>
+
+<p>Everyone using a CMS that generates web pages from a server and would like to transform his website to a client application-like website, ie that does not reload each page during the user navigation but only the needed blocks within the page.</p>
+
+<p>Everyone who would like to keep the way he builds websites but would like to have it behaves like a web application.</p>
+
+<p>The ones who gave up with AngularJS and other javascript frameworks to build web app... like me ;-)</p>
+
+<h1>
+<a id="why-should-i-use-that" class="anchor" href="#why-should-i-use-that" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why should I use that?!</h1>
+
+<p>The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is quite a difficult job with a steep learning curve... 
+Whereas PHP websites built on a standard CMS are easier to handle... The standard CMS does the page generation job quite naturally for years... Except that we reload pages when clicking a link... or we need to do ajax calls to dynamically update part of the pages...</p>
+
+<p>So, the idea is to provide a simple environment that don't change your habits when creating your website without having the hassle of creating ajax calls:</p>
+
+<ul>
+<li>no difficult framework to understand how to build a web application</li>
+<li>no REST or Ajax url end points to develop. Of course, you can do that if you like to do your application that way ;-)</li>
+<li>building the pages don't change from the "static" usual way of doing a website, meaning you can continue to use your standard LAMP and CMS environement</li>
+<li>configuration is simple and quite natural: it uses html5 "data" attributes to be configured and there is quite nothing to do from an existing website :-)</li>
+<li>the history of browsing is kept</li>
+<li>completly compliant with any existing html/js code</li>
+</ul>
+
+<h1>
+<a id="have-a-look-on-the-hello-world-demo" class="anchor" href="#have-a-look-on-the-hello-world-demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Have a look on the "Hello World" demo</h1>
+
+<p><a href="http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/">Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/</a></p>
+
+<h1>
+<a id="how-does-it-work" class="anchor" href="#how-does-it-work" aria-hidden="true"><span class="octicon octicon-link"></span></a>How does it work?</h1>
+
+<p>The main simple idea is to automatically and dynamically bind and update html blocks in ajax during the web navigation from page to page. </p>
+
+<p>Rules defined on the html blocks with data attributes will specify how the blocks should be updated with their new dynamic contents.</p>
+
+<p>let's have a first html file test1.html with some blocks with special attributes we will see later on...</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">body</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>myBlapy<span class="pl-pds">"</span></span>&gt;
+  &lt;<span class="pl-ent">h1</span>&gt;I'm test1.html file&lt;/<span class="pl-ent">h1</span>&gt;
+  &lt;<span class="pl-ent">ul</span>&gt;
+    &lt;<span class="pl-ent">li</span>&gt;&lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>test1.html<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-link</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;Hello World!&lt;/<span class="pl-ent">a</span>&gt;&lt;/<span class="pl-ent">li</span>&gt;
+    &lt;<span class="pl-ent">li</span>&gt;&lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>test2.html<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-link</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;How is it going?&lt;/<span class="pl-ent">a</span>&gt;&lt;/<span class="pl-ent">li</span>&gt;
+  &lt;/<span class="pl-ent">ul</span>&gt;
+  &lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>mainContainer<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-container</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-container-name</span>=<span class="pl-s"><span class="pl-pds">"</span>mainContainer<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-container-content</span>=<span class="pl-s"><span class="pl-pds">"</span>helloWorld<span class="pl-pds">"</span></span>&gt;
+    Hello World
+  &lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">body</span>&gt;</pre></div>
+
+<p><strong>Let's imagine now that you would like that the website loads and updates only the "mainContainer" part without updating the whole page when we click on the test2.html link...</strong></p>
+
+<p>You surely know that you would need to call a URL in ajax, get the new content from the server and update the container with jQuery html function... 
+Perhaps meet some problem with the browser history when going back... etc... etc...</p>
+
+<p>With Blapy, just create a second test2.html file as usual: it will be quite the same than test1.html (let's imagine the files are php generated...) with a new content in the "mainContainer" part :</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">body</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>myBlapy<span class="pl-pds">"</span></span>&gt;
+  &lt;<span class="pl-ent">h1</span>&gt;I am test2.html file&lt;/<span class="pl-ent">h1</span>&gt;
+  &lt;<span class="pl-ent">ul</span>&gt;
+    &lt;<span class="pl-ent">li</span>&gt;&lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>test1.html<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-link</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;Hello World!&lt;/<span class="pl-ent">a</span>&gt;&lt;/<span class="pl-ent">li</span>&gt;
+    &lt;<span class="pl-ent">li</span>&gt;&lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>test2.html<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-link</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;How is it going?&lt;/<span class="pl-ent">a</span>&gt;&lt;/<span class="pl-ent">li</span>&gt;
+  &lt;/<span class="pl-ent">ul</span>&gt;
+  &lt;<span class="pl-ent">div</span> <span class="pl-e">data-blapy-container</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-container-name</span>=<span class="pl-s"><span class="pl-pds">"</span>mainContainer<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-container-content</span>=<span class="pl-s"><span class="pl-pds">"</span>Howisitgoing?<span class="pl-pds">"</span></span>&gt;
+      How is it going?
+  &lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">body</span>&gt;</pre></div>
+
+<p>These two html files will load and behave normally if you load them and click the links.</p>
+
+<p>Well, just add at the end of your files this little script :</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">&lt;</span>script type<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span> src<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>../Blapy.js<span class="pl-pds">"</span></span><span class="pl-k">&gt;&lt;/</span>script<span class="pl-k">&gt;</span>
+<span class="pl-k">&lt;</span>script<span class="pl-k">&gt;</span>
+    $( <span class="pl-c1">document</span> ).ready(<span class="pl-k">function</span>() {
+        $(<span class="pl-s"><span class="pl-pds">'</span>#myBlapy<span class="pl-pds">'</span></span>).Blapy();
+    });
+<span class="pl-k">&lt;/</span>script<span class="pl-k">&gt;</span></pre></div>
+
+<p>You will then see that when clicking on the page links, only the 'data-blapy-container' block is changed without reloading the whole page! You can see that as the title has not changed... </p>
+
+<p>Tada! you've got a <strong>client web application</strong> :-)</p>
+
+<h1>
+<a id="how-to-configure-my-pages-to-become-pages-of-a-web-application" class="anchor" href="#how-to-configure-my-pages-to-become-pages-of-a-web-application" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to configure my pages to become pages of a web application?</h1>
+
+<h2>
+<a id="identify-the-common-blocks-between-your-different-pages" class="anchor" href="#identify-the-common-blocks-between-your-different-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Identify the common blocks between your different pages</h2>
+
+<ul>
+<li>Identify the common blocks (div, p, ... html tags) between your pages. When you use a CMS, these blocks are the same ones than those you identified when building your website.</li>
+</ul>
+
+<div class="highlight highlight-html"><pre>  &lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>myContainer<span class="pl-pds">"</span></span>&gt;
+      How is it going?
+  &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<ul>
+<li>Tell to Blapy that these blocks are the ones that may be updated from page to page:
+
+<ul>
+<li>add a "data-blapy-container" attribute set to true in order to configure this container as a Blapy container</li>
+<li>give a name identifier to the container with the "data-blapy-container-name" attribute in order to identify this content block as unique. </li>
+<li>give a content name to identify each unique page content to be used with the "data-blapy-container-content" attribute.</li>
+</ul>
+</li>
+</ul>
+
+<div class="highlight highlight-html"><pre>  &lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>myContainer<span class="pl-pds">"</span></span>  <span class="pl-e">data-blapy-container</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-container-name</span>=<span class="pl-s"><span class="pl-pds">"</span>mainContainer<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-container-content</span>=<span class="pl-s"><span class="pl-pds">"</span>Howisitgoing<span class="pl-pds">"</span></span>&gt;
+      How is it going?
+  &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<p>You can create as many Blapy containers as you need parts of your page to be updated.</p>
+
+<h2>
+<a id="identify-the-links-that-update-contents" class="anchor" href="#identify-the-links-that-update-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Identify the links that update contents</h2>
+
+<ul>
+<li>Identify the links pointing to pages that have contents you would like to use to update the content blocks of your current page.</li>
+</ul>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>test1.html<span class="pl-pds">"</span></span>&gt;Hello World!&lt;/<span class="pl-ent">a</span>&gt;</pre></div>
+
+<ul>
+<li>Tell the links that they need to be handled by Blapy by using the "data-blapy-link" attribute.</li>
+</ul>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>test1.html<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-link</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;Hello World!&lt;/<span class="pl-ent">a</span>&gt;</pre></div>
+
+<ul>
+<li>Call Blapy jquery script on the body of your page (or any main div in your page)... <strong>The html block should have an "id" attribute</strong>.</li>
+</ul>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">html</span>&gt;
+...
+&lt;<span class="pl-ent">body</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>myBlapy<span class="pl-pds">"</span></span>&gt;
+...
+&lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>myContainer<span class="pl-pds">"</span></span>  <span class="pl-e">data-blapy-container</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-container-name</span>=<span class="pl-s"><span class="pl-pds">"</span>mainContainer<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-container-content</span>=<span class="pl-s"><span class="pl-pds">"</span>Howisitgoing<span class="pl-pds">"</span></span>&gt;
+      How is it going?
+  &lt;/<span class="pl-ent">div</span>&gt;
+...
+&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>../Blapy.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+<span class="pl-s1">&lt;<span class="pl-ent">script</span>&gt;</span>
+<span class="pl-s1">    $( <span class="pl-c1">document</span> ).ready(<span class="pl-k">function</span>() {</span>
+<span class="pl-s1">        $(<span class="pl-s"><span class="pl-pds">'</span>#myBlapy<span class="pl-pds">'</span></span>).Blapy();</span>
+<span class="pl-s1">    });</span>
+<span class="pl-s1">&lt;/<span class="pl-ent">script</span>&gt;</span>
+&lt;/<span class="pl-ent">body</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
+
+<p>That's it: your blocks will be automatically updated by ajax calls to the other pages according to your configuration.</p>
+
+<h1>
+<a id="general-algorithm-of-blapy" class="anchor" href="#general-algorithm-of-blapy" aria-hidden="true"><span class="octicon octicon-link"></span></a>General algorithm of Blapy</h1>
+
+<p>The general algorithm of Blapy is the following:</p>
+
+<ul>
+<li>when a link is called (clicked) and if it is a "blapy-link", 
+
+<ul>
+<li>get the new content from the clicked page through an ajax call</li>
+<li>get all the "blapy-container" of the current page</li>
+<li>for each "blapy-container" of the current page
+
+<ul>
+<li>Get the "blapy-container" with the same name ("blapy-container-name") from the new page</li>
+<li>Compare "blapy-container-content : is the "blapy-container-content" different between the current one and the new one?
+
+<ul>
+<li>if "yes", then change the "blapy-container" with the new one</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<h1>
+<a id="blapyoptions" class="anchor" href="#blapyoptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>.Blapy(options)</h1>
+
+<p>Blapy is the jQuery function that starts your web application.  </p>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">"</span>#&lt;an id&gt;<span class="pl-pds">"</span></span>).Blapy(options);</pre></div>
+
+<h2>
+<a id="options" class="anchor" href="#options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options</h2>
+
+<p>Options is a javascript object. It can take as input the following possible option parameters :</p>
+
+<ul>
+<li>
+<strong>debug</strong>: (default:false) if true, then log things in the console</li>
+<li>
+<strong>LogLevel</strong>: (default:3) log level: 1: error ; 2: warning; 3: notice</li>
+<li>
+<strong>AlertError</strong>: (default:false) show an alert box on error messages if true</li>
+<li>
+<strong>pageLoadedFunction</strong>: (default:null) function to call when the page is loaded</li>
+<li>
+<strong>pageReadyFunction</strong>: (default:null) function to call when the page is ready</li>
+<li>
+<strong>beforePageLoad</strong>: (default:null) function to call b efore the page load the new content</li>
+<li>
+<strong>beforeContentChange</strong>: (default:null) function to call when a Blapy bloc will have its content changed</li>
+<li>
+<strong>afterContentChange</strong>: (default:null) function to call after a Blapy bloc has its content changed</li>
+<li>
+<strong>afterPageChange</strong>: (default:null) function to call when the page had all its content changed</li>
+<li>
+<strong>onErrorOnPageChange</strong>: (default:null) function to call when the page got an error during change</li>
+</ul>
+
+<h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example:</h2>
+
+<div class="highlight highlight-javascript"><pre>    $( <span class="pl-c1">document</span> ).ready(<span class="pl-k">function</span>() {
+        $(<span class="pl-s"><span class="pl-pds">'</span>#bodyId<span class="pl-pds">'</span></span>).Blapy({debug<span class="pl-k">:</span><span class="pl-c1">true</span>,LogLevel<span class="pl-k">:</span><span class="pl-c1">2</span>})
+    });</pre></div>
+
+<h2>
+<a id="remarks" class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
+
+<p><strong>Blapy absolutely needs to be called on an object with an "id" set.</strong></p>
+
+<p>That means that if you'd like to bind Blapy to the "body", you <strong>have to</strong> set an id on the body element:</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">body</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>bodyId<span class="pl-pds">"</span></span>&gt;
+...
+&lt;/<span class="pl-ent">body</span>&gt;</pre></div>
+
+<p><strong>You can have as many separate Blapy blocks as you like.</strong></p>
+
+<div class="highlight highlight-javascript"><pre>    $( <span class="pl-c1">document</span> ).ready(<span class="pl-k">function</span>() {
+        $(<span class="pl-s"><span class="pl-pds">'</span>#myBlapyApp1,#myBlapyApp2,#myBlapyApp3<span class="pl-pds">'</span></span>).Blapy();
+    });</pre></div>
+
+<p>This way, you will be able to tell which application a Blapy block should update when loaded. 
+See "data-blapy-applyon" option on Blapy blocks.</p>
+
+<h1>
+<a id="blapy-blocks" class="anchor" href="#blapy-blocks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blapy Blocks</h1>
+
+<p>Blapy blocks are the parts where you would like the content to be updated from external contents downloaded through ajax calls by Blapy.</p>
+
+<p>A Blapy block may be any html element where you have set Blapy attributes that define the behaviour as Blapy blocks.</p>
+
+<p>These attributes are analysed from the external Blapy block in order to know how the updating process should be applied on the current block. </p>
+
+<p>To define a Blapy Block, you need to use the following attributes:</p>
+
+<h2>
+<a id="attributes" class="anchor" href="#attributes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Attributes</h2>
+
+<ul>
+<li>
+<strong>data-blapy-container</strong>: set to "true", tells that the current html tag is Blapy block</li>
+<li>
+<strong>data-blapy-container-name</strong>: gives the name of the Blapy block. It will identify the block. </li>
+<li>
+<strong>data-blapy-container-content</strong>: gives the subject of the content. It will identify the content of the block. </li>
+<li>
+<strong>data-blapy-update</strong> (option, default:'update'): tells how Blapy should update the Blapy block when an external page or content is loaded.
+
+<ul>
+<li>
+<strong>update</strong>: if the container-name is found from the external content and its container-content is different from the current page, the Blapy block of the current page is to be replaced by the new one</li>
+<li>
+<strong>force-update</strong>: if the container-name is found from the external content, the Blapy block of the current page is to be replaced by the new one</li>
+<li>
+<strong>append</strong>: if the container-name is found from the external content, the external content should be added to the end of the current Blapy block content.</li>
+<li>
+<strong>prepend</strong>: if the container-name is found from the external content, the external content should be added before the current Blapy block content.</li>
+<li>
+<strong>replace</strong>: if the container-name is found from the external content, the inner content of the external content should replace the current Blapy block content.</li>
+<li>
+<strong>json</strong>: the content of the current container is considered to be a template. If the container-name is found, then it is considered that the external content is a json object or an array of json objects. These json objects will be applied on the template.
+
+<ul>
+<li>
+<strong>data-blapy-template-file</strong>: defines a template file name where to get the template if the container is empty</li>
+</ul>
+</li>
+<li>
+<strong>remove</strong>:  if the container-name is found from the external content, then the Blapy block is to be removed.</li>
+<li>
+<strong>custom</strong>:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined and send the Blapy_doCustomChange event.</li>
+<li>
+<strong>[an animation plugin function name]</strong>: if the container-name is found from the external content, function to call and apply to do the content change. The available plugin functions may be found in the Blapy_AnimationPlugins.js file.</li>
+</ul>
+</li>
+<li>
+<strong>data-blapy-update-rule</strong>: ['local'|'external' (default)], if 'local', will use the data-blapy-update rule defined in the current block, else will use the one defined in the external block. Exception to the default value, a "json" block is always "local".</li>
+<li>
+<strong>data-blapy-applyon</strong> (option, default:'all'): By default, the Blapy blocks loaded by a Blapy link will be tried on all Blapy blocks. If defined, the external container will only be applied on the matched Blapy blocks contained in the given application id element. </li>
+</ul>
+
+<h2>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<div class="highlight highlight-html"><pre>        &lt;<span class="pl-ent">div</span>    <span class="pl-e">data-blapy-container</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> 
+                <span class="pl-e">data-blapy-container-name</span>=<span class="pl-s"><span class="pl-pds">"</span>mainContainerApp3<span class="pl-pds">"</span></span> 
+                <span class="pl-e">data-blapy-container-content</span>=<span class="pl-s"><span class="pl-pds">"</span>aContent2<span class="pl-pds">"</span></span> 
+                <span class="pl-e">data-blapy-applyon</span>=<span class="pl-s"><span class="pl-pds">"</span>myBlapyApp1,myBlapyApp3<span class="pl-pds">"</span></span>
+        &gt;
+            &lt;<span class="pl-ent">h3</span>&gt;a Content&lt;/<span class="pl-ent">h3</span>&gt;
+            This is content...
+        &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<div class="highlight highlight-html"><pre>            &lt;<span class="pl-ent">div</span>    <span class="pl-e">data-blapy-container</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> 
+                    <span class="pl-e">data-blapy-container-name</span>=<span class="pl-s"><span class="pl-pds">"</span>submainContainerApp1<span class="pl-pds">"</span></span> 
+                    <span class="pl-e">data-blapy-container-content</span>=<span class="pl-s"><span class="pl-pds">"</span>aSubContent<span class="pl-pds">"</span></span> 
+                    <span class="pl-e">data-blapy-update</span>=<span class="pl-s"><span class="pl-pds">"</span>remove<span class="pl-pds">"</span></span>
+            &gt;
+            &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<h1>
+<a id="blapy-links" class="anchor" href="#blapy-links" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blapy Links</h1>
+
+<p>A Blapy Link is a url link that should be handled by Blapy. </p>
+
+<p>A Blapy link may be attached to the html "<code>&lt;a&gt;</code>" or "<code>&lt;form&gt;</code>" tags by specifying a "data-blapy-link" attribute on it.</p>
+
+<p>It may be attached to other kind of tag, then you will have to specify the "data-blapy-href" attribute to explicit the hyperlink.</p>
+
+<p>To define a Blapy Link, here are its attributes:</p>
+
+<h2>
+<a id="attributes-1" class="anchor" href="#attributes-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Attributes</h2>
+
+<ul>
+<li>
+<strong>data-blapy-link</strong>: tells that the current link has to be handled by Blapy.
+
+<ul>
+<li>set to "get" (or "true" or void), Blapy will get the content of the link and will process the blapy blocks matching with the current application content</li>
+<li>set to "post" (or "submit"), Blapy will post to the server the data of the "input" found tags or the content of any tags with the attribute "data-blapy-data" set to true, then will get the content of the server answer and will process the blapy blocks matching with the current application content</li>
+<li>set to "put", same as "post", but will "put" the data to the server </li>
+</ul>
+</li>
+</ul>
+
+<p><strong>Remarks:</strong> if data-blapy-link is set to a form, the method configuration will be used if defined.</p>
+
+<ul>
+<li>
+<strong>data-blapy-href</strong>: tells the hyperlink to use</li>
+</ul>
+
+<h2>
+<a id="examples-1" class="anchor" href="#examples-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">ul</span>&gt;
+    &lt;<span class="pl-ent">li</span>&gt;&lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>content1.php<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-link</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;Content 1&lt;/<span class="pl-ent">a</span>&gt;&lt;/<span class="pl-ent">li</span>&gt;
+    &lt;<span class="pl-ent">li</span>&gt;&lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>content2.php<span class="pl-pds">"</span></span> <span class="pl-e">data-blapy-link</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;Content 2&lt;/<span class="pl-ent">a</span>&gt;&lt;/<span class="pl-ent">li</span>&gt;
+&lt;/<span class="pl-ent">ul</span></pre></div>
+
+<h1>
+<a id="triggered-events" class="anchor" href="#triggered-events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Triggered events</h1>
+
+<p>Blapy generates the following events during the Blapy object change processing:</p>
+
+<ul>
+<li>
+<strong>Blapy_PageLoaded</strong> - triggered when a page is fully and normally loaded. </li>
+<li>
+<strong>Blapy_PageReady</strong> - triggered when the page is ready, after a loading page or a change in the page.</li>
+<li>
+<strong>Blapy_beforePageLoad</strong> - triggered before a page load its new content.</li>
+<li>
+<strong>Blapy_beforePageChange</strong> - triggered before a page content will change.</li>
+<li>
+<strong>Blapy_beforeContentChange</strong> - triggered before a Blapy block content change. 
+
+<ul>
+<li>Parameters:
+
+<ul>
+<li>the Blapy block </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<strong>Blapy_afterContentChange</strong> - triggered after a a Blapy block content has changed.
+
+<ul>
+<li>Parameters:
+
+<ul>
+<li>the Blapy block </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<strong>Blapy_doCustomChange</strong> - triggered if data-blapy-update='custom', sent to the object that should change its content
+
+<ul>
+<li>Parameters:
+
+<ul>
+<li>newObject : the new Blapy Block </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<strong>Blapy_ErrorOnPageChange</strong> - triggered when an error occured during a page content change. 
+
+<ul>
+<li>Parameters:
+
+<ul>
+<li>anError: the error message</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<p>To listen to Blapy events, you may use the jQuery 'on' function as in this example:</p>
+
+<div class="highlight highlight-javascript"><pre>    $(<span class="pl-s"><span class="pl-pds">"</span>#myBlapy<span class="pl-pds">"</span></span>).on( <span class="pl-s"><span class="pl-pds">"</span>Blapy_ErrorOnPageChange<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">event</span>,<span class="pl-smi">anError</span>) {
+          <span class="pl-c1">alert</span>( anError );
+    }); </pre></div>
+
+<h1>
+<a id="sending-events-to-blapy" class="anchor" href="#sending-events-to-blapy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sending events to Blapy</h1>
+
+<p>You can activate some features of Blapy by sending events to it with the 'trigger' function of jQuery:</p>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">'</span>#&lt; id of the body tag&gt;<span class="pl-pds">'</span></span>).trigger(<span class="pl-k">&lt;</span>anEvent<span class="pl-k">&gt;</span>,{aUrl<span class="pl-k">:&lt;</span>aURL to call<span class="pl-k">&gt;</span>,params<span class="pl-k">:&lt;</span>someParameters<span class="pl-k">&gt;</span>)</pre></div>
+
+<h2>
+<a id="loadurl-event" class="anchor" href="#loadurl-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>"loadURL" event</h2>
+
+<p>This event allows you to call a URL.</p>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">'</span>#&lt;id of the blapy application tag&gt;<span class="pl-pds">'</span></span>).trigger(<span class="pl-s"><span class="pl-pds">'</span>loadUrl<span class="pl-pds">'</span></span>,{aUrl<span class="pl-k">:&lt;</span>aURL to call<span class="pl-k">&gt;</span>,params<span class="pl-k">:</span>{action<span class="pl-k">:&lt;</span>anAction<span class="pl-k">&gt;</span>}})</pre></div>
+
+<h3>
+<a id="params" class="anchor" href="#params" aria-hidden="true"><span class="octicon octicon-link"></span></a>params</h3>
+
+<ul>
+<li>action
+
+<ul>
+<li>'update': update the Blapy blocks from the URL</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="example-1" class="anchor" href="#example-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">'</span>#myBlapy<span class="pl-pds">'</span></span>).trigger(<span class="pl-s"><span class="pl-pds">'</span>loadUrl<span class="pl-pds">'</span></span>,{aUrl<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>helloworld_2.php<span class="pl-pds">"</span></span>,params<span class="pl-k">:</span>{action<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>update<span class="pl-pds">'</span></span>}})</pre></div>
+
+<h2>
+<a id="postdata-event" class="anchor" href="#postdata-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>"postData" event</h2>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">'</span>#&lt;id of the blapy application tag&gt;<span class="pl-pds">'</span></span>).trigger(<span class="pl-s"><span class="pl-pds">'</span>postData<span class="pl-pds">'</span></span>,{aUrl<span class="pl-k">:&lt;</span>aURL to call<span class="pl-k">&gt;</span>,params<span class="pl-k">:</span>{action<span class="pl-k">:&lt;</span>anAction<span class="pl-k">&gt;</span>},method<span class="pl-k">:&lt;</span>http method<span class="pl-k">&gt;</span>});</pre></div>
+
+<h3>
+<a id="params-1" class="anchor" href="#params-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>params</h3>
+
+<ul>
+<li>action
+
+<ul>
+<li>'update' (default) : update the Blapy blocks from the URL</li>
+</ul>
+</li>
+<li>method
+
+<ul>
+<li>'post' (default)</li>
+<li>'put'</li>
+<li>'delete'</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="example-2" class="anchor" href="#example-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">"</span>#myBlapy<span class="pl-pds">"</span></span>).trigger(<span class="pl-s"><span class="pl-pds">'</span>postData<span class="pl-pds">'</span></span>,{aUrl<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>testForm.php<span class="pl-pds">"</span></span>,params<span class="pl-k">:</span>{fname<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>couou<span class="pl-pds">'</span></span>,lname<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>tatat<span class="pl-pds">'</span></span>}})</pre></div>
+
+<h1>
+<a id="blapy-parameters-sent-when-calling-a-url" class="anchor" href="#blapy-parameters-sent-when-calling-a-url" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blapy parameters sent when calling a URL</h1>
+
+<p>When Blapy calls a 'Blapy Link', the following parameters are sent as GET parameters:</p>
+
+<ul>
+<li>
+<strong>blapycall</strong>=1 - tells that the call is coming from Blapy</li>
+<li>
+<strong>blapyaction</strong>=[anAction] -tells the kind of action that will be operated
+
+<ul>
+<li>
+<strong>update</strong>: blocks will be updated</li>
+</ul>
+</li>
+</ul>
+
+<p>Knowing these parameters allow you to optimize the generated html returned by the server to the client, so sending back only the useful html blocks instead of the full html page. </p>
+
+<h1>
+<a id="blapy-animation-plugin-functions" class="anchor" href="#blapy-animation-plugin-functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blapy animation plugin functions</h1>
+
+<p>It is possible to create its own animation plugin functions.</p>
+
+<p>The prototype of an animation plugin function is :</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-c1">theBlapy</span>.<span class="pl-c1">prototype</span>.<span class="pl-en">myAnimationFunction</span> <span class="pl-k">=</span> <span class="pl-k">function</span> (<span class="pl-smi">oldContainer</span>,<span class="pl-smi">newContainer</span>) {}</pre></div>
+
+<p>Have a look in the Blapy_AnimationPlugins.js and add your new functions in it inspired by the existing functions.</p>
+
+<h1>
+<a id="library-dependencies" class="anchor" href="#library-dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>LIBRARY DEPENDENCIES</h1>
+
+<p>To work properly, you need to include the following javascript libraries:</p>
+
+<ul>
+<li>jQuery (&gt;= 1.10) <code>&lt;script type="text/javascript" src="extlib/jquery-1.10.2.min.js"&gt;&lt;/script&gt;</code>
+</li>
+<li>
+<a href="https://github.com/intersel/iFSM/">iFSM by intersel</a>
+
+<ul>
+<li>this library manages finite state machines and needs these libraries:
+
+<ul>
+<li>doTimeout by <a href="http://benalman.com/projects/jquery-dotimeout-plugin/">"Cowboy" Ben Alman</a>
+
+<ul>
+<li>this library brings some very usefull feature on the usual javascript setTimeout function like Debouncing, Delays &amp; Polling Loops, Hover Intent...</li>
+<li><code>&lt;script type="text/javascript" src="extlib/jquery.dotimeout.js"&gt;&lt;/script&gt;</code></li>
+</ul>
+</li>
+<li>attrchange by Selvakumar Arumugam](<a href="http://meetselva.github.io/attrchange/">http://meetselva.github.io/attrchange/</a>) 
+
+<ul>
+<li>a simple jQuery function to bind a listener function to any HTML element on attribute change</li>
+<li><code>&lt;script type="text/javascript" src="extlib/jquery.attrchange.js"&gt;&lt;/script&gt;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="http://sammyjs.org/">Sammy</a>
+
+<ul>
+<li>Sammy is a small framework to make web application providing simple but efficient 'route' services
+
+<ul>
+<li><code>&lt;script type="text/javascript" src="extlib/sammy/lib/sammy.js"&gt;&lt;/script&gt;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="http://json2html.com/">json2html</a>
+
+<ul>
+<li>json2html is a javascript HTML templating library used to transform JSON objects into HTML using a template.
+
+<ul>
+<li><code>&lt;script type="text/javascript" src="../../extlib/json2html/json2html.js"&gt;&lt;/script&gt;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<h1>
+<a id="faq" class="anchor" href="#faq" aria-hidden="true"><span class="octicon octicon-link"></span></a>FAQ</h1>
+
+<p>If you have questions or unsolved problems, you can have a look on the our <a href="https://github.com/intersel/Blapy/wiki">FAQs</a> 
+or leave a message on the <a href="https://github.com/intersel/Blapy/issues">Issue board</a>.</p>
+
+<h2>
+<a id="when-a-blapy-link-is-called-do-the-server-need-to-send-a-full-html-page-with-a-body-and-" class="anchor" href="#when-a-blapy-link-is-called-do-the-server-need-to-send-a-full-html-page-with-a-body-and-" aria-hidden="true"><span class="octicon octicon-link"></span></a>When a Blapy link is called, do the server need to send a full HTML page with a body and ...</h2>
+
+<p>No, you can optimize your code by only sending the useful Blapy blocks. </p>
+
+<h2>
+<a id="is-it-possible-to-set-blapy-blocks-in-head-tags" class="anchor" href="#is-it-possible-to-set-blapy-blocks-in-head-tags" aria-hidden="true"><span class="octicon octicon-link"></span></a>Is it possible to set Blapy blocks in "head" tags?</h2>
+
+<p>Yes, but in order to have the Blapy see them, set an id on the html tag and call Blapy on it:</p>
+
+<h3>
+<a id="example-3" class="anchor" href="#example-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">html</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>myBlapy<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">head</span>&gt;
+    &lt;<span class="pl-ent">title</span>  <span class="pl-e">data-blapy-container</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> 
+            <span class="pl-e">data-blapy-container-name</span>=<span class="pl-s"><span class="pl-pds">"</span>Title<span class="pl-pds">"</span></span> 
+            <span class="pl-e">data-blapy-container-content</span>=<span class="pl-s"><span class="pl-pds">"</span>myTitle<span class="pl-pds">"</span></span>&gt;This is a title page&lt;/<span class="pl-ent">title</span>&gt;
+<span class="pl-s1">    &lt;<span class="pl-ent">script</span>&gt;</span>
+<span class="pl-s1">        $( <span class="pl-c1">document</span> ).ready(<span class="pl-k">function</span>() {</span>
+<span class="pl-s1">            $(<span class="pl-s"><span class="pl-pds">'</span>#myBlapy<span class="pl-pds">'</span></span>).Blapy();</span>
+<span class="pl-s1">        });</span>
+<span class="pl-s1">    &lt;/<span class="pl-ent">script</span>&gt;</span>
+&lt;/<span class="pl-ent">head</span>&gt;
+&lt;<span class="pl-ent">body</span>&gt;
+  <span class="pl-c">&lt;!--  body part --&gt;</span>
+&lt;/<span class="pl-ent">body</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;  </pre></div>
+
+<h2>
+<a id="how-to-define-template-variables-in-a-template" class="anchor" href="#how-to-define-template-variables-in-a-template" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to define template variables in a template</h2>
+
+<p>The syntax follows the one defined by json2html library : ${myVariableName} </p>
+
+<h3>
+<a id="example-4" class="anchor" href="#example-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<pre><code>        First name: ${fname}&lt;br&gt;
+        Last name: ${lname}&lt;br&gt;
+</code></pre>
+
+<h2>
+<a id="how-to-send-several-json-objects-to-a-json-block" class="anchor" href="#how-to-send-several-json-objects-to-a-json-block" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to send several json objects to a json block</h2>
+
+<p>You just defined an array the way you would do in javascript with your json objects</p>
+
+<div class="highlight highlight-html"><pre>    &lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>aForm<span class="pl-pds">"</span></span> 
+        <span class="pl-e">data-blapy-container</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> 
+        <span class="pl-e">data-blapy-container-name</span>=<span class="pl-s"><span class="pl-pds">"</span>resultFormJson<span class="pl-pds">"</span></span> 
+        <span class="pl-e">data-blapy-container-content</span>=<span class="pl-s"><span class="pl-pds">"</span>resultFormJson<span class="pl-pds">"</span></span>
+        <span class="pl-e">data-blapy-update</span>=<span class="pl-s"><span class="pl-pds">"</span>json<span class="pl-pds">"</span></span>
+    &gt;
+    [
+    {fname: "Emmanuel",lname: "Durand"},
+    {fname: "Maryse",lname: "Dupond"}
+    ]
+    &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<h1>
+<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact</h1>
+
+<p>If you have any ideas, feedback, requests or bug reports, you can reach me at <a href="mailto:github@intersel.org">github@intersel.org</a>, 
+or via my website: <a href="http://www.intersel.fr">http://www.intersel.fr</a></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/intersel/Blapy">Blapy</a> is maintained by <a href="https://github.com/intersel">intersel</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
