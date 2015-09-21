@@ -101,7 +101,7 @@ else
 						data-blapy-container-name="mainContainerApp2" 
 						data-blapy-container-content="aContent_<?php echo time();?>" 
 				>
-					<b>Time is:</b> <?php echo date('d-M-Y H:m:s');?>
+					<b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
 		</div>
 		<script>
 			setInterval(function(){ 
