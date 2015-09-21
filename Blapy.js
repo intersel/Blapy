@@ -16,6 +16,7 @@
  * - 2015/08/05 - E.Podvin - V1.0.5 - fix on a double pageready event sent
  * - 2015/08/07 - E.Podvin - V1.0.6 - add event Blapy_doCustomChange
  * - 2015/08/29 - E.Podvin - V1.0.7 - add post data capabilities
+ * - 2015/09/21 - E.Podvin - V1.0.10 - fix on the initialization of json container whose template is defined by an external file
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2015
@@ -242,13 +243,17 @@
 					{
 						$.get(tplFile, function(htmlTplContent) {
 							myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true">'+htmlTplContent+'</div>');
+							var aInitURL = myContainer.attr("data-blapy-template-init");
+							if (aInitURL)
+								$('#'+myBlapy.myUIObjectID).trigger('loadUrl',{aUrl:aInitURL});
 						});
-					}	
-					
-					var aInitURL = myContainer.attr("data-blapy-template-init");
-					if (aInitURL)
-						$('#'+myBlapy.myUIObjectID).trigger('loadUrl',{aUrl:aInitURL});
-					
+					}
+					else
+					{
+						var aInitURL = myContainer.attr("data-blapy-template-init");
+						if (aInitURL)
+							$('#'+myBlapy.myUIObjectID).trigger('loadUrl',{aUrl:aInitURL});
+					}
 				}
 				else
 					myContainer.html('<div style="display:none" data-blapy-container-tpl="true">'+htmlTplContent+'</div>');
@@ -498,7 +503,7 @@
 									if (htmlTpl.length == 0)
 									{
 										htmlTplContent = myContainer.html();
-										myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true">'+htmlTplContent+'</div>');
+										htmlTpl = myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true">'+htmlTplContent+'</div>');
 									}
 									else
 									{
@@ -573,4 +578,3 @@
 
  
 })(jQuery);
-
