@@ -216,6 +216,8 @@ To define a Blapy Block, you need to use the following attributes:
   * **replace**: if the container-name is found from the external content, the inner content of the external content should replace the current Blapy block content.
   * **json**: the content of the current container is considered to be a template. If the container-name is found, then it is considered that the external content is a json object or an array of json objects. These json objects will be applied on the template.
     * **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
+    * **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "<table>")
+	* **data-blapy-template-init**: a file name that contains a blapy block that can be used to initialized the block
   * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
   * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined and send the Blapy_doCustomChange event.
   * **[an animation plugin function name]**: if the container-name is found from the external content, function to call and apply to do the content change. The available plugin functions may be found in the Blapy_AnimationPlugins.js file.
@@ -382,7 +384,7 @@ To work properly, you need to include the following javascript libraries:
 If you have questions or unsolved problems, you can have a look on the our [FAQs](https://github.com/intersel/Blapy/wiki) 
 or leave a message on the [Issue board](https://github.com/intersel/Blapy/issues).
 
-## When a Blapy link is called, do the server need to send a full HTML page with a body and ...
+## When a Blapy link is called, does the server need to send a full HTML page with a body and ...
 No, you can optimize your code by only sending the useful Blapy blocks. 
 ## Is it possible to set Blapy blocks in "head" tags?
 Yes, but in order to have the Blapy see them, set an id on the html tag and call Blapy on it:

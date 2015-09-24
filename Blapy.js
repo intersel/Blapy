@@ -229,20 +229,29 @@
 		//for any json template block
 		$('[data-blapy-update="json"]').each(function() {
 			var myContainer = $(this);
+			
+			//if block is declared json, then we take local update rule (json)
+			myContainer.attr('data-blapy-update-rule','local');
+			
+//			if (!myContainer.attr('data-blapy-template-wrap')) myContainer.attr('data-blapy-template-wrap','<div>'); 
+			
+			//Search for a template container already defined within the blapy container
 			var htmlTpl = myContainer.find('[data-blapy-container-tpl]');
 			if (htmlTpl.length == 0)
 			{
-				htmlTplContent = myContainer.html();
+				var htmlTplContent = myContainer.html();
 				
 				//if no template defined
 				if (htmlTplContent.replace(/\s{2,}/g, ' ').replace(/\t/g, ' ').toString().trim().replace(/(\r\n|\n|\r)/g,"") == "")
 				{
 					//look for partial template file
 					var tplFile = myContainer.attr("data-blapy-template-file");
-					if (myContainer.attr("data-blapy-template-file"))
+					if (tplFile)
 					{
 						$.get(tplFile, function(htmlTplContent) {
-							myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true">'+htmlTplContent+'</div>');
+							//store the template in comment in a hidden div
+							//needs to be in a comment, if not, template content is filtered if the template content not compliant within a div
+							myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true"><!--'+htmlTplContent+'--></div>');
 							var aInitURL = myContainer.attr("data-blapy-template-init");
 							if (aInitURL)
 								$('#'+myBlapy.myUIObjectID).trigger('loadUrl',{aUrl:aInitURL});
@@ -256,7 +265,7 @@
 					}
 				}
 				else
-					myContainer.html('<div style="display:none" data-blapy-container-tpl="true">'+htmlTplContent+'</div>');
+					myContainer.html('<div style="display:none" data-blapy-container-tpl="true"><!--'+htmlTplContent+'--></div>');
 			}
 		});
 	};
@@ -503,11 +512,13 @@
 									if (htmlTpl.length == 0)
 									{
 										htmlTplContent = myContainer.html();
-										htmlTpl = myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true">'+htmlTplContent+'</div>');
+										htmlTpl = myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true"><!--'+htmlTplContent+'--></div>');
 									}
 									else
 									{
 										htmlTplContent=htmlTpl.html();
+										//delete comment tag
+										htmlTplContent=htmlTplContent.substr(4,htmlTplContent.length-3-4);
 									}
 									
 									try
@@ -520,8 +531,20 @@
 										return;
 									}
 									
-									var newHtml = json2html.transform(jsonData,  {'tag':'div','html':htmlTplContent} );
-									myContainer.html(htmlTpl[0].outerHTML+newHtml);//replace content with the new one
+									//get the rendering
+									var newHtml = json2html.transform(jsonData,  {'tag':"void",'html':htmlTplContent} );
+									
+									//as json2html needs a root tag to render... well, we set void to delete it after rendering...
+									newHtml = newHtml.replace(/<.?void>/g,"");
+						
+									//Wrap content if needed
+									if ($(myContainer.attr('data-blapy-template-wrap')).length > 0)
+									{
+										newHtml = $(myContainer.attr('data-blapy-template-wrap')).html(newHtml)[0];
+										newHtml = newHtml.outerHTML;
+									}
+
+									myContainer.html(htmlTpl[0].outerHTML + newHtml);//replace content with the new one
 									myContainer=aBlapyContainer;
 								}
 								else
@@ -572,9 +595,12 @@
             start:
             {
                 next_state: 'PageLoaded',
-            }
-        }
-    };
-
- 
+            },
+	        loadUrl:   //someone try to load an URL but page is not ready... try it later... 
+	        {
+	        	how_process_event: {delay:30,preventcancel:true},
+	        	propagate_event:true,
+	        },
+        },
+	};
 })(jQuery);

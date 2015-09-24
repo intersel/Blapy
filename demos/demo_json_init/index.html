@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!-- To run the current sample code in your own environment, copy this to an html page. -->
+<html>
+<head>
+	<title>Json Example</title>
+	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+	<link rel="stylesheet" href="main.css" />
+	<script type="text/javascript" src="../../extlib/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../../extlib/sammy/lib/sammy.js"></script>
+	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
+	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
+	<script type="text/javascript" src="../../extlib/iFSM/iFSM.js"></script>
+	<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>
+</head>
+<body id="myBlapy">
+	<h1>Select values with the json feature of Blapy </h1>
+	<p>Fill the following form:</p>
+	<form id="myForm" action="testForm.php" data-blapy-link="true" method="POST">
+		Choose a firstname: 
+		<span 
+			data-blapy-container="true" 
+			data-blapy-container-name="fnameOptions" 
+			data-blapy-container-content="fnameOptionsFirstName"
+			data-blapy-update="json"
+			data-blapy-template-file="optionsTemplate.tpl"
+			data-blapy-template-wrap='<select name="firstname" onChange="$(&#39;#myForm&#39;).submit();">'
+			data-blapy-template-init="optionvalues.data"
+		>
+		</span>
+		<br>
+		Choose a lastname: 
+		<span 
+			data-blapy-container="true" 
+			data-blapy-container-name="fnameOptions" 
+			data-blapy-container-content="fnameOptionsLastName"
+			data-blapy-update="json"
+			data-blapy-template-init="optionvalues.data"
+		>
+			<input name="lastname" type="radio" value="${lastname}" ${selected} onClick="$('#myForm').submit();">${lastname}</input>
+		</span>
+	</form> 
+	
+	<h1>Blapy Block results in a Table</h1>
+	<div id="results" 
+			data-blapy-container="true" 
+			data-blapy-container-name="results" 
+			data-blapy-container-content="results"
+			data-blapy-update="json"
+			data-blapy-template-file="arrayvalues.tpl"
+			data-blapy-template-wrap="<table>"
+			data-blapy-template-init="arrayvalues.data"
+		>
+	</div>	
+</body>
+
+<script type="text/javascript" src="../../Blapy.js"></script>
+<script type="text/javascript" src="../../Blapy_AnimationPlugins.js"></script>
+<script>
+	$( document ).ready(function() {
+
+		//start Blapy
+		$('#myBlapy').Blapy();
+
+		//catch errors
+		$( "#myBlapy" ).on( "Blapy_ErrorOnPageChange", function(event,anError) {
+			  alert( 'Blapy error: '+anError );
+			});
+		
+	});
+
+	$("body").append('<h3>HTML code of the page</h3>').append(jQuery('<pre />').text($('html').html()));
+</script>
+
+</html>

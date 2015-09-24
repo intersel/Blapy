@@ -1,0 +1,12 @@
+<div id="results" 
+	data-blapy-container="true" 
+	data-blapy-container-name="results" 
+	data-blapy-container-content="resultsnew"
+>
+[
+	{firstname: "John",lastname: "Doe"},
+	{firstname: "Bob",lastname: "Dylan"},
+	{firstname: "Peter",lastname: "Rabbit"},
+	{firstname: "Nina",lastname: "Hagen"},
+]
+</div>
