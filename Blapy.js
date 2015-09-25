@@ -17,6 +17,7 @@
  * - 2015/08/07 - E.Podvin - V1.0.6 - add event Blapy_doCustomChange
  * - 2015/08/29 - E.Podvin - V1.0.7 - add post data capabilities
  * - 2015/09/21 - E.Podvin - V1.0.10 - fix on the initialization of json container whose template is defined by an external file
+ * - 2015/09/25 - E.Podvin - V1.0.11 - fix on json updates
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2015
