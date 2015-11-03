@@ -18,6 +18,7 @@
  * - 2015/08/29 - E.Podvin - V1.0.7 - add post data capabilities
  * - 2015/09/21 - E.Podvin - V1.0.10 - fix on the initialization of json container whose template is defined by an external file
  * - 2015/09/25 - E.Podvin - V1.0.11 - fix on json updates
+ * - 2015/11/03 - E.Podvin - V1.0.12 - fix on the initial URL loosing the querystring part
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2015
@@ -113,7 +114,7 @@
 		
 		this.myUIObject.iFSM(manageBlapy,this.opts);
 		//app.run('#/');
-		app.run(window.location.pathname+"#"+window.location.pathname);
+		app.run(window.location.pathname+"#"+window.location.pathname+window.location.search);
 
 	};//
 	
