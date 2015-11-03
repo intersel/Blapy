@@ -16,6 +16,7 @@ include("header.php");
 			<h1>How is it going?</h1>
 			<p>Did you see that the title block was changed? The "&lt;title&gt;" is a Blapy block too!</p> 
 			<p>Click on the "Hello world!" link to load back its content...</p> 
+			<p>sent id: <?php if (!empty($_GET['id'])) echo $_GET['id']?>
 		</div>
 	</div>
 	<div style="font-size:80%">
