@@ -20,13 +20,15 @@
  * - 2015/09/25 - E.Podvin - V1.0.11 - fix on json updates
  * - 2015/11/03 - E.Podvin - V1.0.12 - fix on the initial URL loosing the querystring part
  * - 2015/11/03 - E.Podvin - V1.0.13 - remove the # duplication of the url
+ * - 2015/11/04 - E.Podvin - V1.0.14 - fix on posted data
+ * 
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2015
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.0.6
+ * @version : 1.0.14
  * -----------------------------------------------------------------------------------------
  */
 
@@ -96,11 +98,11 @@
 			{
 				case 'update': 
 				default:
-					myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL(),params:this.params,aObjectId:myBlapy.myUIObjectID});
+					myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL(),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID});
 					break;
 			}
 		});
-		app.post(/(.*)/, function() 
+		app.post(/(.*)\#blapylink/, function() 
 				{
 					if(!this.params['action']) this.params['action']='update';
 
@@ -108,7 +110,7 @@
 					{
 						case 'update': 
 						default:
-							myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:this.params,aObjectId:myBlapy.myUIObjectID,method:"post"});
+							myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"post"});
 							break;
 					}
 				});
@@ -163,6 +165,29 @@
 			var Blapy = new theBlapy($(this), options);
 			Blapy.InitApplication();	//start it
 		});
+	};
+	
+	/**
+	 * filter to get only usefull attributes
+	 * on a Sammy Object
+	 * returns an object without any function or object
+	 * 
+	 */
+	theBlapy.prototype.filterAttributes = function (aSammyObject)
+	{
+		var sammyKeys=aSammyObject.keys();
+		var mySammyObject= aSammyObject;
+		var returnObject={};
+		$.each(aSammyObject.keys(),
+				function(key,value) {
+						if ( (typeof mySammyObject[value] != 'function') && (typeof mySammyObject[value] != 'object') )
+						{
+							//console.log(value+" "+mySammyObject[value]+(typeof mySammyObject[value]));
+							returnObject[value] = mySammyObject[value];
+							//alert(localO);console.log(localO);
+						};
+				});
+		return returnObject;
 	};
 	
 	/**
