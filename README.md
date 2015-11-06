@@ -249,9 +249,9 @@ tells how Blapy should update the Blapy block when an external page or content i
 * **json**: the content of the current container is considered to be a template. 
  If the container-name is found, then it is considered that the external content is a json object or an array of json objects. 
  These json objects will be applied on the template. Theses parameters complete the json configuration:
-  * **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
-  * **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "<table>")
-  * **data-blapy-template-init**: a file name that contains a blapy block that can be used to initialized the block 
+  . **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
+  . **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "<table>")
+  . **data-blapy-template-init**: a file name that contains a blapy block that can be used to initialized the block 
 
 
 
