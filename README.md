@@ -225,9 +225,9 @@ To define a Blapy Block, you need to use the following attributes:
 
 ## Attributes
 
-###**data-blapy-container**
+####data-blapy-container
 set to "true", tells that the current html tag is Blapy block.
-###data-blapy-container-name**
+####data-blapy-container-name
 gives the name of the Blapy block. It will identify the block.
 * **data-blapy-container-content**: gives the subject of the content. It will identify the content of the block.
 * **data-blapy-update** (option, default:'update'): tells how Blapy should update the Blapy block when an external page or content is loaded.
