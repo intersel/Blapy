@@ -225,11 +225,11 @@ To define a Blapy Block, you need to use the following attributes:
 
 ## Attributes
 
-* **data-blapy-container**: set to "true", tells that the current html tag is Blapy block.
-* **data-blapy-container-name**: gives the name of the Blapy block. It will identify the block.
-* **data-blapy-container-content**: gives the subject of the content. It will identify the content of the block.
-* **data-blapy-update** (option, default:'update'): tells how Blapy should update the Blapy block when an external page or content is loaded.
-  * **update**: if the container-name is found from the external content and its container-content is different from the current page, 
+*	**data-blapy-container**: set to "true", tells that the current html tag is Blapy block.
+*	**data-blapy-container-name**: gives the name of the Blapy block. It will identify the block.
+*	**data-blapy-container-content**: gives the subject of the content. It will identify the content of the block.
+*	**data-blapy-update** (option, default:'update'): tells how Blapy should update the Blapy block when an external page or content is loaded.
+ *	**update**: if the container-name is found from the external content and its container-content is different from the current page, 
  the Blapy block of the current page is to be replaced by the new one
  * **force-update**: if the container-name is found from the external content, the Blapy block of the current page is to be replaced by the new one
  * **append**: if the container-name is found from the external content, the external content should be added to the end of the current Blapy block content.
