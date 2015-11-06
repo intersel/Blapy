@@ -238,9 +238,9 @@ To define a Blapy Block, you need to use the following attributes:
  * **json**: the content of the current container is considered to be a template. 
  If the container-name is found, then it is considered that the external content is a json object or an array of json objects. 
  These json objects will be applied on the template. Theses parameters complete the json configuration:
-  * **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
-  * **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "```<table>```")
-  * **data-blapy-template-init**: a file name that contains a blapy block that can be used to initialized the block
+  1. **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
+  2. **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "```<table>```")
+  3. **data-blapy-template-init**: a file name that contains a blapy block that can be used to initialized the block
  * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
  * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined 
  and send the Blapy_doCustomChange event.
