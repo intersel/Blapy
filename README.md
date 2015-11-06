@@ -253,7 +253,7 @@ tells how Blapy should update the Blapy block when an external page or content i
   * **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "<table>")
   * **data-blapy-template-init**: a file name that contains a blapy block that can be used to initialized the block 
 
-
+**hello**
 
 ####data-blapy-update-rule
 ['local'|'external' (default)]
