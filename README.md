@@ -481,6 +481,11 @@ You just defined an array the way you would do in javascript with your json obje
 	</div>
 ```
 
+#Problem resolutions
+## My blapy block does not update from my external content...
+
+* Did you verify that your external block has a different **data-blapy-container-content** content than the current one? If not, the content is not updated as it is considered to be the same... The content of **data-blapy-container-content** may be any name.
+
 # Contact
 If you have any ideas, feedback, requests or bug reports, you can reach me at github@intersel.org, 
 or via my website: http://www.intersel.fr

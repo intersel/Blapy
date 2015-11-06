@@ -12,7 +12,8 @@ include("header.php");
 	<ul>
 		<li><a href="index.php" data-blapy-link="true">Hello World!</a></li>
 		<li><a href="helloworld_2.php?id=myNiceId" data-blapy-link="true">How is it going?</a></li>
-		<li><span data-blapy-link="true" data-blapy-href="helloworld_3.php?id=myNiceId2" class="anchor" style="">Load from the optimized code</span></li>
+		<li><a href="helloworld_3.php" data-blapy-link="true">Load from an optimized code</a></li>
+		<li><span data-blapy-link="true" data-blapy-href="helloworld_4.php?id=myNiceId2" class="anchor" style="">Load with a blapy link with no routing</span></li>
 	</ul>
 	<div style="border:solid 1px green;margin:20px;padding:20px;">
 		<div 	id="mainContainer" 

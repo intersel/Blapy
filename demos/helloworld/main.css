@@ -20,6 +20,9 @@ pre {
 	overflow-x:auto;
 	}
 
+.anchor{
+	cursor:pointer;
+}
 .anchor, a:link { 
 	font-weight: bold; 
 	text-decoration: none;  
