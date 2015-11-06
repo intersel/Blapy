@@ -247,11 +247,12 @@ To define a Blapy Block, you need to use the following attributes:
  * **[an animation plugin function name]**: if the container-name is found from the external content, 
  function to call and apply to do the content change. 
  The available plugin functions may be found in the Blapy_AnimationPlugins.js file.
+
 * **data-blapy-update-rule**: ['local'|'external' (default)], if 'local', will use the data-blapy-update rule defined in the current block, else will use the one defined in the external block. Exception to the default value, a "json" block is always "local".
 * **data-blapy-applyon** (option, default:'all'): By default, the Blapy blocks loaded by a Blapy link will be tried on all Blapy blocks. 
 If defined, the external container will only be applied on the matched Blapy blocks contained in the given application id element.
-
-
+ 
+ 
 ## Examples
 
 ```html
