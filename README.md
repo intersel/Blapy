@@ -225,24 +225,31 @@ To define a Blapy Block, you need to use the following attributes:
 
 ## Attributes
 
-* **data-blapy-container**: set to "true", tells that the current html tag is Blapy block
-* **data-blapy-container-name**: gives the name of the Blapy block. It will identify the block. 
+* **data-blapy-container**: set to "true", tells that the current html tag is Blapy block.
+* **data-blapy-container-name**: gives the name of the Blapy block. It will identify the block.
 * **data-blapy-container-content**: gives the subject of the content. It will identify the content of the block.
 * **data-blapy-update** (option, default:'update'): tells how Blapy should update the Blapy block when an external page or content is loaded.
-* **update**: if the container-name is found from the external content and its container-content is different from the current page, the Blapy block of the current page is to be replaced by the new one
+ * **update**: if the container-name is found from the external content and its container-content is different from the current page, 
+ the Blapy block of the current page is to be replaced by the new one
  * **force-update**: if the container-name is found from the external content, the Blapy block of the current page is to be replaced by the new one
  * **append**: if the container-name is found from the external content, the external content should be added to the end of the current Blapy block content.
  * **prepend**: if the container-name is found from the external content, the external content should be added before the current Blapy block content.
  * **replace**: if the container-name is found from the external content, the inner content of the external content should replace the current Blapy block content.
- * **json**: the content of the current container is considered to be a template. If the container-name is found, then it is considered that the external content is a json object or an array of json objects. These json objects will be applied on the template.
-   - **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
-   - **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "<table>")
-   - **data-blapy-template-init**: a file name that contains a blapy block that can be used to initialized the block
+ * **json**: the content of the current container is considered to be a template. 
+ If the container-name is found, then it is considered that the external content is a json object or an array of json objects. 
+ These json objects will be applied on the template.
+  * **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
+  * **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "<table>")
+  * **data-blapy-template-init**: a file name that contains a blapy block that can be used to initialized the block
  * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
- * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined and send the Blapy_doCustomChange event.
- * **[an animation plugin function name]**: if the container-name is found from the external content, function to call and apply to do the content change. The available plugin functions may be found in the Blapy_AnimationPlugins.js file.
+ * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined 
+ and send the Blapy_doCustomChange event.
+ * **[an animation plugin function name]**: if the container-name is found from the external content, 
+ function to call and apply to do the content change. 
+ The available plugin functions may be found in the Blapy_AnimationPlugins.js file.
 * **data-blapy-update-rule**: ['local'|'external' (default)], if 'local', will use the data-blapy-update rule defined in the current block, else will use the one defined in the external block. Exception to the default value, a "json" block is always "local".
-* **data-blapy-applyon** (option, default:'all'): By default, the Blapy blocks loaded by a Blapy link will be tried on all Blapy blocks. If defined, the external container will only be applied on the matched Blapy blocks contained in the given application id element.
+* **data-blapy-applyon** (option, default:'all'): By default, the Blapy blocks loaded by a Blapy link will be tried on all Blapy blocks. 
+If defined, the external container will only be applied on the matched Blapy blocks contained in the given application id element.
 
 ## Examples
 
