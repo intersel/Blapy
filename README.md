@@ -242,6 +242,11 @@ tells how Blapy should update the Blapy block when an external page or content i
 * **prepend**: if the container-name is found from the external content, the external content should be added before the current Blapy block content.
 * **replace**: if the container-name is found from the external content, the inner content of the external content should replace the current Blapy block content.
 * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
+* **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined 
+ and send the Blapy_doCustomChange event.
+* **[an animation plugin function name]**: if the container-name is found from the external content, 
+ function to call and apply to do the content change. 
+ The available plugin functions may be found in the Blapy_AnimationPlugins.js file.
 
 ####data-blapy-update-rule
 ['local'|'external' (default)]
