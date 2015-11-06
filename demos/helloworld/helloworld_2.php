@@ -1,4 +1,4 @@
-from the optimized code<?php
+<?php
 $defaultTitle = "Great! That's a new title of Hello World";
 include("header.php");
 ?>
