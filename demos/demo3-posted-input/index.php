@@ -5,7 +5,15 @@ include("header.php");
 <body id="myBlapy">
 	<h1>I am <b><?php echo basename(__FILE__)?> file</b> of "<?php echo $defaultTitle?>" demo file</h1>
 	<p>Fill the following form:</p>
+	<h2>Form "post" the Data</h2>
 	<form name="myForm" action="testForm.php" data-blapy-link="true" method="POST">
+		First name: <input type="text" name="fname"><br>
+		Last name: <input type="text" name="lname"><br>
+		<input type="submit" value="Send form data!">
+	</form> 
+
+	<h2>Form "put" the Data</h2>
+	<form name="myForm" action="testPutForm.php" data-blapy-link="true" method="PUT">
 		First name: <input type="text" name="fname"><br>
 		Last name: <input type="text" name="lname"><br>
 		<input type="submit" value="Send form data!">

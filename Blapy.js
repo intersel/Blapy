@@ -92,28 +92,16 @@
 		
 		app.get(/(.*)\#blapylink/, function() 
 		{
-			if(!this.params['action']) this.params['action']='update';
-
-			switch(this.params['action'])
-			{
-				case 'update': 
-				default:
-					myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL(),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID});
-					break;
-			}
+			myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL(),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID});
 		});
 		app.post(/(.*)\#blapylink/, function() 
-				{
-					if(!this.params['action']) this.params['action']='update';
-
-					switch(this.params['action'])
-					{
-						case 'update': 
-						default:
-							myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"post"});
-							break;
-					}
-				});
+		{
+			myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"post"});
+		});
+		app.put(/(.*)\#blapylink/, function() 
+		{
+			myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"put"});
+		});
 		
 		this.myUIObject.iFSM(manageBlapy,this.opts);
 		//app.run('#/');
@@ -197,16 +185,20 @@
 	theBlapy.prototype.setBlapyUrl = function ()
 	{
 		this._log('setBlapyUrl');
+		
+		var myBlapy = this;
 
 		//change href on blapy-link
 		$('[data-blapy-link]').each(function() {
 			
+			var aHref;
+			
 			if ($(this)[0].tagName == 'A')
-				var aHref = $(this).attr("href");
+				aHref = $(this).attr("href");
 			else if ($(this)[0].tagName == 'FORM')
-				var aHref = $(this).attr("action");
+				aHref = $(this).attr("action");
 			else 
-				var aHref = $(this).attr("data-blapy-href");
+				aHref = $(this).attr("data-blapy-href");
 				
 			if (!aHref) return;//not valid... for now
 			
@@ -218,7 +210,28 @@
 				else if ($(this)[0].tagName == 'FORM')
 					$(this).attr("action",aHref);
 				else 
+				{
+					if( 	(aHref.charAt(0) != '/')
+						&& 	(aHref.substring(0,4) != "http")
+					  )
+					{
+						var aBaseHref=$('base').attr('href');
+						if (aBaseHref)
+							aHref = aBaseHref+aHref;
+						else
+							aHref = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1)+aHref;
+					}
+					
+					if (aHref.indexOf("?") > 0)
+						aHref = aHref.slice(0, aHref.indexOf("?"));
+					else 
+						aHref = aHref;
+						
 					$(this).attr("data-blapy-href",aHref);
+					$(this).click(function() {
+						myBlapy.myUIObject.trigger('loadUrl',{aUrl:aHref,params:'',aObjectId:myBlapy.myUIObjectID});
+					});
+				}
 			} 
 
 		});
@@ -326,6 +339,7 @@
 					jQuery.ajax({
 						  type: 'GET', 
 						  url: aUrl, 
+						  crossDomain:true,
 						  data: "blapycall=1&blapyaction="+params.action+"&blapyobjectid="+aObjectId,
 						  success: function(data, textStatus, jqXHR) {
 							aFSM.trigger('pageLoaded',{htmlPage:data,params:params});

@@ -20,7 +20,7 @@ pre {
 	overflow-x:auto;
 	}
 
-a:link { 
+.anchor, a:link { 
 	font-weight: bold; 
 	text-decoration: none;  
 	color: #8675AA;
