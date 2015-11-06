@@ -157,7 +157,7 @@ The general algorithm of Blapy is the following:
  * for each "blapy-container" of the current page
      * Get the "blapy-container" with the same name ("blapy-container-name") from the new page
      * Compare "blapy-container-content" : is the current "blapy-container-content" different from the new one?
-          * if "yes", then change the "blapy-container" with the new one
+         * if "yes", then change the "blapy-container" with the new one
 
 
 # .Blapy(options)

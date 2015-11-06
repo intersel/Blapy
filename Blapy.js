@@ -222,11 +222,6 @@
 							aHref = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1)+aHref;
 					}
 					
-					if (aHref.indexOf("?") > 0)
-						aHref = aHref.slice(0, aHref.indexOf("?"));
-					else 
-						aHref = aHref;
-						
 					$(this).attr("data-blapy-href",aHref);
 					$(this).click(function() {
 						myBlapy.myUIObject.trigger('loadUrl',{aUrl:aHref,params:'',aObjectId:myBlapy.myUIObjectID});
