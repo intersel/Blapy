@@ -21,6 +21,8 @@
  * - 2015/11/03 - E.Podvin - V1.0.12 - fix on the initial URL loosing the querystring part
  * - 2015/11/03 - E.Podvin - V1.0.13 - remove the # duplication of the url
  * - 2015/11/04 - E.Podvin - V1.0.14 - fix on posted data
+ * - 2015/11/05 - E.Podvin - V1.0.15 - small fixes...
+ * - 2015/11/08 - E.Podvin - V1.0.16 - Add possibility to not use Sammy (so no routing management) 
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -28,7 +30,7 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.0.14
+ * @version : 1.0.16
  * -----------------------------------------------------------------------------------------
  */
 
@@ -60,7 +62,8 @@
 				afterPageChange		: null,
 				doCustomChange		: null,
 				onErrorOnPageChange	: null,
-				theBlapy	: this,
+				theBlapy			: this,
+				activeSammy			: false,
 				
 		};
 
@@ -85,27 +88,65 @@
 	{
 		this._log('InitApplication');
 		
-		//Standard Routing definition
-		var app = Sammy('#'+this.myUIObjectID);
-		
 		var myBlapy = this;
-		
-		app.get(/(.*)\#blapylink/, function() 
+
+		if (this.opts.activeSammy)
 		{
-			myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL(),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID});
-		});
-		app.post(/(.*)\#blapylink/, function() 
+			//Standard Routing definition
+			if (typeof Sammy != 'function') {
+				alert("Sammy is not loaded... can not continue");
+				return false;
+			}
+			
+			var app = Sammy('#'+this.myUIObjectID);
+			
+			app.get(/(.*)\#blapylink/, function() 
+			{
+				myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL(),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID});
+			});
+			app.post(/(.*)\#blapylink/, function() 
+			{
+				myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"post"});
+			});
+			app.put(/(.*)\#blapylink/, function() 
+			{
+				myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"put"});
+			});
+			app.get(/(.*)/, function() 
+			{
+				//do nothing
+			});
+			
+			this.myUIObject.iFSM(manageBlapy,this.opts);
+			//app.run('#/');
+			app.run(window.location.pathname+window.location.search);
+		}
+		else
 		{
-			myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"post"});
-		});
-		app.put(/(.*)\#blapylink/, function() 
-		{
-			myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"put"});
-		});
-		
-		this.myUIObject.iFSM(manageBlapy,this.opts);
-		//app.run('#/');
-		app.run(window.location.pathname+window.location.search);
+			this.myUIObject.iFSM(manageBlapy,this.opts);
+			$(document).on("click","a[data-blapy-link]", function(event) {
+				event.preventDefault();
+				myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL($(this).attr('href')),params:null,aObjectId:myBlapy.myUIObjectID});
+			});
+			$(document).on("submit","form[data-blapy-link]", function(event) {
+				event.preventDefault();
+				 // get all the inputs into an array.
+			    var $inputs = $(this).serializeArray();
+
+			    // not sure if you wanted this, but I thought I'd add it.
+			    // get an associative array of just the values.
+			    var values = {};
+			    $.each($inputs,function() {
+			        values[this.name] = this.value;
+			    });
+
+				myBlapy.myUIObject.trigger('postData',{
+						aUrl:myBlapy.hashURL($(this).attr("action")),
+						params:values,
+						aObjectId:myBlapy.myUIObjectID,method:$(this).attr("method")
+				});
+			});
+		}
 
 	};//
 	
@@ -330,6 +371,7 @@
 					var aObjectId	= data.aObjectId?data.aObjectId:e.currentTarget.id;
 					var params		= data.params;
 					if (!params) params = {action:'update'}
+					else if (!params.action) params['action'] = 'update';
 					
 					jQuery.ajax({
 						  type: 'GET', 
@@ -359,6 +401,7 @@
 					var aObjectId	= data.aObjectId?data.aObjectId:e.currentTarget.id;
 					var params		= data.params;
 					if (!params) params = {action:'update'}
+					else if (!params.action) params['action'] = 'update';
 					var method		= data.method;
 					if(!method) method = 'post';
 					

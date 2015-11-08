@@ -174,6 +174,7 @@ Options is a javascript object. It can take as input the following possible opti
 * **debug**: (default:false) if true, then log things in the console
 * **LogLevel**: (default:3) log level: 1: error ; 2: warning; 3: notice
 * **AlertError**: (default:false) show an alert box on error messages if true
+* **activeSammy**: (default:false) if set to true, will use Sammy for URL routing 
 * **pageLoadedFunction**: (default:null) function to call when the page is loaded
 * **pageReadyFunction**: (default:null) function to call when the page is ready
 * **beforePageLoad**: (default:null) function to call b efore the page load the new content
@@ -416,12 +417,13 @@ To work properly, you need to include the following javascript libraries:
   * attrchange by Selvakumar Arumugam](http://meetselva.github.io/attrchange/) 
    * a simple jQuery function to bind a listener function to any HTML element on attribute change
     * `<script type="text/javascript" src="extlib/jquery.attrchange.js"></script>`
-* [Sammy](http://sammyjs.org/)
+* [json2html](http://json2html.com/) (optional if blapy block does not use json feature)
+ * json2html is a javascript HTML templating library used to transform JSON objects into HTML using a template.
+ * used for json parsing and templating
+  * `<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>`
+* [Sammy](http://sammyjs.org/) (optional if you don't need routing management)
  * Sammy is a small framework to make web application providing simple but efficient 'route' services
   * `<script type="text/javascript" src="extlib/sammy/lib/sammy.js"></script>`
-* [json2html](http://json2html.com/)
- * json2html is a javascript HTML templating library used to transform JSON objects into HTML using a template.
-  * `<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>`
 
 # FAQ
 If you have questions or unsolved problems, you can have a look on the our [FAQs](https://github.com/intersel/Blapy/wiki) 
