@@ -187,7 +187,7 @@ Options is a javascript object. It can take as input the following possible opti
 
 ```javascript
 	$( document ).ready(function() {
-		$('#bodyId').Blapy({debug:true,LogLevel:2})
+		$('#bodyId').Blapy({activeSammy:true,debug:true,LogLevel:2})
 	});
 ```
 
