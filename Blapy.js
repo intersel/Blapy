@@ -24,6 +24,7 @@
  * - 2015/11/05 - E.Podvin - V1.0.15 - small fixes...
  * - 2015/11/08 - E.Podvin - V1.0.16 - Add possibility to not use Sammy (sammy may be unplugged so no routing management) 
  * - 2015/11/09 - E.Podvin - V1.0.17 - fix on routing with sammy
+ * - 2015/11/09 - E.Podvin - V1.0.18 - fix on routing to 404 error with sammy
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -113,16 +114,13 @@
 			{
 				myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"put"});
 			});
-			/*
-			app.get(/(.*)/, function() 
-			{
-				//do nothing
-			});
-			*/
+			
+			app.notFound = function(verb, path){
+				//just do nothing! means that the called link is not handle by Blapy (no route for Sammy)...
+			}
 
 			this.myUIObject.iFSM(manageBlapy,this.opts);
-			//app.run('#/');
-			app.run(window.location.pathname+window.location.search);
+			app.run();
 		}
 		else
 		{
@@ -186,7 +184,6 @@
 	{
 		this._log('hashURL');
 		if (!aURL) aURL = window.location.href;
-		var results = new RegExp('#blapylink').exec(aURL);
 		return aURL || 0;
 	};
 
