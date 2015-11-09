@@ -22,7 +22,8 @@
  * - 2015/11/03 - E.Podvin - V1.0.13 - remove the # duplication of the url
  * - 2015/11/04 - E.Podvin - V1.0.14 - fix on posted data
  * - 2015/11/05 - E.Podvin - V1.0.15 - small fixes...
- * - 2015/11/08 - E.Podvin - V1.0.16 - Add possibility to not use Sammy (so no routing management) 
+ * - 2015/11/08 - E.Podvin - V1.0.16 - Add possibility to not use Sammy (sammy may be unplugged so no routing management) 
+ * - 2015/11/09 - E.Podvin - V1.0.17 - fix on routing with sammy
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -30,7 +31,7 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.0.16
+ * @version : 1.0.17
  * -----------------------------------------------------------------------------------------
  */
 
@@ -112,11 +113,13 @@
 			{
 				myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"put"});
 			});
+			/*
 			app.get(/(.*)/, function() 
 			{
 				//do nothing
 			});
-			
+			*/
+
 			this.myUIObject.iFSM(manageBlapy,this.opts);
 			//app.run('#/');
 			app.run(window.location.pathname+window.location.search);

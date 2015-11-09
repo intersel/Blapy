@@ -4,7 +4,7 @@
 	$( document ).ready(function() {
 
 		//start Blapy
-		$('#myBlapy').Blapy();
+		$('#myBlapy').Blapy({activeSammy:true});
 
 		//catch errors
 		$( "#myBlapy" ).on( "Blapy_ErrorOnPageChange", function(event,anError) {
