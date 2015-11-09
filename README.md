@@ -411,10 +411,10 @@ To work properly, you need to include the following javascript libraries:
  * `<script type="text/javascript" src="extlib/jquery-1.10.2.min.js"></script>`
 * [iFSM by intersel](https://github.com/intersel/iFSM/)
  * this library manages finite state machines and needs these libraries:
-  * doTimeout by ["Cowboy" Ben Alman](http://benalman.com/projects/jquery-dotimeout-plugin/)
+  * **doTimeout** by ["Cowboy" Ben Alman](http://benalman.com/projects/jquery-dotimeout-plugin/)
    * this library brings some very usefull feature on the usual javascript setTimeout function like Debouncing, Delays & Polling Loops, Hover Intent...
     * `<script type="text/javascript" src="extlib/jquery.dotimeout.js"></script>`
-  * attrchange by Selvakumar Arumugam](http://meetselva.github.io/attrchange/) 
+  * **attrchange** by Selvakumar Arumugam](http://meetselva.github.io/attrchange/) 
    * a simple jQuery function to bind a listener function to any HTML element on attribute change
     * `<script type="text/javascript" src="extlib/jquery.attrchange.js"></script>`
 * [json2html](http://json2html.com/) (optional if blapy block does not use json feature)
