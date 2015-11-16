@@ -341,6 +341,7 @@ Triggered when an error occured during a page content change.
 * Parameters:
  * anError: the error message
 
+##Examples
 To listen to Blapy events, you may use the jQuery 'on' function as in this example:
 
 ```javascript
