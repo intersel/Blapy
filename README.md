@@ -316,8 +316,8 @@ Triggered when the page is ready, after a loading page or a change in the page.
 ##Blapy_beforePageLoad
 Triggered before a page load its new content and sent to the blapy object.
 * Parameters: the Blapy json data sent to the URL
- * <data>.aUrl: url to call
- * <data>.params: json of the parameters to send to aUrl 
+ * [data].aUrl: url to call
+ * [data].params: json of the parameters to send to aUrl 
 ##Blapy_beforeContentChange
 Triggered before a Blapy block content change and sent to the UPI Block that will change. 
 * Parameters:
