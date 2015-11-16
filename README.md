@@ -399,7 +399,7 @@ $('#<id of the blapy application tag>').trigger('postData',{aUrl:<aURL to call>,
 ### Example
 
 ```javascript
-$("#myBlapy").trigger('postData',{aUrl:"testForm.php",params:{fname:'couou',lname:'tatat'}})
+$("#myBlapy").trigger('postData',{aUrl:"testForm.php",params:{fname:'Emmanuel',lname:'Podvin'}})
 ```
 
 
