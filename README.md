@@ -311,25 +311,31 @@ Blapy generates the following events during the Blapy object change processing:
 
 ##Blapy_PageLoaded
 Triggered when a page is fully and normally loaded and sent to the blapy object. 
+
 ##Blapy_PageReady
 Triggered when the page is ready, after a loading page or a change in the page.
+
 ##Blapy_beforePageLoad
 Triggered before a page load its new content and sent to the blapy object.
 * Parameters: the Blapy json data sent to the URL
  * [data].aUrl: url to call
  * [data].params: json of the parameters to send to aUrl 
+
 ##Blapy_beforeContentChange
 Triggered before a Blapy block content change and sent to the UPI Block that will change. 
 * Parameters:
- * the Blapy block 
+ * the Blapy block
+
 ##Blapy_afterContentChange
 Triggered after a a Blapy block content has changed and sent to the UPI Block that has changed..
 * Parameters:
- * the Blapy block 
+ * the Blapy block
+ 
 ##Blapy_doCustomChange
 Triggered if data-blapy-update='custom', sent to the object that should change its content
 * Parameters:
- * newObject : the new Blapy Block 
+ * newObject : the new Blapy Block
+ 
 ##Blapy_ErrorOnPageChange
 Triggered when an error occured during a page content change. 
 * Parameters:
