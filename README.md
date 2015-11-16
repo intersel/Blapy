@@ -359,7 +359,7 @@ To listen to Blapy events, you may use the jQuery 'on' function as in this examp
 You can activate some features of Blapy by sending events to it with the 'trigger' function of jQuery:
 
 ```javascript
-$('#< id of the body tag>').trigger(<anEvent>,{aUrl:<aURL to call>,params:<someParameters>)
+$('#<id of the blapy application tag>').trigger(<anEvent>,{aUrl:<aURL to call>,params:<someParameters>)
 ```
 
 ## "loadURL" event
