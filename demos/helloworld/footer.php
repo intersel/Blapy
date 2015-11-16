@@ -26,6 +26,10 @@
 		$(document).on( "Blapy_afterContentChange","#mainContainer", function(event,previousObject) {
 			  //alert( 'Blapy_afterContentChange' +$(this).html() );
 			});
+		$( "#myBlapy" ).on( "Blapy_beforePageLoad", function(event,data) {
+			  //alert( 'Blapy_beforePageLoad:' +data.aUrl );
+			});
+		
 	});
 
 	$("body").append('<h3>HTML code of the page</h3>').append(jQuery('<pre />').text($('html').html()));

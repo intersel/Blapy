@@ -361,9 +361,9 @@
             },
             loadUrl:   
             {
-                init_function: function(){
-					if (this.opts.beforePageLoad) this.opts.beforePageLoad();
-					this.myUIObject.trigger('Blapy_beforePageLoad');
+                init_function: function(p,e,data){
+					if (this.opts.beforePageLoad) this.opts.beforePageLoad(data);
+					this.myUIObject.trigger('Blapy_beforePageLoad',data);
 				},
                 out_function: function(p,e,data){
 					var aFSM 		= this;
@@ -391,9 +391,9 @@
             },
             postData:   
             {
-                init_function: function(){
-					if (this.opts.beforePageLoad) this.opts.beforePageLoad();
-					this.myUIObject.trigger('Blapy_beforePageLoad');
+                init_function: function(p,e,data){
+					if (this.opts.beforePageLoad) this.opts.beforePageLoad(data);
+					this.myUIObject.trigger('Blapy_beforePageLoad',data);
 				},
                 out_function: function(p,e,data){
 					var aFSM 		= this;

@@ -177,7 +177,7 @@ Options is a javascript object. It can take as input the following possible opti
 * **activeSammy**: (default:false) if set to true, will use Sammy for URL routing 
 * **pageLoadedFunction**: (default:null) function to call when the page is loaded
 * **pageReadyFunction**: (default:null) function to call when the page is ready
-* **beforePageLoad**: (default:null) function to call b efore the page load the new content
+* **beforePageLoad**: (default:null) function to call before the page load the new content
 * **beforeContentChange**: (default:null) function to call when a Blapy bloc will have its content changed
 * **afterContentChange**: (default:null) function to call after a Blapy bloc has its content changed
 * **afterPageChange**: (default:null) function to call when the page had all its content changed
@@ -309,22 +309,31 @@ To define a Blapy Link, here are its attributes:
 # Triggered events
 Blapy generates the following events during the Blapy object change processing:
 
-* **Blapy_PageLoaded** - triggered when a page is fully and normally loaded. 
-* **Blapy_PageReady** - triggered when the page is ready, after a loading page or a change in the page.
-* **Blapy_beforePageLoad** - triggered before a page load its new content.
-* **Blapy_beforePageChange** - triggered before a page content will change.
-* **Blapy_beforeContentChange** - triggered before a Blapy block content change. 
- * Parameters:
-  * the Blapy block 
-* **Blapy_afterContentChange** - triggered after a a Blapy block content has changed.
- * Parameters:
-  * the Blapy block 
-* **Blapy_doCustomChange** - triggered if data-blapy-update='custom', sent to the object that should change its content
- * Parameters:
-  * newObject : the new Blapy Block 
-* **Blapy_ErrorOnPageChange** - triggered when an error occured during a page content change. 
- * Parameters:
-  * anError: the error message
+##Blapy_PageLoaded
+Triggered when a page is fully and normally loaded and sent to the blapy object. 
+##Blapy_PageReady
+Triggered when the page is ready, after a loading page or a change in the page.
+##Blapy_beforePageLoad
+Triggered before a page load its new content and sent to the blapy object.
+* Parameters: the Blapy json data sent to the URL
+ * <data>.aUrl: url to call
+ * <data>.params: json of the parameters to send to aUrl 
+##Blapy_beforeContentChange
+Triggered before a Blapy block content change and sent to the UPI Block that will change. 
+* Parameters:
+ * the Blapy block 
+##Blapy_afterContentChange
+Triggered after a a Blapy block content has changed and sent to the UPI Block that has changed..
+* Parameters:
+ * the Blapy block 
+##Blapy_doCustomChange
+Triggered if data-blapy-update='custom', sent to the object that should change its content
+* Parameters:
+ * newObject : the new Blapy Block 
+##Blapy_ErrorOnPageChange
+Triggered when an error occured during a page content change. 
+* Parameters:
+ * anError: the error message
 
 To listen to Blapy events, you may use the jQuery 'on' function as in this example:
 
@@ -332,6 +341,10 @@ To listen to Blapy events, you may use the jQuery 'on' function as in this examp
 	$("#myBlapy").on( "Blapy_ErrorOnPageChange", function(event,anError) {
 		  alert( anError );
 	}); 
+	//assure that the event will be received by the new DOM object #mainContainer if it has been replaced by Blapy
+	$(document).on( "Blapy_afterContentChange","#mainContainer", function(event,aBlock) {
+			  alert( 'Blapy_afterContentChange');
+			});
 ```
 
 # Sending events to Blapy
