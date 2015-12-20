@@ -12,7 +12,7 @@ Everyone who would like to keep the way he builds websites but would like to hav
 
 The ones who gave up with AngularJS and other javascript frameworks to build web app... like me ;-)
 
-# Why should I use that?!
+# Why would I use that?!
 The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is quite a difficult job with a steep learning curve... 
 Whereas PHP websites built on a standard CMS are easier to handle... The standard CMS does the page generation job quite naturally for years... Except that we reload pages when clicking a link... or we need to do ajax calls to dynamically update part of the pages...
 
