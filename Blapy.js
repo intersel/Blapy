@@ -25,6 +25,7 @@
  * - 2015/11/08 - E.Podvin - V1.0.16 - Add possibility to not use Sammy (sammy may be unplugged so no routing management) 
  * - 2015/11/09 - E.Podvin - V1.0.17 - fix on routing with sammy
  * - 2015/11/09 - E.Podvin - V1.0.18 - fix on routing to 404 error with sammy
+ * - 2015/12/22 - E.Podvin - V1.0.19 - fix on default return for sammy when no blapy route is defined (return now true)
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -117,6 +118,7 @@
 			
 			app.notFound = function(verb, path){
 				//just do nothing! means that the called link is not handle by Blapy (no route for Sammy)...
+				return true;
 			}
 
 			this.myUIObject.iFSM(manageBlapy,this.opts);
