@@ -297,12 +297,15 @@ To define a Blapy Link, here are its attributes:
 
 * **data-blapy-href**: if not bound to a "A" or "FORM" tag, it tells the hyperlink to use.
 
+* **data-blapy-embedding-blockid**: tells to embed the return source of the link in a blapy block of the given name. Usefull for return sources that are not 'blapy' formatted and that address a specific block...
+
 ## Examples
 
 ```html
 <ul>
 	<li><a href="content1.php" data-blapy-link="true">Content 1</a></li>
-	<li><a href="content2.php" data-blapy-link="true">Content 2</a></li>
+	<li data-blapy-link="true" data-blapy-href="content2.php">Content 2</a></li>
+	<li><a href="jsoncontent3.php" data-blapy-link="true" data-blapy-embedding-blockid="mainContainerApp3">Content 3</a></li>
 </ul
 ```
 
@@ -367,13 +370,14 @@ $('#<id of the blapy application tag>').trigger(<anEvent>,{aUrl:<aURL to call>,p
 This event allows you to call a URL.
 
 ```javascript
-$('#<id of the blapy application tag>').trigger('loadUrl',{aUrl:<aURL to call>,params:{action:<anAction>}})
+$('#<id of the blapy application tag>').trigger('loadUrl',{aUrl:<aURL to call>,params:{action:<anAction>,embeddingBlockId:<a Blapy Block Id>}})
 ```
 
 ### params
 
 * action
- * 'update': update the Blapy blocks from the URL
+ * 'update' (optional): update the Blapy blocks from the URL
+ * 'embeddingBlockId'(optional): a block container id 
 
 ### Example
 
@@ -452,6 +456,14 @@ or leave a message on the [Issue board](https://github.com/intersel/Blapy/issues
 ## When a Blapy link is called, does the server need to send a full HTML page with a body and ...
 No, you can optimize your code by only sending the useful Blapy blocks. 
 
+## What about the id sent in the returned blapy blocks...
+Generally, the new block will replace the old one, and so, the id will follow... and that's mainly ok...
+
+Sometime, if there are several blocks with the same data-blapy-container-name in order to update several blocks with the same info, 
+it could be a problem that several new blocks get the same id after processing...
+
+You can give **no id** on the new sent blocks, this way the system will set the id of the old block to change to the new one...
+
 ## Is it possible to set Blapy blocks in "head" tags?
 Yes, but in order to have the Blapy see them, set an id on the html tag and call Blapy on it:
 
@@ -490,7 +502,7 @@ The syntax follows the one defined by json2html library : ${myVariableName}
 You just defined an array the way you would do in javascript with your json objects
 
 ```html
-	<div id="aForm" 
+	<div  
 		data-blapy-container="true" 
 		data-blapy-container-name="resultFormJson" 
 		data-blapy-container-content="resultFormJson"

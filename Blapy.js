@@ -26,6 +26,7 @@
  * - 2015/11/09 - E.Podvin - V1.0.17 - fix on routing with sammy
  * - 2015/11/09 - E.Podvin - V1.0.18 - fix on routing to 404 error with sammy
  * - 2015/12/22 - E.Podvin - V1.0.19 - fix on default return for sammy when no blapy route is defined (return now true)
+ * - 2015/01/20 - E.Podvin - V1.1.0 - add block update feature from a standard json feed
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -33,7 +34,7 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.0.17
+ * @version : 1.1.0
  * -----------------------------------------------------------------------------------------
  */
 
@@ -105,21 +106,26 @@
 			
 			app.get(/(.*)\#blapylink/, function() 
 			{
+				this.params['embeddingBlockId'] = myBlapy.extractembeddingBlockIdName(myBlapy.hashURL());
+				
 				myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL(),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID});
 			});
 			app.post(/(.*)\#blapylink/, function() 
 			{
+				this.params['embeddingBlockId'] = myBlapy.extractembeddingBlockIdName(myBlapy.hashURL(this.path));
+
 				myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"post"});
 			});
 			app.put(/(.*)\#blapylink/, function() 
 			{
+				this.params['embeddingBlockId'] = myBlapy.extractembeddingBlockIdName(myBlapy.hashURL(this.path));
 				myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"put"});
 			});
 			
 			app.notFound = function(verb, path){
 				//just do nothing! means that the called link is not handle by Blapy (no route for Sammy)...
 				return true;
-			}
+			};
 
 			this.myUIObject.iFSM(manageBlapy,this.opts);
 			app.run();
@@ -129,7 +135,7 @@
 			this.myUIObject.iFSM(manageBlapy,this.opts);
 			$(document).on("click","a[data-blapy-link]", function(event) {
 				event.preventDefault();
-				myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL($(this).attr('href')),params:null,aObjectId:myBlapy.myUIObjectID});
+				myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL($(this).attr('href')),params:{embeddingBlockId:$(this).attr('data-blapy-embedding-blockid')},aObjectId:myBlapy.myUIObjectID});
 			});
 			$(document).on("submit","form[data-blapy-link]", function(event) {
 				event.preventDefault();
@@ -142,6 +148,7 @@
 			    $.each($inputs,function() {
 			        values[this.name] = this.value;
 			    });
+			    values['embeddingBlockId']=$(this).attr('data-blapy-embedding-blockid');
 
 				myBlapy.myUIObject.trigger('postData',{
 						aUrl:myBlapy.hashURL($(this).attr("action")),
@@ -178,6 +185,37 @@
 		
 	};//end Log
 
+	
+	
+	/**
+	* 
+	* returns the target block name of the URL if any
+	*/
+	theBlapy.prototype.extractembeddingBlockIdName = function (aBlapyUrl)
+	{
+		regexHashBlapyBlock = /#blapylink#.*/igm;
+		extractEB = regexHashBlapyBlock.exec(aBlapyUrl);
+		if (extractEB && extractEB.length) 
+		{
+			extractEB = extractEB[0].replace('#blapylink#','');
+		}
+		else extractEB='';
+		return extractEB;
+	};
+	
+	/**
+	* embeds a html source with a blapy block definition of aBlapyBlockIdName
+	* returns the embedded html source
+	*/
+	theBlapy.prototype.embedHtmlPage = function (aHtmlSource,aBlapyBlockIdName)
+	{
+		htmlBlapyBlock = this.myUIObject.find('#'+aBlapyBlockIdName);
+		aHtmlSource = $(htmlBlapyBlock[0].outerHTML).html(aHtmlSource);
+		aHtmlSource.attr('data-blapy-container-content',aHtmlSource.attr('data-blapy-container-content')+'-'+$.now()) ;
+		aHtmlSource.attr('id','');//remove id in order that it takes the one of the block to change
+		return aHtmlSource[0].outerHTML;
+	};
+	
 	/**
 	* get the hash part of the URL
 	* returns 0 if none
@@ -206,7 +244,7 @@
 	 */
 	theBlapy.prototype.filterAttributes = function (aSammyObject)
 	{
-		var sammyKeys=aSammyObject.keys();
+		//var sammyKeys=aSammyObject.keys();
 		var mySammyObject= aSammyObject;
 		var returnObject={};
 		$.each(aSammyObject.keys(),
@@ -248,6 +286,9 @@
 			
 			if (aHref.indexOf('#blapylink') == -1) {
 				aHref+='#blapylink';
+				
+				if ($(this).attr('data-blapy-embedding-blockid')) aHref+='#'+$(this).attr('data-blapy-embedding-blockid');
+				
 				if ($(this)[0].tagName == 'A')
 					$(this).attr("href",aHref);
 				else if ($(this)[0].tagName == 'FORM')
@@ -372,8 +413,10 @@
 					var aUrl		= data.aUrl;
 					var aObjectId	= data.aObjectId?data.aObjectId:e.currentTarget.id;
 					var params		= data.params;
-					if (!params) params = {action:'update'}
+					if (!params) params = {action:'update'};
 					else if (!params.action) params['action'] = 'update';
+					
+					var aembeddingBlockId = params.embeddingBlockId;
 					
 					jQuery.ajax({
 						  type: 'GET', 
@@ -381,7 +424,8 @@
 						  crossDomain:true,
 						  data: "blapycall=1&blapyaction="+params.action+"&blapyobjectid="+aObjectId,
 						  success: function(data, textStatus, jqXHR) {
-							aFSM.trigger('pageLoaded',{htmlPage:data,params:params});
+							  if(aembeddingBlockId) data=aFSM.opts.theBlapy.embedHtmlPage(data,aembeddingBlockId);
+							  aFSM.trigger('pageLoaded',{htmlPage:data,params:params});
 						  },
 						  error: function(jqXHR, textStatus, errorThrown) {
 							aFSM.trigger('errorOnLoadingPage',aUrl+': '+errorThrown);
@@ -402,8 +446,11 @@
 					var aUrl		= data.aUrl;
 					var aObjectId	= data.aObjectId?data.aObjectId:e.currentTarget.id;
 					var params		= data.params;
-					if (!params) params = {action:'update'}
+					if (!params) params = {action:'update'};
 					else if (!params.action) params['action'] = 'update';
+					
+					var aembeddingBlockId = params.embeddingBlockId;
+					
 					var method		= data.method;
 					if(!method) method = 'post';
 					
@@ -414,7 +461,8 @@
 						  url: aUrl, 
 						  data: params,
 						  success: function(data, textStatus, jqXHR) {
-							aFSM.trigger('pageLoaded',{htmlPage:data,params:params});
+							  if(aembeddingBlockId) data=aFSM.opts.theBlapy.embedHtmlPage(data,aembeddingBlockId);
+							  aFSM.trigger('pageLoaded',{htmlPage:data,params:params});
 						  },
 						  error: function(jqXHR, textStatus, errorThrown) {
 							aFSM.trigger('errorOnLoadingPage',aUrl+': '+errorThrown);
@@ -449,12 +497,21 @@
 								if (!params['force-update']) params['force-update']=0; 
 								var containerName = myContainer.attr('data-blapy-container-name');
 								
-								//get the Blapy Container named <containerName>
-								var aBlapyContainer=jQuery(pageContent)
-												.filter('[data-blapy-container-name="'+containerName+'"]')
-												.add(jQuery(pageContent)
-														.find('[data-blapy-container-name="'+containerName+'"]')
-												).first();
+								try
+								{
+
+									//get the Blapy Container named <containerName>
+									var aBlapyContainer=jQuery(pageContent)
+													.filter('[data-blapy-container-name="'+containerName+'"]')
+													.add(jQuery(pageContent)
+															.find('[data-blapy-container-name="'+containerName+'"]')
+													).first();
+								}
+								catch(e)
+								{
+									myFSM._log('downloaded content can not be evaluated by jQuery, so perhaps it is json data: '+pageContent,1);
+									return;
+								}
 								
 								//container not found
 								if (!aBlapyContainer || aBlapyContainer.length == 0) 
@@ -471,13 +528,22 @@
 
 								}
 								
+								//update the id with the current container id, if none given in the new container
+								if (!aBlapyContainer.attr('id')) aBlapyContainer.attr('id',myContainer.attr('id'));
+								
 								//alert that the content of the block will change
 								if (myFSM.opts.beforeContentChange) myFSM.opts.beforeContentChange(myContainer);
 								myContainer.trigger('Blapy_beforeContentChange',this.myUIObject);
 								
 								var dataBlapyUpdate = aBlapyContainer.attr('data-blapy-update');
 								var dataBlapyUpdateRuleIsLocal = false;
-								if (myContainer.attr('data-blapy-update-rule') == 'local')
+								if (
+											(myContainer.attr('data-blapy-update-rule') == 'local')
+										|| 	(
+													(dataBlapyUpdate == 'json')
+												&& 	(myContainer.attr('data-blapy-update') != 'json')
+											)
+									)
 								{
 									dataBlapyUpdate = myContainer.attr('data-blapy-update');
 									dataBlapyUpdateRuleIsLocal = true;
@@ -596,11 +662,18 @@
 									}
 									
 									//get the rendering
-									var newHtml = json2html.transform(jsonData,  {'tag':"void",'html':htmlTplContent} );
+									var newHtml = '';
+									if (htmlTplContent.length < 3)
+										//no defined template?
+										newHtml = JSON.stringify(jsonData);
+									else
+									{
+										newHtml = json2html.transform(jsonData,  {'tag':"void",'html':htmlTplContent} );
+										
+										//as json2html needs a root tag to render... well, we set void to delete it after rendering...
+										newHtml = newHtml.replace(/<.?void>/g,"");
+									}
 									
-									//as json2html needs a root tag to render... well, we set void to delete it after rendering...
-									newHtml = newHtml.replace(/<.?void>/g,"");
-						
 									//Wrap content if needed
 									if ($(myContainer.attr('data-blapy-template-wrap')).length > 0)
 									{
