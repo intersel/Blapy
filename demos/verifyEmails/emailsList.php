@@ -4,11 +4,9 @@
 	data-blapy-container-content="resultsnew"<?php echo time();?>
 >
 [
-	{email: "emmanuel@podvin.net"},
 	{email: "emmanuel.podvin@intersel.fr"},
-	{email: "emmanuel.podvin@intersel.org"},
-	{email: "admin@intersel.fr"},
-	{email: "technique@intersel.fr"},
-	{email: "em.tpoql.fkl@yahoo.com"},
+	{email: "em.blapy@yahoo.com"},
+	{email: "blapy"},
+	{email: "blapy@yahoo"},
 ]
 </div>
