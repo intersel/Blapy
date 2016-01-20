@@ -28,6 +28,8 @@ So, the idea is to provide a simple environment that don't change your habits wh
 # Have a look on the "Hello World" demo
 [Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
 
+All the demos are listed there : [http://www.intersel.net/demos/intersel/Blapy/demos/](http://www.intersel.net/demos/intersel/Blapy/demos/)
+
 # How does it work?
 
 The main simple idea is to automatically and dynamically bind and update html blocks in ajax during the web navigation from page to page. 
