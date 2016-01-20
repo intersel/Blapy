@@ -8,5 +8,6 @@
 	{email: "em.blapy@yahoo.com"},
 	{email: "blapy"},
 	{email: "blapy@yahoo"},
+	{email: "blapy@yahoo.fr.com"},
 ]
 </div>
