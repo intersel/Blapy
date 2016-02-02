@@ -9,6 +9,9 @@ include("header.php");
 	<h1>Email Tester</h1>
 	<p>This demo shows the embeddingBlock feature that allows to update blapy block content directly...</p>
 	<p>It checks emails that are listed in the file "emailList.txt".</p> 
+	<p> It uses the class "email_validation_class" from Manuel Lemos to do the hard job<br> 
+	 from http://www.phpclasses.org/package/13-PHP-Determine-if-a-given-e-mail-address-is-valid-.html
+	 </p>
 	<ul>
 		<li>
 			<!--  tells that we want to update blapy blocks named "oneresult" from the get request to verifyEmail... -->
