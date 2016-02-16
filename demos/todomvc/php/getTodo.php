@@ -1,6 +1,11 @@
 <?php
 session_start();
-
+if (empty($_REQUEST['blapycall'])) 
+{
+	header('Location: ../index.php');
+	exit;
+}
+	
 $todo_actions= empty($_SESSION['todoAction'])?array():$_SESSION['todoAction'];
 
 if (empty($_SESSION['filter'])) $_SESSION['filter']='all';
