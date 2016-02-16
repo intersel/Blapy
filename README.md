@@ -28,6 +28,8 @@ So, the idea is to provide a simple environment that don't change your habits wh
 # Have a look on the "Hello World" demo
 [Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
 
+and the ["To do list" web Apps demo](http://www.intersel.net/demos/intersel/Blapy/demos/todomvc/) inspired from [TodoMVC](http://todomvc.com/)
+
 All the demos are listed there : [http://www.intersel.net/demos/intersel/Blapy/demos/](http://www.intersel.net/demos/intersel/Blapy/demos/)
 
 # How does it work?
@@ -525,6 +527,12 @@ You just defined an array the way you would do in javascript with your json obje
 ## Clicking to a blapy link generates several ajax calls though it should generate only a unique call...
 * Verify your html return of the first ajax call. For instance, ```<img src="" alt="">``` will generate a second ajax call to index.html... 
 
+## When routing is activated with Sammy, My URL does not work any more...
+* It's generally a problem linked to base URL. YOu can fix it by setting a <base> html tag in your html head part:
+
+````html
+	<base href="/demos/todomvc/" target="_blank">
+ 
 # Contact
 If you have any ideas, feedback, requests or bug reports, you can reach me at github@intersel.org, 
 or via my website: http://www.intersel.fr
