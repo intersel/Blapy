@@ -2,7 +2,7 @@
 
 $setFilter = 'active';
 
-$returnStr .= <<<EOD
+$returnStr = <<<EOD
 <ul class="filters"
 		data-blapy-container="true"
 		data-blapy-container-name="filters"
