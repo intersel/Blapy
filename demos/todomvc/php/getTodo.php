@@ -73,11 +73,12 @@ foreach($todo_actions as $aAction)
 	$aVarArray['completedStatusChecked']	= $aAction['completedStatus']?'checked=""':'';
 	$aVarArray['actionLabel']				= $aAction['actionLabel'];
 		
+	if ( !$aVarArray['completedStatus'] )
+		$aVarArray['numberOfLeftItems']++;
+	
 	if ( $aVarArray['completedStatus'] && $_SESSION['filter'] == 'active' )  continue;
 	if ( !$aVarArray['completedStatus'] && $_SESSION['filter'] == 'completed' )  continue;
 	
-	if ( !$aVarArray['completedStatus'] )
-		$aVarArray['numberOfLeftItems']++;
 	$liToDoActions .= getTemplateLi($liTemplate, $aVarArray);
 }
 
