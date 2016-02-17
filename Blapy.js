@@ -26,7 +26,8 @@
  * - 2015/11/09 - E.Podvin - V1.0.17 - fix on routing with sammy
  * - 2015/11/09 - E.Podvin - V1.0.18 - fix on routing to 404 error with sammy
  * - 2015/12/22 - E.Podvin - V1.0.19 - fix on default return for sammy when no blapy route is defined (return now true)
- * - 2015/01/20 - E.Podvin - V1.1.0 - add block update feature from a standard json feed
+ * - 2016/01/20 - E.Podvin - V1.1.0 - add block update feature from a standard json feed
+ * - 2016/02/17 - E.Podvin - V1.1.1 - fix when 'postData' is sent to Blapy while we're not in a "pageReady" state
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -733,6 +734,7 @@
             {
                 next_state: 'PageLoaded',
             },
+            postData:'loadUrl',
 	        loadUrl:   //someone try to load an URL but page is not ready... try it later... 
 	        {
 	        	how_process_event: {delay:30,preventcancel:true},

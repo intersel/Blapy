@@ -379,9 +379,9 @@ $('#<id of the blapy application tag>').trigger('loadUrl',{aUrl:<aURL to call>,p
 
 ### params
 
-* action
- * 'update' (optional): update the Blapy blocks from the URL
- * 'embeddingBlockId'(optional): a block container id 
+* action (optional)
+ * 'update' (default): update the Blapy blocks from the URL
+* embeddingBlockId(optional): a block container id 
 
 ### Example
 
@@ -397,12 +397,13 @@ $('#<id of the blapy application tag>').trigger('postData',{aUrl:<aURL to call>,
 
 ### params
 
-* action
+* action (option)
  * 'update' (default) : update the Blapy blocks from the URL
-* method
+* method (option)
  * 'post' (default)
  * 'put'
  * 'delete'
+* <any variable name to send>
 
 ### Example
 

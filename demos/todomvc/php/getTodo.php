@@ -5,24 +5,30 @@ if (empty($_REQUEST['blapycall']))
 	header('Location: ../index.php');
 	exit;
 }
-	
+
+if (empty($returnStr)) $returnStr='';
+
+//actions list is stored in $_SESSION['todoAction']
 $todo_actions= empty($_SESSION['todoAction'])?array():$_SESSION['todoAction'];
 
+//filter 'all'/'completed'/'active'
 if (empty($_SESSION['filter'])) $_SESSION['filter']='all';
 if (!empty($setFilter)) $_SESSION['filter']=$setFilter;
 
 $liToDoActions='';
 if (empty($getAction)) $getAction=null;
 
+//template for the action items
 $liTemplate = <<<EOD
 	<li data-id="[[actionId]]" class="[[completedStatus]]">
 		<div class="view">
 			<input class="toggle" type="checkbox" [[completedStatusChecked]] onclick="$('#myBlapy').trigger('loadUrl',{aUrl:'php/actionCompleted.php?actionId=[[actionId]]'})">
-			<label>[[actionLabel]]</label><button class="destroy" onclick="$('#myBlapy').trigger('loadUrl',{aUrl:'php/deleteAction.php?actionId=[[actionId]]'})"></button>
+			<label data-id="[[actionId]]">[[actionLabel]]</label><button class="destroy" onclick="$('#myBlapy').trigger('loadUrl',{aUrl:'php/deleteAction.php?actionId=[[actionId]]'})"></button>
 		</div>
 	</li>
 EOD;
 
+// update todo_actions array according to requests
 switch ($getAction)
 {
 	case 'addAction':
@@ -30,6 +36,10 @@ switch ($getAction)
 		$todo_actions[$actionName.'_'.time()]['actionId']=$aActionId;
 		$todo_actions[$actionName.'_'.time()]['completedStatus']=false;
 		$todo_actions[$actionName.'_'.time()]['actionLabel']=$actionName;
+		break;
+	case 'editAction':
+		if (!empty($todo_actions[$actionId]['actionId']))
+			$todo_actions[$actionId]['actionLabel']=$actionName;
 		break;
 	case 'actionCompleted':
 		$todo_actions[$actionId]['completedStatus']=!$todo_actions[$actionId]['completedStatus'];
@@ -54,6 +64,8 @@ $_SESSION['todoAction'] = $todo_actions;
 
 $aVarArray['numberOfItems']		= count($todo_actions);
 $aVarArray['numberOfLeftItems']		= 0;
+
+//prepare the list of action items
 foreach($todo_actions as $aAction)
 {
 	$aVarArray['actionId']					= $aAction['actionId'];
@@ -69,16 +81,18 @@ foreach($todo_actions as $aAction)
 	$liToDoActions .= getTemplateLi($liTemplate, $aVarArray);
 }
 
+//process the action items
 $returnStr .= '<ul class="todo-list"
 					data-blapy-container="true" 
 					data-blapy-container-name="todo-list"
 					data-blapy-container-content="todo-list-'.time().'">'.$liToDoActions.'</ul>';
+//process the number of left actions 
 $returnStr .= '<span data-blapy-container="true" 
 					 data-blapy-container-name="numberOfItems"
 					 data-blapy-container-content="numberOfItems-'.$aVarArray['numberOfLeftItems'].'">'.$aVarArray['numberOfLeftItems'].'</span>';
 
-
-if ($aVarArray['numberOfItems'])
+//Process if we need to display the button for "clear completed" block if any completed action there
+if ($aVarArray['numberOfLeftItems'] != $aVarArray['numberOfItems'])
 	$returnStr .= <<<EOD
 		<button class="clear-completed" 
 				data-blapy-container="true" 
@@ -95,16 +109,18 @@ else
 				style="display:none">Clear completed</button>'
 EOD;
 
+//returns the different updated blocks for the front end
 echo $returnStr;
-	
+exit;
+
+//quick and dirty templating function
+//templating variables are embedding within '[[namevar]]'
 function getTemplateLi($aTemplateString, $varArray)
 {
 	if (count($varArray)==0) return $aTemplateString;
 	foreach ($varArray as $aVarName => $aVarValue)
 	{
-//		echo "[[$aVarName]] - $aVarValue \n";
 		$aTemplateString = str_replace("[[$aVarName]]",$aVarValue,$aTemplateString);
-//		echo ">>>>$aTemplateString \n";
 	}
 	
 	return $aTemplateString;

@@ -46,13 +46,13 @@
 						data-blapy-container-name="showClear"
 						data-blapy-container-content="showClear-False"
 						style="display:none"
-						onClick="$('#myBlapy').trigger('postData',{aUrl:'php/clearCompleted.php'});"
 						>Clear completed</button>
 				
 			</footer>
 		</section>
 		<footer class="info">
 			<p>Double-click to edit a todo</p>
+			<p>Reload the whole page (with F5) will reset the todo list completly</p>
 			<p>Created by <a href="https://github.com/intersel">Emmanuel Podvin</a></p>
 			<p>Still not part of... <a href="http://todomvc.com">TodoMVC</a> but completly inspired from it!</p>
 		</footer>
@@ -93,7 +93,10 @@
 				 
 				 $(document).on('focusout', '#todo-list label > input', function () {
 				    var $this = $(this);
-				    $this.parent().text($this.val() || oriVal);
+				    var newText = $this.val() || oriVal;
+				    var actionId = $this.parent().attr('data-id');
+				    $this.parent().text(newText);
+				    $('#myBlapy').trigger('postData',{aUrl:'php/editAction.php',params:{actionName:newText,actionId:actionId}});
 				    $this.remove(); // Don't just hide, remove the element.
 				});
 				
