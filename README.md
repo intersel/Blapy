@@ -5,6 +5,13 @@ The web application is built the usual way of generating web pages like with php
 
 So, it may help you to transform your "normal" web site in a web application too, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
 
+# Have a look on the "Hello World" demo
+[Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
+
+and the ["To do list" web Apps demo](http://www.intersel.net/demos/intersel/Blapy/demos/todomvc/) inspired from [TodoMVC](http://todomvc.com/)
+
+All the demos are listed there : [http://www.intersel.net/demos/intersel/Blapy/demos/](http://www.intersel.net/demos/intersel/Blapy/demos/)
+
 # Who may need it?
 Everyone using a CMS that generates web pages from a server and would like to transform his website to a client application-like website, ie that does not reload each page during the user navigation but only the needed blocks within the page.
 
@@ -24,13 +31,6 @@ So, the idea is to provide a simple environment that don't change your habits wh
 * configuration is simple and quite natural: it uses html5 "data" attributes to be configured and there is quite nothing to do from an existing website :-)
 * the history of browsing is kept
 * completly compliant with any existing html/js code
-
-# Have a look on the "Hello World" demo
-[Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
-
-and the ["To do list" web Apps demo](http://www.intersel.net/demos/intersel/Blapy/demos/todomvc/) inspired from [TodoMVC](http://todomvc.com/)
-
-All the demos are listed there : [http://www.intersel.net/demos/intersel/Blapy/demos/](http://www.intersel.net/demos/intersel/Blapy/demos/)
 
 # How does it work?
 
