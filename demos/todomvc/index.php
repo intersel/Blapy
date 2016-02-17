@@ -15,7 +15,12 @@
 						 onkeypress="if (event.keyCode==13) { $('#myBlapy').trigger('postData',{aUrl:'php/addAction.php',params:{actionName:$(this).val()}}); $(this).val('')}">
 			</header>
 			<section class="main">
-				<input class="toggle-all" type="checkbox">
+				<input class="toggle-all" 
+						type="checkbox" 
+						data-blapy-container="true" 
+						data-blapy-container-name="selectAllToggle"
+						data-blapy-container-content="selectAllToggle-Off"
+						onclick="$('#myBlapy').trigger('postData',{aUrl:'php/allCompleted.php',params:{toggleStatus:$(this).prop('checked')}})">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list" id="todo-list"
 					data-blapy-container="true" 

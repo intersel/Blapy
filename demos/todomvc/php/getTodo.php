@@ -50,6 +50,13 @@ switch ($getAction)
 			if ($aAction['completedStatus']) unset ($todo_actions[$aAction['actionId']]);
 		}
 		break;
+	case 'allCompleted':
+		foreach($todo_actions as $aAction)
+		{
+			$todo_actions[$aAction['actionId']]['completedStatus'] = $toggleStatus;
+		}
+		
+		break;
 	case 'deleteAction':
 		unset ($todo_actions[$actionId]);
 		break;
