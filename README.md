@@ -522,6 +522,31 @@ You just defined an array the way you would do in javascript with your json obje
 	</div>
 ```
 
+## How to initialize the blapy blocks after loading the page?
+The idea is to directly call the url that will initialize your page by calling one of the Blapy API functions "loadURL" or "postData" just after the Blapy initialization.
+
+Example:
+````html
+$( document ).ready(function() {
+    $('#myBlapy').Blapy();
+    $('#myBlapy').trigger('loadUrl',{aUrl:"init_my_page.php"})
+});
+```
+
+## How to update a blapy block at a regular period ?
+You have two attributes for Blapy blocks named "**data-blapy-href** " and "**data-blapy-updateblock-time**" that let you configure the URL to call and the period to call it.
+
+This example will update the block every second (1000ms) from index.php:
+````html
+        <div    data-blapy-container="true" 
+                        data-blapy-container-name="dateContainer" 
+                        data-blapy-container-content="aContent_<?php echo time();?>" 
+                        data-blapy-href = "index.php"
+                        data-blapy-updateblock-time = "1000"
+                >
+                    <b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
+        </div>
+```
 #Problem resolutions
 ## My blapy block does not update from my external content...
 
@@ -531,11 +556,11 @@ You just defined an array the way you would do in javascript with your json obje
 * Verify your html return of the first ajax call. For instance, ```<img src="" alt="">``` will generate a second ajax call to index.html... 
 
 ## When routing is activated with Sammy, My URL does not work any more...
-* It's generally a problem linked to base URL. YOu can fix it by setting a <base> html tag in your html head part:
+* It's generally a problem linked to base URL. YOu can fix it by setting a ```<base>```  html tag in your html head part:
 
-````html
+```html
 	<base href="/demos/todomvc/" target="_blank">
- 
+``` 
 # Contact
 If you have any ideas, feedback, requests or bug reports, you can reach me at github@intersel.org, 
 or via my website: http://www.intersel.fr
