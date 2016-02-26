@@ -245,7 +245,7 @@ To define a Blapy Block, you need to use the following attributes:
  These json objects will be applied on the template. Theses parameters complete the json configuration:
       * **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
       * **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "```<table>```")
-      * **data-blapy-template-init**: a file name that contains a blapy block that can be used to initialized the block
+      * **data-blapy-template-init**: a file name that contains a json data blapy block to use to initialize the block
   * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
   * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined 
  and send the Blapy_doCustomChange event.
@@ -255,6 +255,8 @@ To define a Blapy Block, you need to use the following attributes:
 * **data-blapy-update-rule**: ['local'|'external' (default)], if 'local', will use the data-blapy-update rule defined in the current block, else will use the one defined in the external block. Exception to the default value, a "json" block is always "local".
 * **data-blapy-applyon** (option, default:'all'): By default, the Blapy blocks loaded by a Blapy link will be tried on all Blapy blocks. 
 If defined, the external container will only be applied on the matched Blapy blocks contained in the given application id element.
+* **data-blapy-href** (option): a URL to call on update (if set)
+* **data-blapy-updateblock-time** (option): a time in milliseconds when the URL set in 'data-blapy-href' should be called to update the block. 
  
  
 ## Examples

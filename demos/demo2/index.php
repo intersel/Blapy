@@ -100,14 +100,11 @@ else
 		<div 	data-blapy-container="true" 
 						data-blapy-container-name="mainContainerApp2" 
 						data-blapy-container-content="aContent_<?php echo time();?>" 
+						data-blapy-href = "index.php"
+						data-blapy-updateblock-time = "1000"
 				>
 					<b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
 		</div>
-		<script>
-			setInterval(function(){ 
-				$('#myBlapyApp2').trigger('loadUrl',{aUrl:'index.php',params:{action:'update'}}); 
-				}, 1000);
-		</script>
 	</div>
 	<div style="border:solid 1px green;margin:20px;padding:0px 20px 20px;" id="myBlapyApp3">
 		<h4>"myBlapyApp3" Blapy blocks</h4>

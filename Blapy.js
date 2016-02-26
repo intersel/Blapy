@@ -28,6 +28,7 @@
  * - 2015/12/22 - E.Podvin - V1.0.19 - fix on default return for sammy when no blapy route is defined (return now true)
  * - 2016/01/20 - E.Podvin - V1.1.0 - add block update feature from a standard json feed
  * - 2016/02/17 - E.Podvin - V1.1.1 - fix when 'postData' is sent to Blapy while we're not in a "pageReady" state
+ * - 2016/02/26 - E.Podvin - V1.2.0 - add block regular updates 
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -82,6 +83,9 @@
 		this.myUIObject	= anObject;
 		this.myUIObjectID = anObject.attr('id');
 		if (!this.myUIObjectID) alert('no defined Id on the given jQuery object... Blapy can\'t work properly :-(');
+		
+		//intervals of time set to update blapy blocks
+		this.intervalsSet = new Array(); 
 		
 	};
 
@@ -318,6 +322,38 @@
 	};
 
 	/**
+	* prepare update block calls 
+	* 
+	*/
+	theBlapy.prototype.setBlapyUpdateIntervals = function ()
+	{
+		this._log('setBlapyUpdateIntervals');
+		
+		var myBlapy 		= this;
+		var intervalSetId 	= 0;
+		
+		//clear all intervals set
+		for (i = 0; i < myBlapy.intervalsSet.length; i++) {
+			clearInterval(myBlapy.intervalsSet[i]);
+		}
+		
+		//for any template block
+		$('#'+myBlapy.myUIObjectID+' [data-blapy-updateblock-time]').each(function() {
+			var myContainer = $(this);
+			var aUpdateBlockTime = myContainer.attr("data-blapy-updateblock-time");
+			var aUpdateBlockHrefURL = myContainer.attr("data-blapy-href");
+			if (aUpdateBlockTime)
+			{
+				myBlapy.intervalsSet[intervalSetId] = setInterval(function(){
+					$('#'+myBlapy.myUIObjectID).trigger('loadUrl',{aUrl:aUpdateBlockHrefURL});
+				}, aUpdateBlockTime);
+				
+				intervalSetId++;
+			}
+		});
+	}
+	
+	/**
 	* prepare json templates
 	* 
 	* json templates are stored in a hidden div with a "data-blapy-container-tpl" attribute set
@@ -379,7 +415,10 @@
              enterState:
             {
                 init_function: function(){
-					if (this.opts.pageLoadedFunction) this.opts.pageLoadedFunction();
+                	//process interval updates
+                	this.opts.theBlapy.setBlapyUpdateIntervals();
+
+                	if (this.opts.pageLoadedFunction) this.opts.pageLoadedFunction();
 					this.myUIObject.trigger('Blapy_PageLoaded');
 				},
                 next_state: 'PageReady',
@@ -398,7 +437,8 @@
                 	this.opts.theBlapy.setBlapyUrl();
                 	// process json blocks
                 	this.opts.theBlapy.setBlapyJsonTemplates();
-                	
+
+                	//alert that blapy page is ready
                 	if (this.opts.pageReadyFunction) this.opts.pageReadyFunction();
 					this.myUIObject.trigger('Blapy_PageReady');
 				}
@@ -704,7 +744,10 @@
 								
 								}
 
-								if (myFSM.opts.afterContentChange) myFSM.opts.afterContentChange(myContainer);
+			                	//process interval updates
+								myFSM.opts.theBlapy.setBlapyUpdateIntervals();
+
+			                	if (myFSM.opts.afterContentChange) myFSM.opts.afterContentChange(myContainer);
 								//try to send to the new object the alert
 								if (myContainer.attr('id'))
 									$('#'+myContainer.attr('id')).trigger('Blapy_afterContentChange',myContainer);
@@ -737,7 +780,7 @@
             postData:'loadUrl',
 	        loadUrl:   //someone try to load an URL but page is not ready... try it later... 
 	        {
-	        	how_process_event: {delay:30,preventcancel:true},
+	        	how_process_event: {delay:100,preventcancel:true},
 	        	propagate_event:true,
 	        },
         },
