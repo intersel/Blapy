@@ -15,9 +15,11 @@ All the demos are listed there : [http://www.intersel.net/demos/intersel/Blapy/d
 # Who may need it?
 Everyone using a CMS that generates web pages from a server and would like to transform his website to a client application-like website, ie that does not reload each page during the user navigation but only the needed blocks within the page.
 
-Everyone who would like to keep the way he builds websites but would like to have it behaves like a web application.
+Everyone who would like to keep the way we builds websites but would like to have it behaves like an ajax web application.
 
 The ones who gave up with AngularJS and other javascript frameworks to build web app... like me ;-)
+
+The ones who are starting with Javascript will clearly find benefits to use Blapy too... as they'll do big ajax things with quite no js lines of code...
 
 # Why would I use that?!
 The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is quite a difficult job with a steep learning curve... 
@@ -523,56 +525,7 @@ You just defined an array the way you would do in javascript with your json obje
 ```
 
 ## How to initialize the blapy blocks after loading the page?
-The idea is to directly call the url that will initialize your page by calling one of the Blapy API functions "loadURL" or "postData" just after the Blapy initialization.
 
-Example:
-````html
-$( document ).ready(function() {
-    $('#myBlapy').Blapy();
-    $('#myBlapy').trigger('loadUrl',{aUrl:"init_my_page.php"})
-});
-```
-
-## How to update a blapy block at a regular period ?
-You have two attributes for Blapy blocks named "**data-blapy-href** " and "**data-blapy-updateblock-time**" that let you configure the URL to call and the period to call it.
-
-This example will update the block every second (1000ms) from index.php:
-````html
-        <div    data-blapy-container="true" 
-                        data-blapy-container-name="dateContainer" 
-                        data-blapy-container-content="aContent_<?php echo time();?>" 
-                        data-blapy-href = "index.php"
-                        data-blapy-updateblock-time = "1000"
-                >
-                    <b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
-        </div>
-```
-## How to initialize the blapy blocks after loading the page?
-The idea is to directly call the url that will initialize your page by calling one of the Blapy API functions "loadURL" or "postData" just after the Blapy initialization.
-
-Example:
-````html
-$( document ).ready(function() {
-    $('#myBlapy').Blapy();
-    $('#myBlapy').trigger('loadUrl',{aUrl:"init_my_page.php"})
-});
-```
-
-## How to update a blapy block at a regular period ?
-You have two attributes for Blapy blocks named "data-blapy-href " and "data-blapy-updateblock-time" that let you configure the URL to call and the period to call it.
-
-This example will update the block every second (1000ms) from index.php:
-````html
-        <div    data-blapy-container="true" 
-                        data-blapy-container-name="dateContainer" 
-                        data-blapy-container-content="aContent_<?php echo time();?>" 
-                        data-blapy-href = "index.php"
-                        data-blapy-updateblock-time = "1000"
-                >
-                    <b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
-        </div>
-```
-## How to initialize the blapy blocks after loading the page?
 The idea is to directly call the url that will initialize your page by calling one of the Blapy API functions "loadURL" or "postData" just after the Blapy initialization.
 
 Example:
