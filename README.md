@@ -547,6 +547,56 @@ This example will update the block every second (1000ms) from index.php:
                     <b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
         </div>
 ```
+## How to initialize the blapy blocks after loading the page?
+The idea is to directly call the url that will initialize your page by calling one of the Blapy API functions "loadURL" or "postData" just after the Blapy initialization.
+
+Example:
+````html
+$( document ).ready(function() {
+    $('#myBlapy').Blapy();
+    $('#myBlapy').trigger('loadUrl',{aUrl:"init_my_page.php"})
+});
+```
+
+## How to update a blapy block at a regular period ?
+You have two attributes for Blapy blocks named "data-blapy-href " and "data-blapy-updateblock-time" that let you configure the URL to call and the period to call it.
+
+This example will update the block every second (1000ms) from index.php:
+````html
+        <div    data-blapy-container="true" 
+                        data-blapy-container-name="dateContainer" 
+                        data-blapy-container-content="aContent_<?php echo time();?>" 
+                        data-blapy-href = "index.php"
+                        data-blapy-updateblock-time = "1000"
+                >
+                    <b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
+        </div>
+```
+## How to initialize the blapy blocks after loading the page?
+The idea is to directly call the url that will initialize your page by calling one of the Blapy API functions "loadURL" or "postData" just after the Blapy initialization.
+
+Example:
+````html
+$( document ).ready(function() {
+    $('#myBlapy').Blapy();
+    $('#myBlapy').trigger('loadUrl',{aUrl:"init_my_page.php"})
+});
+```
+
+## How to update a blapy block at a regular period ?
+You have two attributes for Blapy blocks named "data-blapy-href " and "data-blapy-updateblock-time" that let you configure the URL to call and the period to call it.
+
+This example will update the block every second (1000ms) from index.php:
+````html
+        <div    data-blapy-container="true" 
+                        data-blapy-container-name="dateContainer" 
+                        data-blapy-container-content="aContent_<?php echo time();?>" 
+                        data-blapy-href = "index.php"
+                        data-blapy-updateblock-time = "1000"
+                >
+                    <b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
+        </div>
+```
 #Problem resolutions
 ## My blapy block does not update from my external content...
 
