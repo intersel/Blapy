@@ -529,7 +529,7 @@ You just defined an array the way you would do in javascript with your json obje
 The idea is to directly call the url that will initialize your page by calling one of the Blapy API functions "loadURL" or "postData" just after the Blapy initialization.
 
 Example:
-````html
+```html
 $( document ).ready(function() {
     $('#myBlapy').Blapy();
     $('#myBlapy').trigger('loadUrl',{aUrl:"init_my_page.php"})
@@ -540,7 +540,7 @@ $( document ).ready(function() {
 You have two attributes for Blapy blocks named "data-blapy-href " and "data-blapy-updateblock-time" that let you configure the URL to call and the period to call it.
 
 This example will update the block every second (1000ms) from index.php:
-````html
+```html
         <div    data-blapy-container="true" 
                         data-blapy-container-name="dateContainer" 
                         data-blapy-container-content="aContent_<?php echo time();?>" 
@@ -553,7 +553,18 @@ This example will update the block every second (1000ms) from index.php:
 #Problem resolutions
 ## My blapy block does not update from my external content...
 
-* Did you verify that your external block has a different **data-blapy-container-content** content than the current one? If not, the content is not updated as it is considered to be the same... The content of **data-blapy-container-content** may be any name.
+* Did you verify that your external block has a different **data-blapy-container-content** content than the current one? If not, the content is not updated as it is considered to be the same... The content of **data-blapy-container-content** may be any name. You can use the current time applied on the name as in this example:
+
+```html
+<div    data-blapy-container="true" 
+                        data-blapy-container-name="dateContainer" 
+                        data-blapy-container-content="aContent_<?php echo time();?>" 
+                >
+                    <b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
+        </div>
+```
+
+* Maybe, the code of your external block is not a valid HTML code. For instance, if you use tbody as a blapy block, don't set it alone, but embed it within a table tag.
 
 ## Clicking to a blapy link generates several ajax calls though it should generate only a unique call...
 * Verify your html return of the first ajax call. For instance, ```<img src="" alt="">``` will generate a second ajax call to index.html... 

@@ -53,7 +53,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">SB Admin v2.0 using Blapy !</a>
+                <a class="navbar-brand" href="index.php">SB Admin v2.0 using Blapy !</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -97,76 +97,40 @@
                         <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-tasks">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 1</strong>
-                                        <span class="pull-right text-muted">40% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                            <span class="sr-only">40% Complete (success)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 2</strong>
-                                        <span class="pull-right text-muted">20% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                            <span class="sr-only">20% Complete</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 3</strong>
-                                        <span class="pull-right text-muted">60% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                            <span class="sr-only">60% Complete (warning)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 4</strong>
-                                        <span class="pull-right text-muted">80% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                            <span class="sr-only">80% Complete (danger)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
+						<li>
                             <a class="text-center" href="#">
                                 <strong>See All Tasks</strong>
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         </li>
+                    </ul>
+                    <ul class="dropdown-menu dropdown-tasks" style="margin-top: 42px;"
+	                   	data-blapy-container="true" 
+						data-blapy-container-name="tasksList" 
+						data-blapy-container-content="tasksListInit"
+						data-blapy-update="json"
+                    >
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>${taskId}</strong>
+                                        <span class="pull-right text-muted">${completeness}% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div 	class="progress-bar progress-bar-${statusTask}" 
+                                        		role="progressbar" 
+                                        		aria-valuenow="${completeness}" 
+                                        		aria-valuemin="0" 
+                                        		aria-valuemax="100" 
+                                        		style="width: ${completeness}%">
+                                            <span class="sr-only">${completeness}% Complete (${statusTask})</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
                     </ul>
                     <!-- /.dropdown-tasks -->
                 </li>
@@ -175,58 +139,29 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-comment fa-fw"></i> New Comment
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                    <span class="pull-right text-muted small">12 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-tasks fa-fw"></i> New Task
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
+                    <ul class="dropdown-menu dropdown-alerts"
+                    	<li>
                             <a class="text-center" href="#">
                                 <strong>See All Alerts</strong>
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         </li>
+                    </ul>
+                    <ul class="dropdown-menu dropdown-alerts"  style="margin-top: 42px;"
+	                   	data-blapy-container="true" 
+						data-blapy-container-name="alertsList" 
+						data-blapy-container-content="alertsListInit"
+						data-blapy-update="json"
+					>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-${alertType} fa-fw"></i> ${alertTitle}
+                                    <span class="pull-right text-muted small">${alertElapsedTime}</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
                     </ul>
                     <!-- /.dropdown-alerts -->
                 </li>
@@ -265,7 +200,7 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
@@ -375,7 +310,11 @@
                                     <i class="fa fa-comments fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">26</div>
+                                    <div class="huge" 
+					                   	data-blapy-container="true" 
+										data-blapy-container-name="nbNewComments" 
+										data-blapy-container-content="nbNewCommentsVoid"
+                                    	></div>
                                     <div>New Comments!</div>
                                 </div>
                             </div>
@@ -397,7 +336,11 @@
                                     <i class="fa fa-tasks fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">12</div>
+                                    <div class="huge"
+                                    	data-blapy-container="true" 
+										data-blapy-container-name="nbNewTasks" 
+										data-blapy-container-content="nbNewTasksVoid"
+                                    	></div>
                                     <div>New Tasks!</div>
                                 </div>
                             </div>
@@ -419,7 +362,11 @@
                                     <i class="fa fa-shopping-cart fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">124</div>
+                                    <div class="huge" 
+										data-blapy-container="true" 
+										data-blapy-container-name="nbNewOrders" 
+										data-blapy-container-content="nbNewOrdersVoid"
+									></div>
                                     <div>New Orders!</div>
                                 </div>
                             </div>
@@ -441,7 +388,10 @@
                                     <i class="fa fa-support fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">13</div>
+                                    <div class="huge"
+                                    	data-blapy-container="true" 
+										data-blapy-container-name="nbNewTickets" 
+										data-blapy-container-content="nbNewTicketsVoid"></div>
                                     <div>Support Tickets!</div>
                                 </div>
                             </div>
@@ -526,55 +476,11 @@
                                                     <th>Amount</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>3326</td>
-                                                    <td>10/21/2013</td>
-                                                    <td>3:29 PM</td>
-                                                    <td>$321.33</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3325</td>
-                                                    <td>10/21/2013</td>
-                                                    <td>3:20 PM</td>
-                                                    <td>$234.34</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3324</td>
-                                                    <td>10/21/2013</td>
-                                                    <td>3:03 PM</td>
-                                                    <td>$724.17</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3323</td>
-                                                    <td>10/21/2013</td>
-                                                    <td>3:00 PM</td>
-                                                    <td>$23.71</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3322</td>
-                                                    <td>10/21/2013</td>
-                                                    <td>2:49 PM</td>
-                                                    <td>$8345.23</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3321</td>
-                                                    <td>10/21/2013</td>
-                                                    <td>2:23 PM</td>
-                                                    <td>$245.12</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3320</td>
-                                                    <td>10/21/2013</td>
-                                                    <td>2:15 PM</td>
-                                                    <td>$5663.54</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3319</td>
-                                                    <td>10/21/2013</td>
-                                                    <td>2:13 PM</td>
-                                                    <td>$943.45</td>
-                                                </tr>
+                                            <tbody 
+                                            	data-blapy-container="true" 
+												data-blapy-container-name="barChartExample" 
+												data-blapy-container-content="barChartExampleVoid"
+											>
                                             </tbody>
                                         </table>
                                     </div>
