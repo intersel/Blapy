@@ -29,6 +29,7 @@
  * - 2016/01/20 - E.Podvin - V1.1.0 - add block update feature from a standard json feed
  * - 2016/02/17 - E.Podvin - V1.1.1 - fix when 'postData' is sent to Blapy while we're not in a "pageReady" state
  * - 2016/02/26 - E.Podvin - V1.2.0 - add block regular updates 
+ * - 2016/03/07 - E.Podvin - V1.3.0 - add block init update when it becomes visible, after a scroll or resize (data-blapy-updateblock-ondisplay option). 
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -322,7 +323,7 @@
 	};
 
 	/**
-	* prepare update block calls 
+	* prepare update block calls on interval time
 	* 
 	*/
 	theBlapy.prototype.setBlapyUpdateIntervals = function ()
@@ -352,7 +353,33 @@
 			}
 		});
 	}
-	
+
+	/**
+	* prepare update block calls when the block becomes visible
+	* 
+	*/
+	theBlapy.prototype.setBlapyUpdateOnDisplay = function ()
+	{
+		this._log('setBlapyUpdateOnDisplay');
+		
+		if (!window.jQuery.prototype.appear)
+		{
+			this._log('setBlapyUpdateOnDisplay: jquery.appear.js is not loaded...');
+			if ($('[data-blapy-updateblock-ondisplay]').length > 0)
+				alert('Blapy: jquery.appear.js is not loaded. Need it to process data-blapy-updateblock-ondisplay option');
+			return;
+		}
+		
+		var myBlapy 		= this;
+		
+		$('[data-blapy-updateblock-ondisplay]').appear();
+		$(document.body).on('appear','[data-blapy-updateblock-ondisplay]', function(event, $all_appeared_elements) {
+			$(this).trigger('loadUrl',{aUrl: $(this).attr("data-blapy-href")});
+		});
+		$.force_appear();
+		
+	}
+
 	/**
 	* prepare json templates
 	* 
@@ -417,7 +444,9 @@
                 init_function: function(){
                 	//process interval updates
                 	this.opts.theBlapy.setBlapyUpdateIntervals();
-
+                	//init blapy block that should be initialized on display
+                	this.opts.theBlapy.setBlapyUpdateOnDisplay();
+                	
                 	if (this.opts.pageLoadedFunction) this.opts.pageLoadedFunction();
 					this.myUIObject.trigger('Blapy_PageLoaded');
 				},

@@ -480,6 +480,8 @@
                                             	data-blapy-container="true" 
 												data-blapy-container-name="barChartExample" 
 												data-blapy-container-content="barChartExampleVoid"
+												data-blapy-updateblock-ondisplay="true"
+												data-blapy-href="phpAPI/updateBarChartExample.php"
 											>
                                             </tbody>
                                         </table>
@@ -834,6 +836,7 @@
 		<script type="text/javascript" src="../../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
 		<script type="text/javascript" src="../../../extlib/iFSM/iFSM.js"></script>
 		<script type="text/javascript" src="../../../extlib/json2html/json2html.js"></script>
+		<script type="text/javascript" src="../../../extlib/jquery.appear/jquery.appear.js"></script>
 		<script type="text/javascript" src="../../../Blapy.js"></script>
 		<script>
 			$( document ).ready(function() {

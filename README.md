@@ -257,8 +257,9 @@ To define a Blapy Block, you need to use the following attributes:
 * **data-blapy-update-rule**: ['local'|'external' (default)], if 'local', will use the data-blapy-update rule defined in the current block, else will use the one defined in the external block. Exception to the default value, a "json" block is always "local".
 * **data-blapy-applyon** (option, default:'all'): By default, the Blapy blocks loaded by a Blapy link will be tried on all Blapy blocks. 
 If defined, the external container will only be applied on the matched Blapy blocks contained in the given application id element.
-* **data-blapy-href** (option): a URL to call on update (if set)
+* **data-blapy-href** (option): a URL to call on **data-blapy-updateblock-time** (if set) or on **data-blapy-updateblock-ondisplay**
 * **data-blapy-updateblock-time** (option): a time in milliseconds when the URL set in 'data-blapy-href' should be called to update the block. 
+* **data-blapy-updateblock-ondisplay** (option): if set to true, will update the block from **data-blapy-href** when the element is visible (after a scroll).
  
  
 ## Examples
@@ -457,6 +458,8 @@ To work properly, you need to include the following javascript libraries:
 * [Sammy](http://sammyjs.org/) (optional if you don't need routing management)
  * Sammy is a small framework to make web application providing simple but efficient 'route' services
   * `<script type="text/javascript" src="extlib/sammy/lib/sammy.js"></script>`
+* [jquery.appear] (http://morr.github.io/appear.html) (optional if you don't need to init blocks when they become visible after a scroll)
+ * `<script type="text/javascript" src="extlib/jquery.appear/jquery.appear.js"></script>`
 
 # FAQ
 If you have questions or unsolved problems, you can have a look on the our [FAQs](https://github.com/intersel/Blapy/wiki) 
