@@ -29,13 +29,14 @@ $liTemplate = <<<EOD
 EOD;
 
 // update todo_actions array according to requests
+$tagId=uniqid();
 switch ($getAction)
 {
 	case 'addAction':
-		$aActionId = $actionName.'_'.time();
-		$todo_actions[$actionName.'_'.time()]['actionId']=$aActionId;
-		$todo_actions[$actionName.'_'.time()]['completedStatus']=false;
-		$todo_actions[$actionName.'_'.time()]['actionLabel']=$actionName;
+		$aActionId = $actionName.'_'.$tagId;
+		$todo_actions[$actionName.'_'.$tagId]['actionId']=$aActionId;
+		$todo_actions[$actionName.'_'.$tagId]['completedStatus']=false;
+		$todo_actions[$actionName.'_'.$tagId]['actionLabel']=$actionName;
 		break;
 	case 'editAction':
 		if (!empty($todo_actions[$actionId]['actionId']))
@@ -93,7 +94,7 @@ foreach($todo_actions as $aAction)
 $returnStr .= '<ul class="todo-list"
 					data-blapy-container="true" 
 					data-blapy-container-name="todo-list"
-					data-blapy-container-content="todo-list-'.time().'">'.$liToDoActions.'</ul>';
+					data-blapy-container-content="todo-list-'.$tagId.'">'.$liToDoActions.'</ul>';
 //process the number of left actions 
 $returnStr .= '<span data-blapy-container="true" 
 					 data-blapy-container-name="numberOfItems"

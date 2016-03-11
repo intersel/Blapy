@@ -178,7 +178,7 @@ $("#<an id>").Blapy(options);
 Options is a javascript object. It can take as input the following possible option parameters :
 
 * **debug**: (default:false) if true, then log things in the console
-* **LogLevel**: (default:3) log level: 1: error ; 2: warning; 3: notice
+* **LogLevel**: (default:1) log level: 1: error ; 2: warning; 3: notice
 * **AlertError**: (default:false) show an alert box on error messages if true
 * **activeSammy**: (default:false) if set to true, will use Sammy for URL routing 
 * **pageLoadedFunction**: (default:null) function to call when the page is loaded
@@ -546,7 +546,7 @@ This example will update the block every second (1000ms) from index.php:
 ```html
         <div    data-blapy-container="true" 
                         data-blapy-container-name="dateContainer" 
-                        data-blapy-container-content="aContent_<?php echo time();?>" 
+                        data-blapy-container-content="aContent_<?php echo uniqid();?>" 
                         data-blapy-href = "index.php"
                         data-blapy-updateblock-time = "1000"
                 >
@@ -556,12 +556,12 @@ This example will update the block every second (1000ms) from index.php:
 #Problem resolutions
 ## My blapy block does not update from my external content...
 
-* Did you verify that your external block has a different **data-blapy-container-content** content than the current one? If not, the content is not updated as it is considered to be the same... The content of **data-blapy-container-content** may be any name. You can use the current time applied on the name as in this example:
+* Did you verify that your external block has a different **data-blapy-container-content** content than the current one? If not, the content is not updated as it is considered to be the same... The content of **data-blapy-container-content** may be any name. You can use the current time or a unique id to set the name as in this example:
 
 ```html
 <div    data-blapy-container="true" 
                         data-blapy-container-name="dateContainer" 
-                        data-blapy-container-content="aContent_<?php echo time();?>" 
+                        data-blapy-container-content="aContent_<?php echo uniqid();?>" 
                 >
                     <b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
         </div>
