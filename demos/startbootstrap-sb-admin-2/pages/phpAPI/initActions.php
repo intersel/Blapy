@@ -69,8 +69,118 @@ $returnStr = <<<EOD
 	data-blapy-container-name="nbNewTickets" 
 	data-blapy-container-content="nbNewTickets-$currentTime"
 >13</div>
+			
+			
+<ul class="nav" id="side-menu"
+		data-blapy-container="true" 
+		data-blapy-container-name="sideMenusList" 
+		data-blapy-container-content="sideMenusListInit"
+		data-blapy-update="json"
+>
+[
+			{subMenuContent:'<div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+					 ',
+			 liInfo:'class="sidebar-search"'
+			},
+			{liInfo:'',subMenuContent:'<a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>'},
+			{liInfo:'',subMenuContent:'<a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
+                            <ul id="UIChartsList" class="nav nav-second-level"
+		                        data-blapy-container="true" 
+								data-blapy-container-name="UIChartsList" 
+								data-blapy-container-content="UIChartsListInit"
+								data-blapy-update="json"
+								data-blapy-template-init="phpAPI/subMenus.php"
+								>
+                                <li>
+                                    <a href="$\{menuURL\}">$\{menuTitle\}</a>
+                                </li>
+                            </ul>
+							<script>$("#myBlapy").trigger("loadUrl",{aUrl:"phpAPI/subMenus.php"});</script>
+			'},
+			{liInfo:'',subMenuContent:'<a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>'},
+			{liInfo:'',subMenuContent:'<a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>'},
+			{liInfo:'',subMenuContent:'<a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level"
+		                        data-blapy-container="true" 
+								data-blapy-container-name="UIElementsList" 
+								data-blapy-container-content="UIElementsListInit"
+								data-blapy-update="json"
+								>
+                                <li>
+                                    <a href="$\{menuURL\}">$\{menuTitle\}</a>
+                                </li>
+                            </ul>
+                                    		'},
+			{liInfo:'',subMenuContent:'<a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">Second Level Item</a>
+                                </li>
+                                <li>
+                                    <a href="#">Second Level Item</a>
+                                </li>
+                                <li>
+                                    <a href="#">Third Level <span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="#">Third Level Item</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Third Level Item</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Third Level Item</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Third Level Item</a>
+                                        </li>
+                                    </ul>
+                                    <!-- /.nav-third-level -->
+                                </li>
+                            </ul>
+                                    		'},
+				{liInfo:'',subMenuContent:'<a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="blank.html">Blank Page</a>
+                                </li>
+                                <li>
+                                    <a href="login.html">Login Page</a>
+                                </li>
+                            </ul>
+                            '},        		
+			]
+</ul>
+
+
+
+<ul class="nav nav-second-level"
+	data-blapy-container="true" 
+	data-blapy-container-name="UIElementsList" 
+	data-blapy-container-content="UIElementsListInit"
+	data-blapy-update="json"
+>
+[
+		{menuURL:"panels-wells.html",menuTitle:"Panels and Wells"},
+		{menuURL:"buttons.html",menuTitle:"Buttons"},
+					{menuURL:"notifications.html",menuTitle:"Notifications"},
+					{menuURL:"typography.html",menuTitle:"Typography"},
+					{menuURL:"icons.html",menuTitle:"Icons"},
+					{menuURL:"grid.html",menuTitle:"Grid"},
+			]
+</ul>
+			
 
 EOD;
+
+$returnStr=str_replace("\n",'',$returnStr);
 
 include('callActions.php');
 
