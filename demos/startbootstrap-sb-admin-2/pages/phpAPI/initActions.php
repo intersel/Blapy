@@ -46,6 +46,20 @@ $returnStr = <<<EOD
 		]
 </ul>
 
+<ul class="dropdown-menu dropdown-user"
+	data-blapy-container="true" 
+	data-blapy-container-name="userFeaturesList" 
+	data-blapy-container-content="userFeaturesListInit"
+	data-blapy-update="json"
+>
+	[
+		{featureIcon:"user",class:"",feature:"User Profile",url:"http://www.intersel.fr"},
+		{featureIcon:"gear",class:"",feature:"Settings",url:"#"},
+		{featureIcon:"",class:"divider",feature:"",url:"#"},
+		{featureIcon:"sign-out",class:"",feature:"Logout",url:"#"},
+	]	
+</ul>
+
 <div class="huge" 
 	data-blapy-container="true" 
 	data-blapy-container-name="nbNewComments" 
@@ -102,7 +116,7 @@ $returnStr = <<<EOD
                                     <a href="$\{menuURL\}">$\{menuTitle\}</a>
                                 </li>
                             </ul>
-							<script>$("#myBlapy").trigger("loadUrl",{aUrl:"phpAPI/subMenus.php"});</script>
+
 			'},
 			{liInfo:'',subMenuContent:'<a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>'},
 			{liInfo:'',subMenuContent:'<a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>'},

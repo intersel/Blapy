@@ -4,8 +4,8 @@
  * RCS PARIS 488 379 660 - NAF 721Z
  *
  * File : Blapy.js
- * Blapy : a jquery plugin that helps to handle and manage an ajax web application 
- * 					from a usual way of generating web pages like with php or a standard CMS
+ * Blapy : a jquery plugin that helps to design and manage an ajax web application 
+ * 					keeping the usual way of generating web pages like with php or a standard CMS
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
@@ -30,14 +30,15 @@
  * - 2016/02/17 - E.Podvin - V1.1.1 - fix when 'postData' is sent to Blapy while we're not in a "pageReady" state
  * - 2016/02/26 - E.Podvin - V1.2.0 - add block regular updates 
  * - 2016/03/07 - E.Podvin - V1.3.0 - add block init update when it becomes visible, after a scroll or resize (data-blapy-updateblock-ondisplay option). 
+ * - 2016/04/01 - E.Podvin - V1.3.1 - fix on json blocks embedded in json block 
  * 
  * -----------------------------------------------------------------------------------------
  *
- * @copyright Intersel 2015
+ * @copyright Intersel 2015-2016
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.1.0
+ * @version : 1.3.1
  * -----------------------------------------------------------------------------------------
  */
 
@@ -381,6 +382,57 @@
 	}
 
 	/**
+	 * prepare a json container
+	 */
+	theBlapy.prototype.setBlapyContainerJsonTemplate = function (myContainer,myBlapy)
+	{
+		this._log('setBlapyContainerJsonTemplate');
+			
+		//if block is declared json, then we take local update rule (json)
+		myContainer.attr('data-blapy-update-rule','local');
+		
+		//Search for a template container already defined within the blapy container
+		var htmlTpl = myContainer.find('[data-blapy-container-tpl]');// if still processed, a block data-blapy-container-tpl will be inside
+		if (htmlTpl.length == 0)// ok so not processed, so let's do it
+		{
+			var htmlTplContent = myContainer.html();
+			
+			//if no template defined within the block
+			if (htmlTplContent.replace(/\s{2,}/g, ' ').replace(/\t/g, ' ').toString().trim().replace(/(\r\n|\n|\r)/g,"") == "")
+			{
+				//look for partial template file
+				var tplFile = myContainer.attr("data-blapy-template-file");
+				if (tplFile)
+				{
+					$.get(tplFile, function(htmlTplContent) {
+						//store the template in comment in a hidden div
+						//needs to be in a comment, if not, template content is filtered by the DOM if the template content not compliant within a div
+						myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true"><!--'+htmlTplContent+'--></div>');
+						var aInitURL = myContainer.attr("data-blapy-template-init");
+						if (aInitURL)
+							$('#'+myBlapy.myUIObjectID).trigger('loadUrl',{aUrl:aInitURL});
+					});
+				}
+				else // no defined template...?
+				{
+					var aInitURL = myContainer.attr("data-blapy-template-init");
+					if (aInitURL)
+						$('#'+myBlapy.myUIObjectID).trigger('loadUrl',{aUrl:aInitURL});
+				}
+			}
+			else //template is defined in the block
+			{
+				myContainer.html('<div style="display:none" data-blapy-container-tpl="true"><!--'+htmlTplContent+'--></div>');
+				var aInitURL = myContainer.attr("data-blapy-template-init");
+				if (aInitURL)
+					$('#'+myBlapy.myUIObjectID).trigger('loadUrl',{aUrl:aInitURL});
+				
+			}
+		}
+	};
+	
+	
+	/**
 	* prepare json templates
 	* 
 	* json templates are stored in a hidden div with a "data-blapy-container-tpl" attribute set
@@ -395,43 +447,7 @@
 		$('[data-blapy-update="json"]').each(function() {
 			var myContainer = $(this);
 			
-			//if block is declared json, then we take local update rule (json)
-			myContainer.attr('data-blapy-update-rule','local');
-			
-//			if (!myContainer.attr('data-blapy-template-wrap')) myContainer.attr('data-blapy-template-wrap','<div>'); 
-			
-			//Search for a template container already defined within the blapy container
-			var htmlTpl = myContainer.find('[data-blapy-container-tpl]');
-			if (htmlTpl.length == 0)
-			{
-				var htmlTplContent = myContainer.html();
-				
-				//if no template defined
-				if (htmlTplContent.replace(/\s{2,}/g, ' ').replace(/\t/g, ' ').toString().trim().replace(/(\r\n|\n|\r)/g,"") == "")
-				{
-					//look for partial template file
-					var tplFile = myContainer.attr("data-blapy-template-file");
-					if (tplFile)
-					{
-						$.get(tplFile, function(htmlTplContent) {
-							//store the template in comment in a hidden div
-							//needs to be in a comment, if not, template content is filtered if the template content not compliant within a div
-							myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true"><!--'+htmlTplContent+'--></div>');
-							var aInitURL = myContainer.attr("data-blapy-template-init");
-							if (aInitURL)
-								$('#'+myBlapy.myUIObjectID).trigger('loadUrl',{aUrl:aInitURL});
-						});
-					}
-					else
-					{
-						var aInitURL = myContainer.attr("data-blapy-template-init");
-						if (aInitURL)
-							$('#'+myBlapy.myUIObjectID).trigger('loadUrl',{aUrl:aInitURL});
-					}
-				}
-				else
-					myContainer.html('<div style="display:none" data-blapy-container-tpl="true"><!--'+htmlTplContent+'--></div>');
-			}
+			myBlapy.setBlapyContainerJsonTemplate(myContainer,myBlapy);
 		});
 	};
 
@@ -752,7 +768,15 @@
 									}
 
 									myContainer.html(htmlTpl[0].outerHTML + newHtml);//replace content with the new one
+									var myBlapy = myFSM.opts.theBlapy;
+									myContainer.find('[data-blapy-update="json"]').each(function() {
+										var mySubContainer = $(this);
+										
+										myBlapy.setBlapyContainerJsonTemplate(mySubContainer,myBlapy);
+									});									
+
 									myContainer=aBlapyContainer;
+									
 								}
 								else
 								{
