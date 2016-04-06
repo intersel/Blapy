@@ -762,9 +762,7 @@
 					});
 
 			    $(document).on( "Blapy_afterContentChange","#side-menu", function(event,aBlock) {
-
-			    	//alert( 'Blapy_afterContentChange' );
-			    	//if ($(aBlock).attr('id') == 'side-menu') $('#myBlapy').trigger('loadUrl',{aUrl:'phpAPI/subMenus.php'});
+			    	 $('#side-menu').metisMenu();//update behaviour on the left menu bar
 		            });
 								
 			});
