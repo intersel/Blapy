@@ -329,16 +329,13 @@
                                         Actions
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Action</a>
-                                        </li>
-                                        <li><a href="#">Another action</a>
-                                        </li>
-                                        <li><a href="#">Something else here</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
+                                    <ul class="dropdown-menu pull-right" role="menu"
+                                       	data-blapy-container="true" 
+										data-blapy-container-name="areaChart" 
+										data-blapy-container-content="areaChartVoid"
+										data-blapy-update="json"
+                                    >
+                                    	<li class="${class}"><a href="${url}">${action}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -359,16 +356,18 @@
                                         Actions
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Action</a>
-                                        </li>
-                                        <li><a href="#">Another action</a>
-                                        </li>
-                                        <li><a href="#">Something else here</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
+                                    <ul id="barChartExampleMenu"
+                                    	class="dropdown-menu pull-right" role="menu"
+                                       	data-blapy-container="true" 
+										data-blapy-container-name="barChartExampleMenu" 
+										data-blapy-container-content="barChartExampleMenuVoid"
+										data-blapy-update="json"
+                                    >
+                                     <blapyScriptJS>
+	                                    	if (!"${dontdisplay}") 
+    	                                    	jQuery('#barChartExampleMenu').append('<li class="${class}"><a href="${url}">${action}</a></li>');
+                                     </blapyScriptJS>
+                                    	
                                     </ul>
                                 </div>
                             </div>
@@ -471,7 +470,7 @@
                                     </div>
                                     <div class="timeline-panel">
                                         <div class="timeline-heading">
-                                            <h4 class="timeline-title">Lorem ipsum dolor</h4>
+                                            <h4 class="timeline-title">Lorem ipsum dolor Last</h4>
                                         </div>
                                         <div class="timeline-body">
                                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis minus modi quam ipsum alias at est molestiae excepturi delectus nesciunt, quibusdam debitis amet, beatae consequuntur impedit nulla qui! Laborum, atque.</p>

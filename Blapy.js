@@ -31,6 +31,7 @@
  * - 2016/02/26 - E.Podvin - V1.2.0 - add block regular updates 
  * - 2016/03/07 - E.Podvin - V1.3.0 - add block init update when it becomes visible, after a scroll or resize (data-blapy-updateblock-ondisplay option). 
  * - 2016/04/01 - E.Podvin - V1.3.1 - fix on json blocks embedded in json block 
+ * - 2016/04/06 - E.Podvin - V1.3.2 - add scripting within json block template with the "<blapyScriptJs>" tag 
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -38,7 +39,7 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.3.1
+ * @version : 1.3.2
  * -----------------------------------------------------------------------------------------
  */
 
@@ -396,6 +397,8 @@
 		if (htmlTpl.length == 0)// ok so not processed, so let's do it
 		{
 			var htmlTplContent = myContainer.html();
+			
+			htmlTplContent = htmlTplContent.replace(/blapyScriptJS/gi, 'script');
 			
 			//if no template defined within the block
 			if (htmlTplContent.replace(/\s{2,}/g, ' ').replace(/\t/g, ' ').toString().trim().replace(/(\r\n|\n|\r)/g,"") == "")

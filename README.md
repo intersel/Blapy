@@ -5,12 +5,13 @@ The web application is built the usual way of generating web pages like with php
 
 So, it may help you to transform your "normal" web site in a web application too, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
 
-# Have a look on the "Hello World" demo
+# Have a look on the "Hello World" demo and other demos
 [Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
 
-and the ["To do list" web Apps demo](http://www.intersel.net/demos/intersel/Blapy/demos/todomvc/) inspired from [TodoMVC](http://todomvc.com/)
+You can have a look on a more complete example based on the [SB Admin 2 - Free Bootstrap Admin] Theme(http://www.intersel.net/demos/intersel/Blapy/demos/startbootstrap-sb-admin-2/pages/) (you can see the original one [here](http://startbootstrap.com/template-overviews/sb-admin-2/).
+or the ["To do list" web Apps demo](http://www.intersel.net/demos/intersel/Blapy/demos/todomvc/) inspired from [TodoMVC](http://todomvc.com/)
 
-All the demos are listed there : [http://www.intersel.net/demos/intersel/Blapy/demos/](http://www.intersel.net/demos/intersel/Blapy/demos/)
+All the demos found in the demos directory can be tested there : [http://www.intersel.net/demos/intersel/Blapy/demos/](http://www.intersel.net/demos/intersel/Blapy/demos/)
 
 # Who may need it?
 Everyone using a CMS that generates web pages from a server and would like to transform his website to a client application-like website, ie that does not reload each page during the user navigation but only the needed blocks within the page.
@@ -244,7 +245,7 @@ To define a Blapy Block, you need to use the following attributes:
   * **replace**: if the container-name is found from the external content, the inner content of the external content should replace the current Blapy block content.
   * **json**: the content of the current container is considered to be a template. 
  If the container-name is found, then it is considered that the external content is a json object or an array of json objects. 
- These json objects will be applied on the template. Theses parameters complete the json configuration:
+ These json objects will be applied on the template. Theses parameters allows the json configuration:
       * **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
       * **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "```<table>```")
       * **data-blapy-template-init**: a file name that contains a json data blapy block to use to initialize the block
@@ -468,13 +469,6 @@ or leave a message on the [Issue board](https://github.com/intersel/Blapy/issues
 ## When a Blapy link is called, does the server need to send a full HTML page with a body and ...
 No, you can optimize your code by only sending the useful Blapy blocks. 
 
-## What about the id sent in the returned blapy blocks...
-Generally, the new block will replace the old one, and so, the id will follow... and that's mainly ok...
-
-Sometime, if there are several blocks with the same data-blapy-container-name in order to update several blocks with the same info, 
-it could be a problem that several new blocks get the same id after processing...
-
-You can give **no id** on the new sent blocks, this way the system will set the id of the old block to change to the new one...
 
 ## Is it possible to set Blapy blocks in "head" tags?
 Yes, but in order to have the Blapy see them, set an id on the html tag and call Blapy on it:
@@ -499,9 +493,9 @@ Yes, but in order to have the Blapy see them, set an id on the html tag and call
 </html>  
 ```  
 
-## How to define template variables in a template
+## How to define template variables in a json template
 
-The syntax follows the one defined by json2html library : ${myVariableName} 
+The syntax follows the one defined by [json2html library](http://json2html.com/) : ${myVariableName} 
 
 ### Example
 
@@ -509,7 +503,93 @@ The syntax follows the one defined by json2html library : ${myVariableName}
 		First name: ${fname}<br>
 		Last name: ${lname}<br>
 ```
-	
+
+## How to set conditional output in a json template
+
+Instead of having a HTML template, you can set a javascript that will be interprated to generate the DOM.
+
+The javascript should be inserted with the specific tag **"<blapyScriptJs>"**.
+
+### Example
+
+This example shows how "<li>" statement will be inserted according to the statut of "dontdisplay" variable.
+
+#### Initial blapy definition
+
+Let's define a UL statement that we want be filled with LI statements. 
+
+It will be initialized from the "data-blapy-template-init" variable (myInitFile.php file). It could have been initialized with a "loadUrl" or "postData" calls.
+
+```
+<ul id="MenuExampleWithInitializedWithJSScript"
+    data-blapy-container="true" 
+	data-blapy-container-name="MenuExampleWithInitializedWithJSScript" 
+	data-blapy-container-content="MenuExampleVoid"
+	data-blapy-update="json"
+	data-blapy-template-init="myInitFile.php"
+>
+     <blapyScriptJS>
+        	if (!"${dontdisplay}") 
+            	jQuery('#MenuExampleWithInitializedWithJSScript').append('<li class="${class}"><a href="${url}">${action}</a></li>');
+     </blapyScriptJS>
+                                    	
+</ul>
+```
+
+#### Example of data that could be sent to Blapy by myInitFile.php
+```
+<ul id="MenuExampleWithInitializedWithJSScript"
+	data-blapy-container="true" 
+	data-blapy-container-name="MenuExampleWithInitializedWithJSScript" 
+	data-blapy-update="json"
+>
+	[
+		{class: "",url: "#",action:"Action"},
+		{class: "",url: "#",action:"Action Not Shown",dontdisplay:'1'},
+		{class: "",url: "#",action:"Another action",dontdisplay:'1'},
+		{class: "myClass",url: "#",action:"Something else here"},
+	]
+</ul>
+```
+
+
+#### Example result
+
+The result will be processed as:
+```
+<blapyScriptJS>
+        	if (!"") 
+            	jQuery('#MenuExampleWithInitializedWithJSScript').append('<li class=""><a href="#">Action</a></li>');
+</blapyScriptJS>
+<blapyScriptJS>
+        	if (!"1") 
+            	jQuery('#MenuExampleWithInitializedWithJSScript').append('<li class=""><a href="#">Action Not Shown</a></li>');
+</blapyScriptJS>
+<blapyScriptJS>
+        	if (!"1") 
+            	jQuery('#MenuExampleWithInitializedWithJSScript').append('<li class=""><a href="#">Another action</a></li>');
+</blapyScriptJS>
+<blapyScriptJS>
+        	if (!"") 
+            	jQuery('#MenuExampleWithInitializedWithJSScript').append('<li class="myClass"><a href="#">Something else here</a></li>');
+</blapyScriptJS>
+```     
+
+and so, giving the following processed DOM:
+
+```     
+<ul id="MenuExampleWithInitializedWithJSScript"
+	data-blapy-container="true" 
+	data-blapy-container-name="MenuExampleWithInitializedWithJSScript" 
+	data-blapy-update="json"
+>     
+	<li class=""><a href="#">Action</a></li>
+	<li class="myClass"><a href="#">Something else here</a></li>
+</ul>
+```
+
+
+
 ## How to send several json objects to a json block
 You just defined an array the way you would do in javascript with your json objects
 
@@ -553,6 +633,15 @@ This example will update the block every second (1000ms) from index.php:
                     <b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
         </div>
 ```
+
+## What about the id sent in the returned blapy blocks...
+Generally, the new block will replace the old one, and so, the id will follow... and that's mainly ok...
+
+Sometime, if there are several blocks with the same data-blapy-container-name in order to update several blocks with the same info, 
+it could be a problem that several new blocks get the same id after processing...
+
+You can give **no id** on the new sent blocks, this way the system will set the id of the old block to change to the new one...
+
 #Problem resolutions
 ## My blapy block does not update from my external content...
 

@@ -4,10 +4,10 @@ $currentTime = time();
 
 $returnStr = <<<EOD
 <table>
-<tbody 	data-blapy-container="true"
-		data-blapy-container-name="barChartExample"
-				data-blapy-container-content="barChartExample-$currentTime"
-				>
+	<tbody 	data-blapy-container="true"
+			data-blapy-container-name="barChartExample"
+			data-blapy-container-content="barChartExample-$currentTime"
+			>
 				<tr>
 				<td>3326</td>
 				<td>10/21/2013</td>
@@ -56,8 +56,8 @@ $returnStr = <<<EOD
 				<td>2:13 PM</td>
 				<td>$943.45</td>
 				</tr>
-				</tbody>
-				</table>
+	</tbody>
+</table>
 
 EOD;
 				

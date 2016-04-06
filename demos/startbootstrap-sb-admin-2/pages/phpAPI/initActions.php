@@ -172,8 +172,35 @@ $returnStr = <<<EOD
                             '},        		
 			]
 </ul>
+<ul class="dropdown-menu pull-right" role="menu"
+	data-blapy-container="true" 
+	data-blapy-container-name="areaChart" 
+	data-blapy-container-content="areaChartVoid"
+>
+	[
+		{class: "",url: "#",action:"Action"},
+		{class: "",url: "#",action:"Another action"},
+		{class: "",url: "#",action:"Something else here"},
+		{class: "divider",url: "#",action:""},
+		{class: "",url: "#",action:"Separated link"},
+	]
+</ul>			
 
-
+<ul class="dropdown-menu pull-right" role="menu"
+	data-blapy-container="true" 
+	data-blapy-container-name="barChartExampleMenu" 
+	data-blapy-container-content="barChartExampleMenuVoid"
+	data-blapy-update="json"
+>
+	[
+		{class: "",url: "#",action:"BCE- Action"},
+		{class: "",url: "#",action:"BCE- Action Not Shown",dontdisplay:'1'},
+		{class: "",url: "#",action:"BCE- Another action"},
+		{class: "",url: "#",action:"BCE- Something else here"},
+		{class: "divider",url: "#",action:""},
+		{class: "",url: "#",action:"Separated link"},
+	]
+</ul>
 
 <ul class="nav nav-second-level"
 	data-blapy-container="true" 
