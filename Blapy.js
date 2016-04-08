@@ -726,7 +726,9 @@
 								//json update
 								else if (dataBlapyUpdate== 'json')
 								{
-									var jsonData = aBlapyContainer.html();
+									//get json data and remove return chars (for the eval)
+									var jsonData = aBlapyContainer.html().replace(/(\r\n|\n|\r)/g,"");
+									
 									var htmlTpl = myContainer.find('[data-blapy-container-tpl]');
 									if (htmlTpl.length == 0)
 									{
