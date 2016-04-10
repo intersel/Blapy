@@ -8,7 +8,7 @@ So, it may help you to transform your "normal" web site in a web application too
 # Have a look on the "Hello World" demo and other demos
 [Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
 
-You can have a look on a more complete example based on the [SB Admin 2 - Free Bootstrap Admin] Theme(http://www.intersel.net/demos/intersel/Blapy/demos/startbootstrap-sb-admin-2/pages/) (you can see the original one [here](http://startbootstrap.com/template-overviews/sb-admin-2/))
+You can have a look on a more complete example based on the [SB Admin 2 - Free Bootstrap Admin Theme](http://www.intersel.net/demos/intersel/Blapy/demos/startbootstrap-sb-admin-2/pages/) (you can see the original one [here](http://startbootstrap.com/template-overviews/sb-admin-2/))
 
 or test the ["To do list" web Apps demo](http://www.intersel.net/demos/intersel/Blapy/demos/todomvc/) made with Blapy and inspired from [TodoMVC](http://todomvc.com/)
 
