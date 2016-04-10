@@ -509,11 +509,11 @@ The syntax follows the one defined by [json2html library](http://json2html.com/)
 
 Instead of having a HTML template, you can set a javascript that will be interprated to generate the DOM.
 
-The javascript should be inserted with the specific tag **"<blapyScriptJs>"**.
+The javascript should be inserted with the specific tag **"```<blapyScriptJs>```"**.
 
 ### Example
 
-This example shows how "<li>" statement will be inserted according to the statut of "dontdisplay" variable.
+This example shows how "```<li>```" statement will be inserted according to the statut of "dontdisplay" variable.
 
 #### Initial blapy definition
 
