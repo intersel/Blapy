@@ -1,0 +1,14 @@
+[
+	{ 	"blapy-container-name":"fnameOptions",
+		"blapy-container-content":"fnameOptionsNew",
+		"blapy-data": 
+		[
+			{"firstname": "Choose a value","lastname": "None","selected":"checked"},
+			{"firstname": "John","lastname": "Doe","selected":"false"},
+			{"firstname": "Bob","lastname": "Dylan","selected":"false"},
+			{"firstname": "Peter","lastname": "Rabbit","selected":"false"},
+			{"firstname": "Nina","lastname": "Hagen","selected":""},
+			{"firstname": "Robert","lastname": "deNiro","selected":""}
+		]
+	}
+]

@@ -24,7 +24,6 @@
 			data-blapy-update="json"
 			data-blapy-template-file="optionsTemplate.tpl"
 			data-blapy-template-wrap='<select name="firstname" onChange="$(&#39;#myForm&#39;).submit();">'
-			data-blapy-template-init="optionvalues.data"
 		>
 		</span>
 		<br>
@@ -34,7 +33,7 @@
 			data-blapy-container-name="fnameOptions" 
 			data-blapy-container-content="fnameOptionsLastName"
 			data-blapy-update="json"
-			data-blapy-template-init="optionvalues.data"
+			data-blapy-template-init="optionvalues.json"
 		>
 			<input name="lastname" type="radio" value="${lastname}" ${selected} onClick="$('#myForm').submit();">${lastname}</input>
 		</span>

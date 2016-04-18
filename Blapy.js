@@ -32,6 +32,7 @@
  * - 2016/03/07 - E.Podvin - V1.3.0 - add block init update when it becomes visible, after a scroll or resize (data-blapy-updateblock-ondisplay option). 
  * - 2016/04/01 - E.Podvin - V1.3.1 - fix on json blocks embedded in json block 
  * - 2016/04/06 - E.Podvin - V1.3.2 - add scripting within json block template with the "<blapyScriptJs>" tag 
+ * - 2016/04/18 - E.Podvin - V1.4.0 - add pure json answer to define blapy blocks
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -39,7 +40,7 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.3.2
+ * @version : 1.4.0
  * -----------------------------------------------------------------------------------------
  */
 
@@ -224,6 +225,28 @@
 		return aHtmlSource[0].outerHTML;
 	};
 	
+	/**
+	* create a blapy block from a pure json definition
+	* returns the html source of the blapy block
+	* 
+	* aJsonObject : array of blapy objects described with the attributes of a blapy block
+	* 				the essential attributes are blapy-container-name, blapy-container-content
+	* 				the attribute "blapy-data" gives the new data of the block
+	*/
+	theBlapy.prototype.createBlapyBlock = function (aJsonObject)
+	{
+		this._log('createBlapyBlock');
+		
+		htmlBlapyBlock = $('<div/>', {
+			"data-blapy-container":true,
+			"data-blapy-container-name":aJsonObject["blapy-container-name"],
+			"data-blapy-container-content":aJsonObject["blapy-container-content"],
+			"data-blapy-update":aJsonObject["blapy-update"],
+			"data-blapy-update":"json"
+		}).html(JSON.stringify(aJsonObject['blapy-data']));
+		return htmlBlapyBlock;
+	};
+
 	/**
 	* get the hash part of the URL
 	* returns 0 if none
@@ -574,6 +597,18 @@
 					var params 		= data.params;
 					var aObjectId	= this.myUIObject.attr('id');
 					var myFSM		= this;
+					
+					//if the received pageContent is pure json then build the equivalent in blapy block
+					if (pageContent instanceof Array) 
+					{
+						var newContent=$("");
+						var tmpRes="";
+						for (i = 0; i < pageContent.length; i++) {
+							tmpRes = this.opts.theBlapy.createBlapyBlock(pageContent[i]);
+							newContent = newContent.add(tmpRes); 
+						};
+						pageContent = newContent;
+					}
 					
 					switch(params['action'])
 					{

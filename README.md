@@ -14,6 +14,8 @@ or test the ["To do list" web Apps demo](http://www.intersel.net/demos/intersel/
 
 All the demos found in the demos directory can be tested there : [http://www.intersel.net/demos/intersel/Blapy/demos/](http://www.intersel.net/demos/intersel/Blapy/demos/)
 
+We invite you to have a deep look in the code source of the demos as they use quite every possible features and configurations available in Blapy as they are used to test the library.
+
 # Who may need it?
 Everyone using a CMS that generates web pages from a server and would like to transform his website to a client application-like website, ie that does not reload each page during the user navigation but only the needed blocks within the page.
 
@@ -494,7 +496,7 @@ Yes, but in order to have the Blapy see them, set an id on the html tag and call
 </html>  
 ```  
 
-## How to define template variables in a json template
+## How to define template variables in a blapy template for json blocks
 
 The syntax follows the one defined by [json2html library](http://json2html.com/) : ${myVariableName} 
 
@@ -519,7 +521,7 @@ This example shows how "```<li>```" statement will be inserted according to the 
 
 Let's define a UL statement that we want be filled with LI statements. 
 
-It will be initialized from the "data-blapy-template-init" variable (myInitFile.php file). It could have been initialized with a "loadUrl" or "postData" calls.
+It will be initialized from the "data-blapy-template-init" variable with the content returned by myInitFile.php file. It could have been initialized with a "loadUrl" or "postData" calls.
 
 ```
 <ul id="MenuExampleWithInitializedWithJSScript"
@@ -536,6 +538,8 @@ It will be initialized from the "data-blapy-template-init" variable (myInitFile.
                                     	
 </ul>
 ```
+
+Please note that what myIntFile.php returns as data content should have only data initialization for this block. 
 
 #### Example of data that could be sent to Blapy by myInitFile.php
 ```
@@ -606,6 +610,55 @@ You just defined an array the way you would do in javascript with your json obje
 	{fname: "Maryse",lname: "Dupond"}
 	]
 	</div>
+```
+
+## How to send "pure" json as response to a query ?
+
+By default, when there is a blapy call, you define a blapy block and put your json data inside it and send the result back.
+
+It is possible to return "pure" json that would give all the blapy blocks information and the data to transmit to the blapy blocks.
+
+To do so, send an array of objects, each one will describe a blapy block. All the blapy attributes may be given to configure your blapy block. The names are those described in this document without the "data-" at the beginning of the name. For example, "data-blapy-container" will have "blapy-container" as attribute object.
+
+The necessary attributes are:
+* **blapy-container-name**: name of the blapy container
+* **blapy-container-content**: identifier name of the content
+* **blapy-data**: the json data to send to the blapy block
+
+It is expected that that the answer returns an array of blapy objects.
+
+###Example of a response to a blapy call
+
+The following blapy block definition are the same:
+
+* usual blapy block
+```html
+<div
+	data-blapy-container-name="fnameOptions"
+	data-blapy-container-content="fnameOptionsNew"
+>
+		[
+			{"firstname": "John","lastname": "Doe","selected":"false"},
+			{"firstname": "Bob","lastname": "Dylan","selected":"false"},
+			{"firstname": "Peter","lastname": "Rabbit","selected":"false"},
+		]
+</div>
+```
+
+* pure json blapy block
+
+```javascript
+[
+	{ 	"blapy-container-name":"fnameOptions",
+		"blapy-container-content":"fnameOptionsNew",
+		"blapy-data": 
+		[
+			{"firstname": "John","lastname": "Doe","selected":"false"},
+			{"firstname": "Bob","lastname": "Dylan","selected":"false"},
+			{"firstname": "Peter","lastname": "Rabbit","selected":"false"},
+		]
+	}
+]
 ```
 
 ## How to initialize the blapy blocks after loading the page?
