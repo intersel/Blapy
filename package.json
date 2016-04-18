@@ -10,7 +10,7 @@
     "dynamic web",
     "Ajax"
   ],
-  "version": "1.3.2",
+  "version": "1.4.0",
   "author": {
     "name": "Emmanuel Podvin",
     "url": "http://fr.linkedin.com/in/podvin"
@@ -39,6 +39,7 @@
     "jquery": ">=1.10",
     "iFSM": ">=1.6",
     "sammy": ">= 0.0",
-    "json2html": ">= 0.0"
+    "json2html": ">= 0.0",
+	"jquery.appear": ">=0.0"    
   }
 }
