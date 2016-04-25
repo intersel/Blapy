@@ -1,3 +1,15 @@
+				</div>
+			</div>
+		</article>
+	</div>
+	<div style="font-size:80%">
+		<a href="index.php">normal "Hello World" Link</a> 
+		- <a href="helloworld_2.php">normal "How is it going" Link</a><br>
+		<a href="helloworld_3.php">normal "Load from an optimized code" Link</a> 
+		- <a href="helloworld_4.php">normal "Load with a blapy link" Link</a><br>
+	</div>
+</body>
+
 <script type="text/javascript" src="../../Blapy.js"></script>
 <script type="text/javascript" src="../../Blapy_AnimationPlugins.js"></script>
 <script>

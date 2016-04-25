@@ -23,5 +23,5 @@ $defaultTitle = "Optimized version... Great as well!";
 		>
 	<h1>Good as well with an optimized version</h1>
 	<p>You can update Blapy block from an optimized version of html code with only the useful Blapy blocks to be loaded</p> 
-	<p>and apply animation during content change</p>
+	<p>and apply an animation effect during content change, like the one applied on this block during loading...</p>
 </div>
