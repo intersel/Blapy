@@ -1,9 +1,11 @@
 # Blapy
-Blapy is a jQuery plugin that helps you to create and manage an ajax web application without coding any javascript to do it.
+Blapy is a jQuery plugin that helps you to create and manage an ajax web application without coding javascript to do it.
 
-The web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents and without coding any javascript.
+The web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents.
 
 So, it may help you to transform your "normal" web site in a web application too, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
+
+Integrate a REST API in your webapp will also be really easy to do now...
 
 # Have a look on the "Hello World" demo and other demos
 [Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
@@ -22,6 +24,8 @@ Everyone using a CMS that generates web pages from a server and would like to tr
 Everyone who would like to keep the way we builds websites but would like to have it behaves like an ajax web application.
 
 The ones who gave up with AngularJS and other javascript frameworks to build web app... like me ;-)
+
+The ones who wants to integrate json REST API with a simple approach without coding...
 
 The ones who are starting with Javascript will clearly find benefits to use Blapy too... as they'll do big ajax things with quite no js lines of code...
 
@@ -556,6 +560,20 @@ Please note that what myIntFile.php returns as data content should have only dat
 	]
 </ul>
 ```
+
+or the same description but in full json description:
+```
+[
+	{ 	"blapy-container-name":"MenuExampleWithInitializedWithJSScript",
+		"blapy-data":
+		[
+		{class: "",url: "#",action:"Action"},
+		{class: "",url: "#",action:"Action Not Shown",dontdisplay:'1'},
+		{class: "",url: "#",action:"Another action",dontdisplay:'1'},
+		{class: "myClass",url: "#",action:"Something else here"},
+		]
+	}
+]```
 
 
 #### Example result
