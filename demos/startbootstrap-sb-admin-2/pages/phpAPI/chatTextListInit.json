@@ -1,0 +1,12 @@
+[
+	{ 	"blapy-container-name":"chatTextList",
+		"blapy-container-content":"chatTextListNew",
+		"blapy-data":
+		[
+{"leftright":"left","avatarIMG":"http:\/\/placehold.it\/50\/55C1E7\/fff","nameUser":"Jack Sparrow","time":" 12 mins ago","textChat":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales."},
+{"leftright":"right","avatarIMG":"http:\/\/placehold.it\/50\/FA6F57\/fff","nameUser":"Bhaumik Patel","time":" 13 mins ago","textChat":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales."},
+{"leftright":"left","avatarIMG":"http:\/\/placehold.it\/50\/55C1E7\/fff","nameUser":"Jack Sparrow","time":" 15 mins ago","textChat":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales."},
+{"leftright":"right","avatarIMG":"http:\/\/placehold.it\/50\/FA6F57\/fff","nameUser":"Bhaumik Patel","time":" 18 mins ago","textChat":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales."}
+		]
+	}
+]

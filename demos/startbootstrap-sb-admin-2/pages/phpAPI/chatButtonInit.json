@@ -1,0 +1,14 @@
+[
+	{ 	"blapy-container-name":"chatButton",
+		"blapy-container-content":"chatButtonNew",
+		"blapy-data":
+		[
+		{"URL":"#","class":"fa-refresh","textChat":"Refresh"},
+		{"URL":"#","class":"fa-check-circle","textChat":"Available"},
+		{"URL":"#","class":"fa-times","textChat":"Busy"},
+		{"URL":"#","class":"fa-clock-o","textChat":"Away"},
+		{"URL":"#","classLI":"divider","textChat":""},
+		{"URL":"#","class":"fa-sign-out","textChat":"Sign Out"}
+		]
+	}
+]

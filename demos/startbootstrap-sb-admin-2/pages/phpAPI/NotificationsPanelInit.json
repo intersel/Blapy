@@ -1,0 +1,16 @@
+[
+	{ 	"blapy-container-name":"NotificationsPanel",
+		"blapy-container-content":"NotificationsPanelNew",
+		"blapy-data":
+	[
+		{"URL":"#","class":"fa-comment","TextNotification":" New Comment","TimeNotification":"4 minutes ago"},
+		{"URL":"#","class":"fa-twitter","TextNotification":" 3 New Followers","TimeNotification":"12 minutes ago"},
+		{"URL":"#","class":"fa-warning","TextNotification":"Server Problem","TimeNotification":"27 minutes ago"},
+		{"URL":"#","class":"fa-upload","TextNotification":" Server Rebooted","TimeNotification":"11:32 AM"},
+		{"URL":"#","class":"fa-bolt","TextNotification":" Server Crashed!","TimeNotification":"11:13 AM"},
+		{"URL":"#","class":"fa-warning","TextNotification":" Server Not Responding","TimeNotification":"10:57 AM"},
+		{"URL":"#","class":"fa-shopping-cart","TextNotification":" New Order Placed","TimeNotification":"9:49 AM"},
+		{"URL":"#","class":"fa-money","TextNotification":" Payment Received","TimeNotification":"Yesterday"}
+	]
+}
+]
