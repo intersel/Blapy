@@ -34,6 +34,7 @@
  * - 2016/04/06 - E.Podvin - V1.3.2 - add scripting within json block template with the "<blapyScriptJs>" tag 
  * - 2016/04/18 - E.Podvin - V1.4.0 - add pure json answer to define blapy blocks
  * - 2016/04/26 - E.Podvin - V1.4.1 - fix on multiple initialization (+fix on iFsm) 
+ * - 2016/04/26 - E.Podvin - V1.4.2 - fix on json file when returned as a string by .ajax (+fix on iFsm) 
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -598,6 +599,20 @@
 					var params 		= data.params;
 					var aObjectId	= this.myUIObject.attr('id');
 					var myFSM		= this;
+					var tmpPC		= null;
+					
+					//transform any json text in json object
+					//todo: optimize the json data processing as we eval it then stringify it (createBlapyBlock) then reeval... :(
+					try
+					{
+						tmpPC=eval(pageContent);
+						pageContent=tmpPC;
+					}
+					catch(e)
+					{
+						//not json input... but html...
+						//myFSM._log('downloaded content can not be evaluated by eval: '+pageContent,1);
+					}
 					
 					//if the received pageContent is pure json then build the equivalent in blapy block
 					if (pageContent instanceof Array) 

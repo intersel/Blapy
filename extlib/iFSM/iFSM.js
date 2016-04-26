@@ -37,7 +37,7 @@
  * How to use it :
  * ===============
  * <code>
- * <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+ * <script type="text/javascript" src="jquery-2.1.4.min.js"></script>
  * <script type="text/javascript" src="jquery.dotimeout.js"></script>
  * <script type="text/javascript" src="jquery.attrchange.js"></script>
  * <script type="text/javascript" src="ifsm.js"></script>
@@ -1108,20 +1108,13 @@ var aPreviousId=0;//to manage the preventcancel by creating a unique id for doTi
 fsm_manager.prototype.delayProcess	= function(anEvent, aDelay, data) {
 	this._log('delayProcess:  ---> '+anEvent);
 
-	var currentEventConfiguration = this._stateDefinition[this.currentState][aEvent];
-	if 	( 	 	currentEventConfiguration.how_process_event
-			&& 	(		currentEventConfiguration.how_process_event.preventcancel == undefined
-					||  currentEventConfiguration.how_process_event.preventcancel != true
-				)
-		)
-	{
-	}
-	else 
-	{
-		aPreviousId++;
-	}
+	aPreviousId++;
+	if (!this._stateDefinition[this.currentState][aEvent].how_process_event.DelayedProcessNames)
+		this._stateDefinition[this.currentState][aEvent].how_process_event.DelayedProcessNames=[];
+	aDelayedProcessName=this.myUIObject.attr('id')+this.currentState+anEvent+aPreviousId;
+	this._stateDefinition[this.currentState][aEvent].how_process_event.DelayedProcessNames.push(aDelayedProcessName);
 	//setTimeout(this.launchProcess,aDelay,this,anEvent,data);
-	jQuery.doTimeout(this.myUIObject.attr('id')+this.currentState+anEvent+aPreviousId,aDelay,fsm_manager_launchProcess,this,anEvent,data);
+	jQuery.doTimeout(aDelayedProcessName,aDelay,fsm_manager_launchProcess,this,anEvent,data);
 };
 
 /**
@@ -1139,7 +1132,15 @@ fsm_manager.prototype.cancelDelayedProcess	= function() {
 						||  currentEventConfiguration.how_process_event.preventcancel != true
 					)
 			)
-			jQuery.doTimeout(this._stateDefinition[this.currentState]+aEvent);//cancel event
+		{
+			if (currentEventConfiguration.how_process_event.DelayedProcessNames)
+			{
+				for(aDelayedProcessName in currentEventConfiguration.how_process_event.DelayedProcessNames) 
+				{
+					jQuery.doTimeout(aDelayedProcessName);//cancel event
+				}
+			}
+		}
 	}
 
 };
