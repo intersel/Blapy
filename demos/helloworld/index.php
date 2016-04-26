@@ -15,11 +15,11 @@ include("header.php");
 							
 							<h1>Hello World!</h1>
 							<p>This is a "Hello World" content</p>
-						
+							<p>	Click on the <a href="helloworld_2.php" data-blapy-link="true">"How is it going?"</a> link, 
+						it will then change the Blapy content of the current page by the one coming from the page of this link</p>
+							
 						</div>
 					</div>	
-					<p>	Click on the <a href="helloworld_2.php" data-blapy-link="true">"How is it going?"</a> link, 
-						it will then change the Blapy content of the current page by the one coming from the page of this link</p>
 					<p>	As you click... you will see that the <span style="border: 1px solid green;padding:3px;">green block above</span> is updated<br> 
 						and this text is not... neither the title of the page...<br>
 						because they are not involved in a Blapy block...</p>

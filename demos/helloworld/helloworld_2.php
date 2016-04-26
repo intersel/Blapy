@@ -14,9 +14,11 @@ include("header.php");
 								data-blapy-container-content="How is it going?"
 						>
 							<h1>How is it going?</h1>
-							<p>Did you see that the title block was changed? The "&lt;title&gt;" is a Blapy block too!</p> 
-							<p>Click on the "Hello world!" link to load back its content...</p> 
-							<p><?php if (!empty($_GET['id'])) echo "sent id: ".$_GET['id']?>
+							<p>Did you see that the content of "&lt;title&gt;" tag was changed? The "&lt;title&gt;" is a Blapy block too!<br> 
+							   The Url changed too... thanks to the use of the <a href="http://sammyjs.org/">Sammy library</a>.<br>
+							   Click on the <a href="index.php" data-blapy-link="true">"Hello world!"</a> link to load back its content...<br> 
+							  <?php if (!empty($_GET['id'])) echo "sent id: ".$_GET['id']?>
+							  </p>
 						</div>
 					</div>	
 					<p>Click on the <a href="index.php" data-blapy-link="true">"Hello world"</a> link, it will then change the Blapy content of the current page by the one coming from the page of this link</p>
