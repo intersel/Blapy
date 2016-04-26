@@ -33,6 +33,7 @@
  * - 2016/04/01 - E.Podvin - V1.3.1 - fix on json blocks embedded in json block 
  * - 2016/04/06 - E.Podvin - V1.3.2 - add scripting within json block template with the "<blapyScriptJs>" tag 
  * - 2016/04/18 - E.Podvin - V1.4.0 - add pure json answer to define blapy blocks
+ * - 2016/04/26 - E.Podvin - V1.4.1 - fix on multiple initialization (+fix on iFsm) 
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -633,7 +634,7 @@
 								}
 								catch(e)
 								{
-									myFSM._log('downloaded content can not be evaluated by jQuery, so perhaps it is json data: '+pageContent,1);
+									myFSM._log('downloaded content can not be evaluated by jQuery, so perhaps it is json data: '+pageContent+' - '+containerName,1);
 									return;
 								}
 								
@@ -863,6 +864,12 @@
 				},
                 next_state: 'PageReady',
             },
+            postData:'loadUrl',
+	        loadUrl:   //someone try to load an URL but page is not ready... try it later... 
+	        {
+	        	how_process_event: {delay:20,preventcancel:true},
+	        	propagate_event:true,
+	        },
         },
         DefaultState:
         {
@@ -870,12 +877,6 @@
             {
                 next_state: 'PageLoaded',
             },
-            postData:'loadUrl',
-	        loadUrl:   //someone try to load an URL but page is not ready... try it later... 
-	        {
-	        	how_process_event: {delay:100,preventcancel:true},
-	        	propagate_event:true,
-	        },
         },
 	};
 })(jQuery);

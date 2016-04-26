@@ -1104,10 +1104,24 @@ fsm_manager.prototype.popEvent	= function() {
  * @param aDelay	: a delay to do the processing
  * @param data		: {event, data}
  */
+var aPreviousId=0;//to manage the preventcancel by creating a unique id for doTimeout
 fsm_manager.prototype.delayProcess	= function(anEvent, aDelay, data) {
 	this._log('delayProcess:  ---> '+anEvent);
+
+	var currentEventConfiguration = this._stateDefinition[this.currentState][aEvent];
+	if 	( 	 	currentEventConfiguration.how_process_event
+			&& 	(		currentEventConfiguration.how_process_event.preventcancel == undefined
+					||  currentEventConfiguration.how_process_event.preventcancel != true
+				)
+		)
+	{
+	}
+	else 
+	{
+		aPreviousId++;
+	}
 	//setTimeout(this.launchProcess,aDelay,this,anEvent,data);
-	jQuery.doTimeout(this.myUIObject.attr('id')+this._stateDefinition[this.currentState]+anEvent,aDelay,fsm_manager_launchProcess,this,anEvent,data);
+	jQuery.doTimeout(this.myUIObject.attr('id')+this.currentState+anEvent+aPreviousId,aDelay,fsm_manager_launchProcess,this,anEvent,data);
 };
 
 /**
