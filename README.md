@@ -634,7 +634,54 @@ You just defined an array the way you would do in javascript with your json obje
 
 By default, when there is a blapy call, you define a blapy block and put your json data inside it and send the result back.
 
-It is possible to return "pure" json that would give all the blapy blocks information and the data to transmit to the blapy blocks.
+It is possible to return "pure" json to be handled by Blapy.
+
+There are two possible configurations:
+* the json content returned has no information on the Blapy blocks that should be updated
+* the json content is blapy oriented
+
+### Json has no information about blapy blocks
+
+It applies to content that comes from outside your web application, that are not aware of Blapy ;-)
+
+In order to tell to Blapy on what blapy block this kind of content should update, you need to configure the Blapy link that calls the json content.
+
+Use the "data-blapy-embedding-blockid" parameter and configure it to the name of your Blapy block.
+
+That's it! When the blapy link will call your json content, all your blapy block with the given name will be updated with the json content.
+
+#### Example
+
+**HTML File**
+
+```html
+<a href="myJsonDataFile.json" 
+	data-blapy-link="true" 
+	data-blapy-embedding-blockid="aBlapyBlockToUpdate" 
+			>Click here to update my "aBlapyBlockToUpdate" to update
+</a>
+<div  
+		data-blapy-container="true" 
+		data-blapy-container-name="aBlapyBlockToUpdate" 
+		data-blapy-update="json"
+>
+This is ${jsonContent}<br>
+The other content is: ${anotherContent}
+</div>
+```
+
+**myJsonDataFile.json**
+
+```
+{"jsonContent":"a content for myJsonDataFile...","anotherContent":"another content for the example"}
+```
+
+
+**Remark:** You can have a look on the "demos/verifyEmails" demo that use this feature.
+
+### The returned Json content is Blapy oriented
+
+It is possible to configure your json content in order to give all the blapy blocks information and the data to transmit to the blapy blocks.
 
 To do so, send an array of objects, each one will describe a blapy block. All the blapy attributes may be given to configure your blapy block. The names are those described in this document without the "data-" at the beginning of the name. For example, "data-blapy-container" will have "blapy-container" as attribute object.
 
@@ -663,7 +710,7 @@ The following blapy block definition are the same:
 </div>
 ```
 
-* pure json blapy block
+* pure json blapy block corresponding to the above example
 
 ```javascript
 [

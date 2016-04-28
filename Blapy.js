@@ -42,7 +42,7 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.4.0
+ * @version : 1.4.2
  * -----------------------------------------------------------------------------------------
  */
 
