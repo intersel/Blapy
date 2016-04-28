@@ -573,12 +573,14 @@ or the same description but in full json description:
 		{class: "myClass",url: "#",action:"Something else here"},
 		]
 	}
-]```
+]
+```
 
 
 #### Example result
 
 The result will be processed as:
+
 ```
 <blapyScriptJS>
         	if (!"") 
