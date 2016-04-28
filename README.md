@@ -1,11 +1,11 @@
 # Blapy
-Blapy is a jQuery plugin that helps you to create and manage an ajax web application without coding javascript to do it.
+Blapy is a jQuery plugin that helps you to create and manage ajax web applications and Single-Page Application (SPA) without coding javascript to do it.
 
 The web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents.
 
 So, it may help you to transform your "normal" web site in a web application too, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
 
-Integrate a REST API in your webapp will also be really easy to do now...
+Integrate a REST API in your webapp will also be a simple thing to do...
 
 # Have a look on the "Hello World" demo and other demos
 [Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
@@ -694,7 +694,7 @@ The necessary attributes are:
 
 It is expected that that the answer returns an array of blapy objects.
 
-###Example of a response to a blapy call
+#### Example of a response to a blapy call
 
 The following blapy block definition are the same:
 
