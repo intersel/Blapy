@@ -506,7 +506,9 @@ Knowing these parameters allow you to optimize the generated html returned by th
 
 # Blapy animation plugin functions
 
-It is possible to create its own animation plugin functions.
+It is possible to create its own animation plugin functions on Blapy blocks when they are loaded.
+
+It is also a way to hook features on the content that will be placed in a Blapy block...
 
 The prototype of an animation plugin function is :
 
