@@ -1,5 +1,5 @@
 # Blapy
-Blapy is a jQuery plugin that helps you to create and manage ajax web applications and Single-Page Application (SPA) without coding javascript to do it.
+Blapy is a jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) without coding javascript to do it.
 
 The web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents.
 
@@ -31,20 +31,22 @@ The ones who are starting with Javascript will clearly find benefits to use Blap
 
 # Why would I use that?!
 The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is quite a difficult job with a steep learning curve... 
-Whereas PHP websites built on a standard CMS are easier to handle... The standard CMS does the page generation job quite naturally for years... Except that we reload pages when clicking a link... or we need to do ajax calls to dynamically update part of the pages...
+Whereas PHP websites built on a standard CMS are easier to handle... Any standard CMS does the page generation job quite naturally for years... Except that it reloads pages when clicking a link... or it needs to develop ajax calls to dynamically update parts of the page...
 
 So, the idea is to provide a simple environment that don't change your habits when creating your website without having the hassle of creating ajax calls:
 
-* no difficult framework to understand how to build a web application
+* no difficult framework to understand to understand how to build a web application
 * no REST or Ajax url end points to develop. Of course, you can do that if you like to do your application that way ;-)
-* building the pages don't change from the "static" usual way of doing a website, meaning you can continue to use your standard LAMP and CMS environement
-* configuration is simple and quite natural: it uses html5 "data" attributes to be configured and there is quite nothing to do from an existing website :-)
-* the history of browsing is kept
+* no change in your habit to develop website: building the pages with Blapy don't change from the "static" usual way of doing a website, meaning you can continue to use your standard LAMP and CMS environement
+* configuration is simple and quite natural: it uses html5 "data" attributes to configure the Blapy configuration and there is quite nothing to do from an existing website :-)
+* the history of browsing is kept as any smart framework
 * completly compliant with any existing html/js code
 
 # How does it work?
 
-The main simple idea is to automatically and dynamically bind and update html blocks in ajax during the web navigation from page to page. 
+The main simple idea behind Blapy is to automatically and dynamically bind and update html blocks in ajax during the web navigation from page to page.
+
+Simple ;-) but powerful... and proposed by no other library to my knowledge...  
 
 Rules defined on the html blocks with data attributes will specify how the blocks should be updated with their new dynamic contents.
 
