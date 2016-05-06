@@ -1,13 +1,13 @@
 # Blapy
-Blapy is a jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) without coding javascript to do it.
+Blapy is a jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) with almost no coding javascript to do it.
 
 Your web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents.
 
 So, it may help you to transform your "normal" web site in a web application without the hassle of changing the way you develop websites.
 
-Blapy is json compliant too and ease the integration of ajax/rest API with templating services very simple to use.
+Blapy is json compliant too and eases the integration of ajax/rest API with templating and routing services very simple to use... Blapy will be the "V-iew" in the MVC approach...
 
-But the best of all is that your web application will be fully SEO compliant as Blapy uses normal URLs to do the routing and your server html rendering output to update your application blocks!
+The best of all is that your web application will be fully SEO compliant as Blapy uses normal URLs to do the routing and your server html rendering output to update your application blocks!
 
 # Have a look on the "Hello World" demo and other demos
 [Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
@@ -96,6 +96,7 @@ Everyone who...
 * gave up with AngularJS and other javascript frameworks to build web app... like me ;-)
 * wants to integrate json REST API with a simple approach without coding...
 * is starting with Javascript as big ajax things can be done with quite no js lines of code...
+* does not want to learn a Nth new framework to do websites...
 * wants to keep the application SEO compliant with google...
 
 # Why would I use that?!
