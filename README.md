@@ -1,11 +1,13 @@
 # Blapy
 Blapy is a jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) without coding javascript to do it.
 
-The web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents.
+Your web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents.
 
-So, it may help you to transform your "normal" web site in a web application too, creating easily ajax/rest calls without the hassle of changing the way you develop websites.
+So, it may help you to transform your "normal" web site in a web application without the hassle of changing the way you develop websites.
 
-Integrate a REST API in your webapp will also be a simple thing to do...
+Blapy is json compliant too and ease the integration of ajax/rest API with templating services very simple to use.
+
+But the best of all is that your web application will be fully SEO compliant as Blapy uses normal URLs to do the routing and your server html rendering output to update your application blocks!
 
 # Have a look on the "Hello World" demo and other demos
 [Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
@@ -89,22 +91,22 @@ Table of Contents
 # Who may need it?
 Everyone using a CMS that generates web pages from a server and would like to transform his website to a client application-like website, ie that does not reload each page during the user navigation but only the needed blocks within the page.
 
-Everyone who would like to keep the way we builds websites but would like to have it behaves like an ajax web application.
-
-The ones who gave up with AngularJS and other javascript frameworks to build web app... like me ;-)
-
-The ones who wants to integrate json REST API with a simple approach without coding...
-
-The ones who are starting with Javascript will clearly find benefits to use Blapy too... as they'll do big ajax things with quite no js lines of code...
+Everyone who...
+* would like to keep the way we builds websites but would like to have it behaves like an ajax web application.
+* gave up with AngularJS and other javascript frameworks to build web app... like me ;-)
+* wants to integrate json REST API with a simple approach without coding...
+* is starting with Javascript as big ajax things can be done with quite no js lines of code...
+* wants to keep the application SEO compliant with google...
 
 # Why would I use that?!
 The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is quite a difficult job with a steep learning curve... 
-Whereas PHP websites built on a standard CMS are easier to handle... Any standard CMS does the page generation job quite naturally for years... Except that it reloads pages when clicking a link... or it needs to develop ajax calls to dynamically update parts of the page...
+
+Whereas PHP -or whatever web server languages- websites built on a standard CMS are easier to handle... Any standard CMS does the page rendering job quite naturally for years... Except that it reloads pages when clicking a link... or it needs to develop ajax calls to dynamically update parts of the page...
 
 So, the idea is to provide a simple environment that don't change your habits when creating your website without having the hassle of creating ajax calls:
 
-* no difficult framework to understand to understand how to build a web application
-* no REST or Ajax url end points to develop. Of course, you can do that if you like to do your application that way ;-)
+* no difficult framework to understand how to build a web application
+* no REST or Ajax url end points to develop. Of course, you can do that if you like to have your application that way ;-)
 * no change in your habit to develop website: building the pages with Blapy don't change from the "static" usual way of doing a website, meaning you can continue to use your standard LAMP and CMS environement
 * configuration is simple and quite natural: it uses html5 "data" attributes to configure the Blapy configuration and there is quite nothing to do from an existing website :-)
 * the history of browsing is kept as any smart framework
