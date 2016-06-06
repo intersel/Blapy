@@ -399,9 +399,11 @@
 		
 		var myBlapy 		= this;
 		
+		$(document.body).off('appear');
 		$('[data-blapy-updateblock-ondisplay]').appear();
 		$(document.body).on('appear','[data-blapy-updateblock-ondisplay]', function(event, $all_appeared_elements) {
-			$(this).trigger('loadUrl',{aUrl: $(this).attr("data-blapy-href")});
+			if ($(this).attr("data-blapy-href") && !$(this).attr("data-blapy-appear")) myBlapy.myUIObject.trigger('loadUrl',{aUrl: $(this).attr("data-blapy-href")});
+			$(this).attr("data-blapy-appear",'done');
 		});
 		$.force_appear();
 		
@@ -488,8 +490,6 @@
                 init_function: function(){
                 	//process interval updates
                 	this.opts.theBlapy.setBlapyUpdateIntervals();
-                	//init blapy block that should be initialized on display
-                	this.opts.theBlapy.setBlapyUpdateOnDisplay();
                 	
                 	if (this.opts.pageLoadedFunction) this.opts.pageLoadedFunction();
 					this.myUIObject.trigger('Blapy_PageLoaded');
@@ -511,10 +511,13 @@
                 	// process json blocks
                 	this.opts.theBlapy.setBlapyJsonTemplates();
 
+                	//init blapy block that should be initialized on display
+                	this.opts.theBlapy.setBlapyUpdateOnDisplay();
+
                 	//alert that blapy page is ready
                 	if (this.opts.pageReadyFunction) this.opts.pageReadyFunction();
 					this.myUIObject.trigger('Blapy_PageReady');
-				}
+				},
             },
             loadUrl:   
             {
