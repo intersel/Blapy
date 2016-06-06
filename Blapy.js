@@ -35,6 +35,7 @@
  * - 2016/04/18 - E.Podvin - V1.4.0 - add pure json answer to define blapy blocks
  * - 2016/04/26 - E.Podvin - V1.4.1 - fix on multiple initialization (+fix on iFsm) 
  * - 2016/04/26 - E.Podvin - V1.4.2 - fix on json file when returned as a string by .ajax (+fix on iFsm) 
+ * - 2016/06/06 - E.Podvin - V1.4.3 - fix on setBlapyUpdateOnDisplay and blapy blocks to appear
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -42,7 +43,7 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.4.2
+ * @version : 1.4.3
  * -----------------------------------------------------------------------------------------
  */
 
