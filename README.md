@@ -16,7 +16,7 @@ You can have a look on a more complete example based on the [SB Admin 2 - Free B
 
 or test the ["To do list" web Apps demo](http://www.intersel.net/demos/intersel/Blapy/demos/todomvc/) made with Blapy and inspired from [TodoMVC](http://todomvc.com/)
 
-[This one allows to dynamically load and display contents](http://intersel.net/demos/intersel/Blapy/demos/bootstrap-four-column-gallery/) that were hidden and which need to be displayed as they became visible. 
+[This one allows to dynamically load and display blapy block contents](http://intersel.net/demos/intersel/Blapy/demos/bootstrap-four-column-gallery/) that were hidden and which need to be displayed as they became visible. 
 
 All the demos found in the demos directory can be tested there : [http://www.intersel.net/demos/intersel/Blapy/demos/](http://www.intersel.net/demos/intersel/Blapy/demos/)
 
