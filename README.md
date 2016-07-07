@@ -167,7 +167,15 @@ These two html files will load and behave normally if you load them and click th
 Well, just add at the end of your files this little script :
 
 ```javascript
-<script type="text/javascript" src="../Blapy.js"></script>
+<!-- load of the external libraries needed by Blapy (provided in the package) -->
+<script type="text/javascript" src="extlib/jquery-2.1.4.min.js				></script>
+<script type="text/javascript" src="extlib/sammy/lib/sammy.js"				></script>
+<script type="text/javascript" src="extlib/iFSM/extlib/jquery.dotimeout.js"	></script>
+<script type="text/javascript" src="extlib/iFSM/extlib/jquery.attrchange.js"></script>
+<script type="text/javascript" src="extlib/iFSM/iFSM.js"					></script>
+<!-- load of the Blapy script -->
+<script type="text/javascript" src="Blapy.js"></script>
+<!-- start Blapy -->
 <script>
 	$( document ).ready(function() {
 		$('#myBlapy').Blapy();
