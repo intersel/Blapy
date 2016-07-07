@@ -168,7 +168,7 @@ Well, just add at the end of your files this little script :
 
 ```javascript
 <!-- load of the external libraries needed by Blapy (provided in the package) -->
-<script type="text/javascript" src="extlib/jquery-2.1.4.min.js				></script>
+<script type="text/javascript" src="extlib/jquery-2.1.4.min.js"				></script>
 <script type="text/javascript" src="extlib/sammy/lib/sammy.js"				></script>
 <script type="text/javascript" src="extlib/iFSM/extlib/jquery.dotimeout.js"	></script>
 <script type="text/javascript" src="extlib/iFSM/extlib/jquery.attrchange.js"></script>
