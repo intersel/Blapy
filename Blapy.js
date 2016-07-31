@@ -8,7 +8,7 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
- * - 2016/07/32 - E.Podvin - V1.5.0 - 
+ * - 2016/07/31 - E.Podvin - V1.5.0 - 
  * 		- add data-blapy-template-header and data-blapy-template-footer in json templating
  * 		- fix on the scope of a blapy links now limited to their blapy object
  * 		- for blapy objects embeded in an blapy object, we can now specify the correct blapy object that applies on a blapy links if needed (if not, will react for all blapy objects)  
