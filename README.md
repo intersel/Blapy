@@ -1,5 +1,5 @@
 # Blapy
-Blapy is a jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) with almost no coding javascript to do it.
+Blapy is a jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) with almost no javascript coding to do it.
 
 Your web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents.
 
@@ -342,6 +342,8 @@ To define a Blapy Block, you need to use the following attributes:
  These json objects will be applied on the template. Theses parameters allows the json configuration:
       * **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
       * **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "```<table>```")
+      * **data-blapy-template-header**: once the json data are rendered, it is possible to set a header(ex: "```<tr><th>header</th></tr>```")
+      * **data-blapy-template-footer**: once the json data are rendered, it is possible to set a footer(ex: "```<tr><th>footer</th></tr>```")
       * **data-blapy-template-init**: a file name that contains a json data blapy block to use to initialize the block
   * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
   * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined 
@@ -402,6 +404,7 @@ To define a Blapy Link, here are its attributes:
 * **data-blapy-href**: if not bound to a "A" or "FORM" tag, it tells the hyperlink to use.
 
 * **data-blapy-embedding-blockid**: tells to embed the return source of the link in a blapy block of the given name. Usefull for return sources that are not 'blapy' formatted and that address a specific block...
+* **data-blapy-active-blapyId**: useful in the case the link is embedded in several different blapy objects, it gives the correct blapy object for the link. If not set, the link will be processed by all the blapy objects that contain the link.
 
 ## Examples
 

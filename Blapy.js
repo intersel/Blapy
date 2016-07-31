@@ -4,38 +4,41 @@
  * RCS PARIS 488 379 660 - NAF 721Z
  *
  * File : Blapy.js
- * Blapy : a jquery plugin that helps to design and manage an ajax web application 
- * 					keeping the usual way of generating web pages like with php or a standard CMS
+ * Blapy : jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) with almost no javascript coding to do it. 
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
- * - 2015/07/25 - E.Podvin - V1.0.0 - Creation
- * - 2015/07/31 - E.Podvin - V1.0.1
- * - 2015/08/02 - E.Podvin - V1.0.3 - append/prepend features on Blapy blocks
- * - 2015/08/04 - E.Podvin - V1.0.4 - fix on relative URL
- * - 2015/08/05 - E.Podvin - V1.0.5 - fix on a double pageready event sent
- * - 2015/08/07 - E.Podvin - V1.0.6 - add event Blapy_doCustomChange
- * - 2015/08/29 - E.Podvin - V1.0.7 - add post data capabilities
- * - 2015/09/21 - E.Podvin - V1.0.10 - fix on the initialization of json container whose template is defined by an external file
- * - 2015/09/25 - E.Podvin - V1.0.11 - fix on json updates
- * - 2015/11/03 - E.Podvin - V1.0.12 - fix on the initial URL loosing the querystring part
- * - 2015/11/03 - E.Podvin - V1.0.13 - remove the # duplication of the url
- * - 2015/11/04 - E.Podvin - V1.0.14 - fix on posted data
- * - 2015/11/05 - E.Podvin - V1.0.15 - small fixes...
- * - 2015/11/08 - E.Podvin - V1.0.16 - Add possibility to not use Sammy (sammy may be unplugged so no routing management) 
- * - 2015/11/09 - E.Podvin - V1.0.17 - fix on routing with sammy
- * - 2015/11/09 - E.Podvin - V1.0.18 - fix on routing to 404 error with sammy
- * - 2015/12/22 - E.Podvin - V1.0.19 - fix on default return for sammy when no blapy route is defined (return now true)
- * - 2016/01/20 - E.Podvin - V1.1.0 - add block update feature from a standard json feed
- * - 2016/02/17 - E.Podvin - V1.1.1 - fix when 'postData' is sent to Blapy while we're not in a "pageReady" state
- * - 2016/02/26 - E.Podvin - V1.2.0 - add block regular updates 
- * - 2016/03/07 - E.Podvin - V1.3.0 - add block init update when it becomes visible, after a scroll or resize (data-blapy-updateblock-ondisplay option). 
- * - 2016/04/01 - E.Podvin - V1.3.1 - fix on json blocks embedded in json block 
- * - 2016/04/06 - E.Podvin - V1.3.2 - add scripting within json block template with the "<blapyScriptJs>" tag 
- * - 2016/04/18 - E.Podvin - V1.4.0 - add pure json answer to define blapy blocks
- * - 2016/04/26 - E.Podvin - V1.4.1 - fix on multiple initialization (+fix on iFsm) 
- * - 2016/04/26 - E.Podvin - V1.4.2 - fix on json file when returned as a string by .ajax (+fix on iFsm) 
+ * - 2016/07/32 - E.Podvin - V1.5.0 - 
+ * 		- add data-blapy-template-header and data-blapy-template-footer in json templating
+ * 		- fix on the scope of a blapy links now limited to their blapy object
+ * 		- for blapy objects embeded in an blapy object, we can now specify the correct blapy object that applies on a blapy links if needed (if not, will react for all blapy objects)  
  * - 2016/06/06 - E.Podvin - V1.4.3 - fix on setBlapyUpdateOnDisplay and blapy blocks to appear
+ * - 2016/04/26 - E.Podvin - V1.4.2 - fix on json file when returned as a string by .ajax (+fix on iFsm) 
+ * - 2016/04/26 - E.Podvin - V1.4.1 - fix on multiple initialization (+fix on iFsm) 
+ * - 2016/04/18 - E.Podvin - V1.4.0 - add pure json answer to define blapy blocks
+ * - 2016/04/06 - E.Podvin - V1.3.2 - add scripting within json block template with the "<blapyScriptJs>" tag 
+ * - 2016/04/01 - E.Podvin - V1.3.1 - fix on json blocks embedded in json block 
+ * - 2016/03/07 - E.Podvin - V1.3.0 - add block init update when it becomes visible, after a scroll or resize (data-blapy-updateblock-ondisplay option). 
+ * - 2016/02/26 - E.Podvin - V1.2.0 - add block regular updates 
+ * - 2016/02/17 - E.Podvin - V1.1.1 - fix when 'postData' is sent to Blapy while we're not in a "pageReady" state
+ * - 2016/01/20 - E.Podvin - V1.1.0 - add block update feature from a standard json feed
+ * - 2015/12/22 - E.Podvin - V1.0.19 - fix on default return for sammy when no blapy route is defined (return now true)
+ * - 2015/11/09 - E.Podvin - V1.0.18 - fix on routing to 404 error with sammy
+ * - 2015/11/09 - E.Podvin - V1.0.17 - fix on routing with sammy
+ * - 2015/11/08 - E.Podvin - V1.0.16 - Add possibility to not use Sammy (sammy may be unplugged so no routing management) 
+ * - 2015/11/05 - E.Podvin - V1.0.15 - small fixes...
+ * - 2015/11/04 - E.Podvin - V1.0.14 - fix on posted data
+ * - 2015/11/03 - E.Podvin - V1.0.13 - remove the # duplication of the url
+ * - 2015/11/03 - E.Podvin - V1.0.12 - fix on the initial URL loosing the querystring part
+ * - 2015/09/25 - E.Podvin - V1.0.11 - fix on json updates
+ * - 2015/09/21 - E.Podvin - V1.0.10 - fix on the initialization of json container whose template is defined by an external file
+ * - 2015/08/29 - E.Podvin - V1.0.7 - add post data capabilities
+ * - 2015/08/07 - E.Podvin - V1.0.6 - add event Blapy_doCustomChange
+ * - 2015/08/05 - E.Podvin - V1.0.5 - fix on a double pageready event sent
+ * - 2015/08/04 - E.Podvin - V1.0.4 - fix on relative URL
+ * - 2015/08/02 - E.Podvin - V1.0.3 - append/prepend features on Blapy blocks
+ * - 2015/07/31 - E.Podvin - V1.0.1 - general fixes
+ * - 2015/07/25 - E.Podvin - V1.0.0 - Creation
  * 
  * -----------------------------------------------------------------------------------------
  *
@@ -43,7 +46,7 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.4.3
+ * @version : 1.5.0
  * -----------------------------------------------------------------------------------------
  */
 
@@ -303,10 +306,14 @@
 		
 		var myBlapy = this;
 
-		//change href on blapy-link
-		$('[data-blapy-link]').each(function() {
+		//change href on blapy-link within the blapy object
+		$('#'+myBlapy.myUIObjectID+' [data-blapy-link]').each(function() {
 			
 			var aHref;
+			
+			//in case a blapy object is within another blapy object, we need to tell which active blapy object to listen... 
+			if ( ($(this).attr("data-blapy-active-blapyId")) && ($(this).attr("data-blapy-active-blapyId")) != myBlapy.myUIObjectID)
+				return;
 			
 			if ($(this)[0].tagName == 'A')
 				aHref = $(this).attr("href");
@@ -820,6 +827,15 @@
 										newHtml = newHtml.replace(/<.?void>/g,"");
 									}
 									
+									if ($(myContainer.attr('data-blapy-template-header')).length > 0)
+									{
+										newHtml = $(myContainer).attr('data-blapy-template-header')+newHtml;
+									}
+									if ($(myContainer.attr('data-blapy-template-footer')).length > 0)
+									{
+										newHtml = newHtml+$(myContainer).attr('data-blapy-template-footer');
+									}
+
 									//Wrap content if needed
 									if ($(myContainer.attr('data-blapy-template-wrap')).length > 0)
 									{

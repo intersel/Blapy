@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- To run the current sample code in your own environment, copy this to an html page. -->
+<html>
+<head>
+	<title>Json Example - Search on a table</title>
+	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+	<link rel="stylesheet" href="main.css" />
+	<script type="text/javascript" src="../../extlib/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../../extlib/sammy/lib/sammy.js"></script>
+	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
+	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
+	<script type="text/javascript" src="../../extlib/iFSM/iFSM.js"></script>
+	<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>
+</head>
+<body id="myBlapy">
+	<h1>Search values in an ajax way with the json feature of Blapy </h1>
+	<p>Fill the following form:</p>
+	<form id="myForm" action="arrayvalues.data.php" data-blapy-link="true" method="POST">
+		<input type="hidden" name="action" value="search">
+		Choose a firstname:
+		<input  name="firstname" onKeyup="$('#myForm').submit();"> 
+		<br>
+		Choose a lastname: 
+		<input name="lastname" type="text" onKeyup="$('#myForm').submit();"></input>
+	</form> 
+	
+	<h1>Blapy Block results in a Table</h1>
+	<div id="results" 
+			data-blapy-container="true" 
+			data-blapy-container-name="results" 
+			data-blapy-container-content="results"
+			data-blapy-update="json"
+			data-blapy-template-file="arrayvalues.tpl"
+			data-blapy-template-wrap="<table>"
+			data-blapy-template-header="<tr><th>First name</th><th>Name</th></tr>"
+			data-blapy-template-footer="<tr><th>First name</th><th>Name</th></tr>"
+			data-blapy-template-init="arrayvalues.data.php"
+		>
+	</div>	
+</body>
+
+<script type="text/javascript" src="../../Blapy.js"></script>
+<script type="text/javascript" src="../../Blapy_AnimationPlugins.js"></script>
+<script>
+	$( document ).ready(function() {
+
+		//start Blapy
+		$('#myBlapy').Blapy();
+
+		//catch errors
+		$( "#myBlapy" ).on( "Blapy_ErrorOnPageChange", function(event,anError) {
+			  alert( 'Blapy error: '+anError );
+			});
+		
+	});
+
+	$("body").append('<h3>HTML code of the page</h3>').append(jQuery('<pre />').text($('html').html()));
+</script>
+
+</html>
