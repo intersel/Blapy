@@ -8,6 +8,7 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2016/07/31 - E.Podvin - V1.5.1 - fix on blapy objects embedded on other blapy objects 
  * - 2016/07/31 - E.Podvin - V1.5.0 - 
  * 		- add data-blapy-template-header and data-blapy-template-footer in json templating
  * 		- fix on the scope of a blapy links now limited to their blapy object
@@ -46,7 +47,7 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.5.0
+ * @version : 1.5.1
  * -----------------------------------------------------------------------------------------
  */
 
@@ -121,18 +122,29 @@
 			
 			app.get(/(.*)\#blapylink/, function() 
 			{
-				this.params['embeddingBlockId'] = myBlapy.extractembeddingBlockIdName(myBlapy.hashURL());
+				//filter the action to be processed only on the defined active blapy object for the link
+                if ( ($(this.target).attr("data-blapy-active-blapyid")) && ($(this.target).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID) )
+                        return;
+
+                this.params['embeddingBlockId'] = myBlapy.extractembeddingBlockIdName(myBlapy.hashURL());
 				
 				myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL(),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID});
 			});
 			app.post(/(.*)\#blapylink/, function() 
 			{
+				//filter the action to be processed only on the defined active blapy object for the link
+                if ( ($(this.target).attr("data-blapy-active-blapyid")) && ($(this.target).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID) )
+                        return;
+
 				this.params['embeddingBlockId'] = myBlapy.extractembeddingBlockIdName(myBlapy.hashURL(this.path));
 
 				myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"post"});
 			});
 			app.put(/(.*)\#blapylink/, function() 
 			{
+				//filter the action to be processed only on the defined active blapy object for the link
+                if ( ($(this.target).attr("data-blapy-active-blapyid")) && ($(this.target).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID) )
+                        return;
 				this.params['embeddingBlockId'] = myBlapy.extractembeddingBlockIdName(myBlapy.hashURL(this.path));
 				myBlapy.myUIObject.trigger('postData',{aUrl:myBlapy.hashURL(this.path),params:myBlapy.filterAttributes(this.params),aObjectId:myBlapy.myUIObjectID,method:"put"});
 			});
@@ -149,11 +161,19 @@
 		{
 			this.myUIObject.iFSM(manageBlapy,this.opts);
 			$(document).on("click","a[data-blapy-link]", function(event) {
-				event.preventDefault();
+				//filter the action to be processed only on the defined active blapy object for the link
+                if ( ($(event.target).attr("data-blapy-active-blapyid")) && ($(event.target).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID) )
+                        return;
+				
+                event.preventDefault();
 				myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL($(this).attr('href')),params:{embeddingBlockId:$(this).attr('data-blapy-embedding-blockid')},aObjectId:myBlapy.myUIObjectID});
 			});
 			$(document).on("submit","form[data-blapy-link]", function(event) {
-				event.preventDefault();
+				//filter the action to be processed only on the defined active blapy object for the link
+                if ( ($(event.target).attr("data-blapy-active-blapyid")) && ($(event.target).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID) )
+                        return;
+
+                event.preventDefault();
 				 // get all the inputs into an array.
 			    var $inputs = $(this).serializeArray();
 
@@ -312,7 +332,7 @@
 			var aHref;
 			
 			//in case a blapy object is within another blapy object, we need to tell which active blapy object to listen... 
-			if ( ($(this).attr("data-blapy-active-blapyId")) && ($(this).attr("data-blapy-active-blapyId")) != myBlapy.myUIObjectID)
+			if ( ($(this).attr("data-blapy-active-blapyId")) && ($(this).attr("data-blapy-active-blapyId") != myBlapy.myUIObjectID) )
 				return;
 			
 			if ($(this)[0].tagName == 'A')
