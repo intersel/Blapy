@@ -139,7 +139,7 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-alerts"
+                    <ul class="dropdown-menu dropdown-alerts">
                     	<li>
                             <a class="text-center" href="#">
                                 <strong>See All Alerts</strong>
