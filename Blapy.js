@@ -8,6 +8,7 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2016/08/01 - E.Podvin - V1.5.2 - fix on blapy objects embedded on other blapy objects 
  * - 2016/07/31 - E.Podvin - V1.5.1 - fix on blapy objects embedded on other blapy objects 
  * - 2016/07/31 - E.Podvin - V1.5.0 - 
  * 		- add data-blapy-template-header and data-blapy-template-footer in json templating
@@ -47,7 +48,7 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.5.1
+ * @version : 1.5.2
  * -----------------------------------------------------------------------------------------
  */
 
@@ -160,16 +161,16 @@
 		else
 		{
 			this.myUIObject.iFSM(manageBlapy,this.opts);
-			$(document).on("click","a[data-blapy-link]", function(event) {
-				//filter the action to be processed only on the defined active blapy object for the link
+			$(document).on("click","#"+myBlapy.myUIObjectID+" a[data-blapy-link]", function(event) {
+				//if requested, filter the action to be processed only to the defined active blapy object for the link
                 if ( ($(event.target).attr("data-blapy-active-blapyid")) && ($(event.target).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID) )
                         return;
 				
                 event.preventDefault();
 				myBlapy.myUIObject.trigger('loadUrl',{aUrl:myBlapy.hashURL($(this).attr('href')),params:{embeddingBlockId:$(this).attr('data-blapy-embedding-blockid')},aObjectId:myBlapy.myUIObjectID});
 			});
-			$(document).on("submit","form[data-blapy-link]", function(event) {
-				//filter the action to be processed only on the defined active blapy object for the link
+			$(document).on("submit","#"+myBlapy.myUIObjectID+" form[data-blapy-link]", function(event) {
+				//if requested, filter the action to be processed only to the defined active blapy object for the link
                 if ( ($(event.target).attr("data-blapy-active-blapyid")) && ($(event.target).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID) )
                         return;
 
