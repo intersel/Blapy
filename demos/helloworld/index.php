@@ -26,7 +26,7 @@ include("header.php");
 						because they are not involved in a Blapy block...</p>
 					<p>Meaning that <b>THE PAGE IS NOT RELOADED ;-) but ajaxified...</b></p> 
 					<h2>Get Blapy...</h2>
-					<p><a href="https://github.com/intersel/Blapy"><img src="https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png" style="width:10%">Get Blapy from GitHub</a></p>
+					<p><a href="https://github.com/intersel/Blapy" target="_blank"><img src="https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png" style="width:10%">Get Blapy from GitHub</a></p>
 					<h2>Some Blapy demos...</h2>
 					<ul>
 						<li><a href="../bootstrap-four-column-gallery/">Dynamic loading of content when it appears</a></li>
