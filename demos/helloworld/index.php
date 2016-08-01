@@ -25,6 +25,16 @@ include("header.php");
 						and this text is not... neither the title of the page...<br>
 						because they are not involved in a Blapy block...</p>
 					<p>Meaning that <b>THE PAGE IS NOT RELOADED ;-) but ajaxified...</b></p> 
+					<h2>Get Blapy...</h2>
+					<p><a href="https://github.com/intersel/Blapy"><img src="https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png" style="width:10%">Get Blapy from GitHub</a></p>
+					<h2>Some Blapy demos...</h2>
+					<ul>
+						<li><a href="../bootstrap-four-column-gallery/">Dynamic loading of content when it appears</a></li>
+						<li><a href="../dynamicSearch/">Dynamic search in some data</a></li>
+						<li><a href="../startbootstrap-sb-admin-2/">Start Bootstrap SB Admin with Blapy</a></li>
+						<li><a href="../todomvc/">A TODO list</a></li>
+						<li><a href="../verifyEmails/">Verify email address</a></li>
+					</ul>
 					
 
 <?php 
