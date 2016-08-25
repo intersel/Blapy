@@ -908,7 +908,7 @@
 				},
                 out_function: function(p,e,data){
 					if (this.opts.afterPageChange) this.opts.afterPageChange();
-					this.myUIObject.trigger('Blapy_afterPageChange');
+					this.myUIObject.trigger('Blapy_afterPageChange',data);
 				},
                 next_state: 'PageReady',
             },

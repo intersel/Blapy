@@ -420,24 +420,31 @@ To define a Blapy Link, here are its attributes:
 Blapy generates the following events during the Blapy object change processing:
 
 ##Blapy_PageLoaded
-Triggered when a page is fully and normally loaded and sent to the blapy object. 
+Triggered when a page is fully and normally loaded and sent to the **blapy object**. 
 
 ##Blapy_PageReady
-Triggered when the page is ready, after a loading page or a change in the page.
+Triggered when the page is ready, after a loading page or a change in the page, and sent to the **blapy object**.
 
 ##Blapy_beforePageLoad
-Triggered before a page load its new content and sent to the blapy object.
+Triggered before a page loads its new content and sent to the **blapy object**.
 * Parameters: the Blapy json data sent to the URL
  * [data].aUrl: url to call
  * [data].params: json of the parameters to send to aUrl 
 
+##Blapy_afterPageChange
+Triggered after a page loaded its new content and sent to the **blapy object**.
+* Parameters: the Blapy json data sent to the URL
+ * [data].aUrl: url to call
+ * [data].params: json of the parameters to send to aUrl 
+
+
 ##Blapy_beforeContentChange
-Triggered before a Blapy block content change and sent to the UPI Block that will change. 
+Triggered before a Blapy block content change and sent to the **blapy Block** that will change. 
 * Parameters:
  * the Blapy block
 
 ##Blapy_afterContentChange
-Triggered after a a Blapy block content has changed and sent to the UPI Block that has changed..
+Triggered after a a Blapy block content has changed and sent to the **blapy Block** that has changed..
 * Parameters:
  * the Blapy block
  
@@ -845,6 +852,20 @@ This example will update the block every second (1000ms) from index.php:
                 >
                     <b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
         </div>
+```
+## How to set a loader when blapy updates a content?
+
+Use the events "Blapy_beforePageLoad" and "Blapy_afterPageChange" in order to active/deactivate your loader, as in the following example:
+
+```html
+<script>
+	$(document).on( "Blapy_beforePageLoad", function(event) {
+		$('#loader').show();
+	});
+	$(document).on( "Blapy_afterPageChange", function(event) {
+		$('#loader').hide();
+	});
+</script>
 ```
 
 ## What about the id sent in the returned blapy blocks...
