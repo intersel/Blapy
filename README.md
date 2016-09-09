@@ -1,4 +1,14 @@
 # Blapy
+
+  [![NPM Version][npm-image]][npm-url]
+  [![NPM Downloads][downloads-image]][downloads-url]
+  [![Code Climate][cc-image]][cc-url]
+  [![Test Coverage][coverage-image]][coverage-url]
+  [![Dev Dependencies][d-image]][d-url]
+  
+> If you like Blapy, please star it!
+
+  
 Blapy is a jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) with almost no javascript coding to do it.
 
 Your web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents.
@@ -795,7 +805,7 @@ It is expected that that the answer returns an array of blapy objects.
 
 #### Example of a response to a blapy call
 
-The following blapy block definition are the same:
+The following blapy block definitions are the same:
 
 * usual blapy block
 ```html
