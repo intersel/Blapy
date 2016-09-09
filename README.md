@@ -1,11 +1,6 @@
 # Blapy
 
-  [![NPM Version][npm-image]][npm-url]
-  [![NPM Downloads][downloads-image]][downloads-url]
-  [![Code Climate][cc-image]][cc-url]
-  [![Test Coverage][coverage-image]][coverage-url]
-  [![Dev Dependencies][d-image]][d-url]
-  
+ 
 > If you like Blapy, please star it!
 
   
