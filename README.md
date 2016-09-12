@@ -422,7 +422,9 @@ To define a Blapy Link, here are its attributes:
 ```
 
 # Triggered events
-Blapy generates the following events during the Blapy object change processing:
+Blapy generates the specific events during the Blapy object change processing.
+
+Some events are sent to the DOM element on which you create the jquery blapy object, some apply on the blapy block where occurs the processing.
 
 ##Blapy_PageLoaded
 Triggered when a page is fully and normally loaded and sent to the **blapy object**. 
@@ -469,6 +471,9 @@ To listen to Blapy events, you may use the jQuery 'on' function as in this examp
 ```javascript
 	$("#myBlapy").on( "Blapy_ErrorOnPageChange", function(event,anError) {
 		  alert( anError );
+	}); 
+	$("#myBlapy").on( "Blapy_beforePageLoad", function(event,anError) {
+		  alert( 'call before loading new blocks...' );
 	}); 
 	//assure that the event will be received by the new DOM object #mainContainer if it has been replaced by Blapy
 	$(document).on( "Blapy_afterContentChange","#mainContainer", function(event,aBlock) {
@@ -864,10 +869,10 @@ Use the events "Blapy_beforePageLoad" and "Blapy_afterPageChange" in order to ac
 
 ```html
 <script>
-	$(document).on( "Blapy_beforePageLoad", function(event) {
+	$("#myBlapy").on( "Blapy_beforePageLoad", function(event) {
 		$('#loader').show();
 	});
-	$(document).on( "Blapy_afterPageChange", function(event) {
+	$("#myBlapy").on( "Blapy_afterPageChange", function(event) {
 		$('#loader').hide();
 	});
 </script>
