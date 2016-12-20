@@ -8,6 +8,7 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2016/12/20 - E.Podvin - V1.5.3 - fix https://github.com/intersel/Blapy/issues/4 - form should return the value of button/input of submit type 
  * - 2016/08/01 - E.Podvin - V1.5.2 - fix on blapy objects embedded on other blapy objects 
  * - 2016/07/31 - E.Podvin - V1.5.1 - fix on blapy objects embedded on other blapy objects 
  * - 2016/07/31 - E.Podvin - V1.5.0 - 
@@ -179,11 +180,21 @@
 			    var $inputs = $(this).serializeArray();
 
 			    // not sure if you wanted this, but I thought I'd add it.
-			    // get an associative array of just the values.
+			    // get an associative array of the values in the form.
 			    var values = {};
 			    $.each($inputs,function() {
 			        values[this.name] = this.value;
 			    });
+			    //add the submit input info that is not given by the serializeArray
+			    if (event.originalEvent)
+			    {
+				    aSubmitInput = $(event.originalEvent.currentTarget.activeElement);
+				    if (aSubmitInput)
+				    {
+					    values[aSubmitInput.attr('name')] = aSubmitInput.attr('value'); 
+				    }
+			    }
+
 			    values['embeddingBlockId']=$(this).attr('data-blapy-embedding-blockid');
 
 				myBlapy.myUIObject.trigger('postData',{
