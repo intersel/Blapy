@@ -16,10 +16,10 @@ else if ($ChangeBlapyBlock==-1)
 	$appword='update';
 
 ?>
-<body>
+<body id="myBlapyApp1">
 	<h1>Some of the Blapy features on Blapy blocks</h1>
 	<p></p>
-	<div style="border:solid 1px green;margin:20px;padding:0 20px 20px;" id="myBlapyApp1">
+	<div style="border:solid 1px green;margin:20px;padding:0 20px 20px;">
 		<h4>"myBlapyApp1" Blapy blocks</h4>
 		<div 	data-blapy-container="true" 
 				data-blapy-container-name="mainContainerApp1" 
@@ -95,7 +95,7 @@ else
 		<button onclick="$('#myBlapyApp1').trigger('loadUrl',{aUrl:'index.php?ChangeBlapyBlock=1',params:{action:'update'}})">Change Blapy Block with two others blocks...</button>
 		<button onclick="$('#myBlapyApp1').trigger('loadUrl',{aUrl:'index.php?ChangeBlapyBlock=-1',params:{action:'update'}})">Reinitialize the Blapy Block...</button>
 	</div>	
-	<div style="border:solid 1px green;margin:20px;padding:0px 20px 20px;" id="myBlapyApp2">
+	<!-- <div style="border:solid 1px green;margin:20px;padding:0px 20px 20px;" id="myBlapyApp2">
 		<h4>"myBlapyApp2" Blapy blocks</h4>
 		<div 	data-blapy-container="true" 
 						data-blapy-container-name="mainContainerApp2" 
@@ -106,6 +106,7 @@ else
 					<b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
 		</div>
 	</div>
+	 -->
 	<div style="border:solid 1px green;margin:20px;padding:0px 20px 20px;" id="myBlapyApp3">
 		<h4>"myBlapyApp3" Blapy blocks</h4>
 	

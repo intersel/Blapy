@@ -5,7 +5,7 @@
 	<title><?php echo $defaultTitle?></title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<link rel="stylesheet" href="main.css" />
-	<script type="text/javascript" src="../../extlib/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../../extlib/jquery-3.2.0.min.js"></script>
 	<script type="text/javascript" src="../../extlib/sammy/lib/sammy.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
