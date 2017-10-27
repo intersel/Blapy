@@ -430,46 +430,46 @@ Blapy generates the specific events during the Blapy object change processing.
 
 Some events are sent to the DOM element on which you create the jquery blapy object, some apply on the blapy block where occurs the processing.
 
-##Blapy_PageLoaded
+## Blapy_PageLoaded
 Triggered when a page is fully and normally loaded and sent to the **blapy object**. 
 
-##Blapy_PageReady
+## Blapy_PageReady
 Triggered when the page is ready, after a loading page or a change in the page, and sent to the **blapy object**.
 
-##Blapy_beforePageLoad
+## Blapy_beforePageLoad
 Triggered before a page loads its new content and sent to the **blapy object**.
 * Parameters: the Blapy json data sent to the URL
  * [data].aUrl: url to call
  * [data].params: json of the parameters to send to aUrl 
 
-##Blapy_afterPageChange
+## Blapy_afterPageChange
 Triggered after a page loaded its new content and sent to the **blapy object**.
 * Parameters: the Blapy json data sent to the URL
  * [data].aUrl: url to call
  * [data].params: json of the parameters to send to aUrl 
 
 
-##Blapy_beforeContentChange
+## Blapy_beforeContentChange
 Triggered before a Blapy block content change and sent to the **blapy Block** that will change. 
 * Parameters:
  * the Blapy block
 
-##Blapy_afterContentChange
+## Blapy_afterContentChange
 Triggered after a a Blapy block content has changed and sent to the **blapy Block** that has changed..
 * Parameters:
  * the Blapy block
  
-##Blapy_doCustomChange
+## Blapy_doCustomChange
 Triggered if data-blapy-update='custom', sent to the object that should change its content
 * Parameters:
  * newObject : the new Blapy Block
  
-##Blapy_ErrorOnPageChange
+## Blapy_ErrorOnPageChange
 Triggered when an error occured during a page content change. 
 * Parameters:
  * anError: the error message
 
-##Examples
+## Examples
 To listen to Blapy events, you may use the jQuery 'on' function as in this example:
 
 ```javascript
