@@ -915,6 +915,24 @@ You can give **no id** on the new sent blocks, this way the system will set the 
 ```html
 	<base href="/demos/todomvc/" target="_blank">
 ``` 
+## How to automate that every A / Form tags are "blapy-link"?
+Blapy expects that you define the A and Form tags as blapy links if you want them to be handled by blapy.
+
+Hereafter, you can add this little script to automate that every A / Form tags become "blapy-link=true":
+
+```javascript
+// every new page load, will assure that every new links will have the "blapy-link" attribute 
+$(document).on( "Blapy_PageReady","body", function(event,anError) {
+		$('#[[+BlapyApplicationId]]').find('a,form').attr('data-blapy-link','true'); 
+		var myBlapy = $('#<You Blapy DOM Object>).getFSM();//get the FSM working behind the scene for blapy
+		myBlapy[0].opts.theBlapy.setBlapyUrl(); // call the function that will make blapy handle the url links
+
+}); 
+```
+
+Once in place, every url links will be considered as Blapy Links...
+
+
 # Contact
 If you have any ideas, feedback, requests or bug reports, you can reach me at github@intersel.org, 
 or via my website: http://www.intersel.fr
