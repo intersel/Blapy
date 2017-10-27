@@ -924,7 +924,7 @@ Hereafter, you can add this little script to automate that every A / Form tags b
 // every new page load, will assure that every new links will have the "blapy-link" attribute 
 $(document).on( "Blapy_PageReady","body", function(event,anError) {
 		$('#[[+BlapyApplicationId]]').find('a,form').attr('data-blapy-link','true'); 
-		var myBlapy = $('#<You Blapy DOM Object>).getFSM();//get the FSM working behind the scene for blapy
+		var myBlapy = $('#<You Blapy DOM Object>').getFSM();//get the FSM working behind the scene for blapy
 		myBlapy[0].opts.theBlapy.setBlapyUrl(); // call the function that will make blapy handle the url links
 
 }); 
