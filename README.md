@@ -652,7 +652,7 @@ First step is to define the blapy block:
 ```
 Some explanations on the defined attributes:
   - _data-blapy-update="json"_: the blapy block is filled with json data. So the content in the block is the template to apply on the json data. The template may be given by an external file with the property "data-blapy-template-file".
-  - _data-blapy-template-wrap="<table>"_: the template is wrapped with a 'table' tag
+  - _data-blapy-template-wrap="```<table>```"_: the template is wrapped with a 'table' tag
   - _data-blapy-template-init="arrayvalues.data.php"_: the values to init our block are to be found in this file
 
 The returned content of the "data-blapy-template-init" file should contain the addressed blapy block definition ("data-blapy-container-name") with a json struture with the data to display, and so should be something like the following example:
