@@ -1,16 +1,16 @@
 # Blapy
 
- 
+
 > If you like Blapy, I'll be pleased that you star it :-)
 
-  
+
 Blapy is a jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) with almost no javascript coding to do it.
 
 Your web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents.
 
 So, it may help you to transform your "normal" web site in a web application without the hassle of changing the way you develop websites.
 
-Blapy will speed up your page load too as it won't load all the internet files every page change but only the requested new contents. 
+Blapy will speed up your page load too as it won't load all the internet files every page change but only the requested new contents.
 
 Blapy is json compliant too and eases the integration of ajax/rest API with templating and routing services very simple to use... Blapy will be the "V-iew" in an MVC application approach...
 
@@ -23,7 +23,7 @@ You can have a look on a more complete example based on the [SB Admin 2 - Free B
 
 or test the ["To do list" web Apps demo](http://www.intersel.net/demos/intersel/Blapy/demos/todomvc/) made with Blapy and inspired from [TodoMVC](http://todomvc.com/)
 
-[This one allows to dynamically load and display blapy block contents](http://intersel.net/demos/intersel/Blapy/demos/bootstrap-four-column-gallery/) that were hidden and which need to be displayed as they became visible. 
+[This one allows to dynamically load and display blapy block contents](http://intersel.net/demos/intersel/Blapy/demos/bootstrap-four-column-gallery/) that were hidden and which need to be displayed as they became visible.
 
 All the demos found in the demos directory can be tested there : [http://www.intersel.net/demos/intersel/Blapy/demos/](http://www.intersel.net/demos/intersel/Blapy/demos/)
 
@@ -111,7 +111,7 @@ Everyone who...
 And, as I just discovered it recently, for those who are using [pjax](https://github.com/defunkt/jquery-pjax), Blapy may be a good alternative too... You'll tell me!
 
 # Why would I use that?!
-The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is quite a difficult job with a steep learning curve... 
+The concept of a web application getting data through REST Api with a client application that is doing the job of connecting the whole to build an application is quite a difficult job with a steep learning curve...
 
 Whereas PHP -or whatever web server languages- websites built on a standard CMS are easier to handle... Any standard CMS does the page rendering job quite naturally for years... Except that it reloads pages when clicking a link... or it needs to develop ajax calls to dynamically update parts of the page...
 
@@ -132,7 +132,7 @@ The benefits of using Blapy?
 
 The main simple idea behind Blapy is to automatically and dynamically bind and update html blocks in ajax during the web navigation from page to page.
 
-Simple ;-) but powerful... 
+Simple ;-) but powerful...
 
 Rules defined on the html blocks with data attributes will specify how the blocks should be updated with their new dynamic contents.
 
@@ -153,7 +153,7 @@ let's have a first html file test1.html with some blocks with special attributes
 
 **Let's imagine now that you would like that the website loads and updates only the "mainContainer" part without updating the whole page when we click on the test2.html link...**
 
-You surely know that you would need to call a URL in ajax, get the new content from the server and update the container with jQuery html function... 
+You surely know that you would need to call a URL in ajax, get the new content from the server and update the container with jQuery html function...
 Perhaps meet some problem with the browser history when going back... etc... etc...
 
 With Blapy, just create a second test2.html file as usual: it will be quite the same than test1.html (let's imagine the files are php generated...) with a new content in the "mainContainer" part :
@@ -172,7 +172,7 @@ With Blapy, just create a second test2.html file as usual: it will be quite the 
 ```
 
 These two html files will load and behave normally if you load them and click the links.
- 
+
 Well, just add at the end of your files this little script :
 
 ```javascript
@@ -192,7 +192,7 @@ Well, just add at the end of your files this little script :
 </script>
 ```
 
-You will then see that when clicking on the page links, only the 'data-blapy-container' block is changed without reloading the whole page! You can see that as the title has not changed... 
+You will then see that when clicking on the page links, only the 'data-blapy-container' block is changed without reloading the whole page! You can see that as the title has not changed...
 
 Tada! you've got a **client web application** :-)
 
@@ -209,9 +209,9 @@ Tada! you've got a **client web application** :-)
 
 * Tell to Blapy that these blocks are the ones that may be updated from page to page:
  * add a "data-blapy-container" attribute set to true in order to configure this container as a Blapy container
- * give a name identifier to the container with the "data-blapy-container-name" attribute in order to identify this content block as unique. 
+ * give a name identifier to the container with the "data-blapy-container-name" attribute in order to identify this content block as unique.
  * give a content name to identify each unique page content to be used with the "data-blapy-container-content" attribute.
-  
+
 ```html
   <div id="myContainer"  data-blapy-container="true" data-blapy-container-name="mainContainer" data-blapy-container-content="Howisitgoing">
 	  How is it going?
@@ -261,7 +261,7 @@ That's it: your blocks will be automatically updated by ajax calls to the other 
 
 The general algorithm of Blapy is the following:
 
-* when a link is called (clicked) and if it is a "blapy-link", 
+* when a link is called (clicked) and if it is a "blapy-link",
  * get the new content from the clicked page through an ajax call
  * get all the "blapy-container" of the current page
  * for each "blapy-container" of the current page
@@ -284,7 +284,7 @@ Options is a javascript object. It can take as input the following possible opti
 * **debug**: (default:false) if true, then log things in the console
 * **LogLevel**: (default:1) log level: 1: error ; 2: warning; 3: notice
 * **AlertError**: (default:false) show an alert box on error messages if true
-* **activeSammy**: (default:false) if set to true, will use Sammy for URL routing 
+* **activeSammy**: (default:false) if set to true, will use Sammy for URL routing
 * **pageLoadedFunction**: (default:null) function to call when the page is loaded
 * **pageReadyFunction**: (default:null) function to call when the page is ready
 * **beforePageLoad**: (default:null) function to call before the page load the new content
@@ -293,7 +293,7 @@ Options is a javascript object. It can take as input the following possible opti
 * **afterPageChange**: (default:null) function to call when the page had all its content changed
 * **onErrorOnPageChange**: (default:null) function to call when the page got an error during change
 
-## Example: 
+## Example:
 
 ```javascript
 	$( document ).ready(function() {
@@ -321,7 +321,7 @@ That means that if you'd like to bind Blapy to the "body", you **have to** set a
 	});
 ```
 
-This way, you will be able to tell which application a Blapy block should update when loaded. 
+This way, you will be able to tell which application a Blapy block should update when loaded.
 
 See "data-blapy-applyon" option on Blapy blocks.
 
@@ -330,7 +330,7 @@ Blapy blocks are the parts where you would like the content to be updated from e
 
 A Blapy block may be any html element where you have set Blapy attributes that define the behaviour as Blapy blocks.
 
-These attributes are analysed from the external Blapy block in order to know how the updating process should be applied on the current block. 
+These attributes are analysed from the external Blapy block in order to know how the updating process should be applied on the current block.
 
 To define a Blapy Block, you need to use the following attributes:
 
@@ -340,14 +340,14 @@ To define a Blapy Block, you need to use the following attributes:
 * **data-blapy-container-name**: gives the name of the Blapy block. It will identify the block.
 * **data-blapy-container-content**: gives the subject of the content. It will identify the content of the block.
 * **data-blapy-update** (option, default:'update'): tells how Blapy should update the Blapy block when an external page or content is loaded.
-  * **update**: if the container-name is found from the external content and its container-content is different from the current page, 
+  * **update**: if the container-name is found from the external content and its container-content is different from the current page,
  the Blapy block of the current page is to be replaced by the new one
   * **force-update**: if the container-name is found from the external content, the Blapy block of the current page is to be replaced by the new one
   * **append**: if the container-name is found from the external content, the external content should be added to the end of the current Blapy block content.
   * **prepend**: if the container-name is found from the external content, the external content should be added before the current Blapy block content.
   * **replace**: if the container-name is found from the external content, the inner content of the external content should replace the current Blapy block content.
-  * **json**: the content of the current container is considered to be a template. 
- If the container-name is found, then it is considered that the external content is a json object or an array of json objects. 
+  * **json**: the content of the current container is considered to be a template.
+ If the container-name is found, then it is considered that the external content is a json object or an array of json objects.
  These json objects will be applied on the template. Theses parameters allows the json configuration:
       * **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
       * **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "```<table>```")
@@ -355,25 +355,25 @@ To define a Blapy Block, you need to use the following attributes:
       * **data-blapy-template-footer**: once the json data are rendered, it is possible to set a footer(ex: "```<tr><th>footer</th></tr>```")
       * **data-blapy-template-init**: a file name that contains a json data blapy block to use to initialize the block
   * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
-  * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined 
+  * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined
  and send the Blapy_doCustomChange event.
-  * **[an animation plugin function name]**: if the container-name is found from the external content, 
- function to call and apply to do the content change. 
+  * **[an animation plugin function name]**: if the container-name is found from the external content,
+ function to call and apply to do the content change.
  The available plugin functions may be found in the Blapy_AnimationPlugins.js file.
 * **data-blapy-update-rule**: ['local'|'external' (default)], if 'local', will use the data-blapy-update rule defined in the current block, else will use the one defined in the external block. Exception to the default value, a "json" block is always "local".
-* **data-blapy-applyon** (option, default:'all'): By default, the Blapy blocks loaded by a Blapy link will be tried on all Blapy blocks. 
+* **data-blapy-applyon** (option, default:'all'): By default, the Blapy blocks loaded by a Blapy link will be tried on all Blapy blocks.
 If defined, the external container will only be applied on the matched Blapy blocks contained in the given application id element.
 * **data-blapy-href** (option): a URL to call on **data-blapy-updateblock-time** (if set) or on **data-blapy-updateblock-ondisplay**
-* **data-blapy-updateblock-time** (option): a time in milliseconds when the URL set in 'data-blapy-href' should be called to update the block. 
+* **data-blapy-updateblock-time** (option): a time in milliseconds when the URL set in 'data-blapy-href' should be called to update the block.
 * **data-blapy-updateblock-ondisplay** (option): if set to true, will update the block from **data-blapy-href** when the element is visible (after a scroll).
- 
- 
+
+
 ## Examples
 
 ```html
-		<div 	data-blapy-container="true" 
-				data-blapy-container-name="mainContainerApp3" 
-				data-blapy-container-content="aContent2" 
+		<div 	data-blapy-container="true"
+				data-blapy-container-name="mainContainerApp3"
+				data-blapy-container-content="aContent2"
 				data-blapy-applyon="myBlapyApp1,myBlapyApp3"
 		>
 			<h3>a Content</h3>
@@ -381,9 +381,9 @@ If defined, the external container will only be applied on the matched Blapy blo
 		</div>
 ```
 ```html
-		<div 	data-blapy-container="true" 
-				data-blapy-container-name="submainContainerApp1" 
-				data-blapy-container-content="aSubContent" 
+		<div 	data-blapy-container="true"
+				data-blapy-container-name="submainContainerApp1"
+				data-blapy-container-content="aSubContent"
 				data-blapy-update="remove"
 		>
 		</div>
@@ -391,11 +391,11 @@ If defined, the external container will only be applied on the matched Blapy blo
 
 
 # Blapy Links
-A Blapy Link is a url link that should be handled by Blapy. 
+A Blapy Link is a url link that should be handled by Blapy.
 
 A Blapy link may be attached to the html "`<a>`" or "`<form>`" tags by specifying a "data-blapy-link" attribute on it.
 
-It may be attached to other kind of tag, then you will have to specify the "data-blapy-href" attribute to explicit the hyperlink. 
+It may be attached to other kind of tag, then you will have to specify the "data-blapy-href" attribute to explicit the hyperlink.
 
 **Remarks on blapy links on tags that are not "a" or "form"**
 * In this case, Blapy automatically binds a click event on this element in order to simulate an anchor.
@@ -431,7 +431,7 @@ Blapy generates the specific events during the Blapy object change processing.
 Some events are sent to the DOM element on which you create the jquery blapy object, some apply on the blapy block where occurs the processing.
 
 ## Blapy_PageLoaded
-Triggered when a page is fully and normally loaded and sent to the **blapy object**. 
+Triggered when a page is fully and normally loaded and sent to the **blapy object**.
 
 ## Blapy_PageReady
 Triggered when the page is ready, after a loading page or a change in the page, and sent to the **blapy object**.
@@ -440,17 +440,17 @@ Triggered when the page is ready, after a loading page or a change in the page, 
 Triggered before a page loads its new content and sent to the **blapy object**.
 * Parameters: the Blapy json data sent to the URL
  * [data].aUrl: url to call
- * [data].params: json of the parameters to send to aUrl 
+ * [data].params: json of the parameters to send to aUrl
 
 ## Blapy_afterPageChange
 Triggered after a page loaded its new content and sent to the **blapy object**.
 * Parameters: the Blapy json data sent to the URL
  * [data].aUrl: url to call
- * [data].params: json of the parameters to send to aUrl 
+ * [data].params: json of the parameters to send to aUrl
 
 
 ## Blapy_beforeContentChange
-Triggered before a Blapy block content change and sent to the **blapy Block** that will change. 
+Triggered before a Blapy block content change and sent to the **blapy Block** that will change.
 * Parameters:
  * the Blapy block
 
@@ -458,14 +458,14 @@ Triggered before a Blapy block content change and sent to the **blapy Block** th
 Triggered after a a Blapy block content has changed and sent to the **blapy Block** that has changed..
 * Parameters:
  * the Blapy block
- 
+
 ## Blapy_doCustomChange
 Triggered if data-blapy-update='custom', sent to the object that should change its content
 * Parameters:
  * newObject : the new Blapy Block
- 
+
 ## Blapy_ErrorOnPageChange
-Triggered when an error occured during a page content change. 
+Triggered when an error occured during a page content change.
 * Parameters:
  * anError: the error message
 
@@ -475,10 +475,10 @@ To listen to Blapy events, you may use the jQuery 'on' function as in this examp
 ```javascript
 	$("#myBlapy").on( "Blapy_ErrorOnPageChange", function(event,anError) {
 		  alert( anError );
-	}); 
+	});
 	$("#myBlapy").on( "Blapy_beforePageLoad", function(event,anError) {
 		  alert( 'call before loading new blocks...' );
-	}); 
+	});
 	//assure that the event will be received by the new DOM object #mainContainer if it has been replaced by Blapy
 	$(document).on( "Blapy_afterContentChange","#mainContainer", function(event,aBlock) {
 			  alert( 'Blapy_afterContentChange');
@@ -505,7 +505,7 @@ $('#<id of the blapy application tag>').trigger('loadUrl',{aUrl:<aURL to call>,p
 
 * action (optional)
  * 'update' (default): update the Blapy blocks from the URL
-* embeddingBlockId(optional): a block container id 
+* embeddingBlockId(optional): a block container id
 
 ### Example
 
@@ -542,8 +542,8 @@ When Blapy calls a 'Blapy Link', the following parameters are sent as GET parame
 * **blapycall**=1 - tells that the call is coming from Blapy
 * **blapyaction**=[anAction] -tells the kind of action that will be operated
  * **update**: blocks will be updated
-  
-Knowing these parameters allow you to optimize the generated html returned by the server to the client, so sending back only the useful html blocks instead of the full html page. 
+
+Knowing these parameters allow you to optimize the generated html returned by the server to the client, so sending back only the useful html blocks instead of the full html page.
 
 # Blapy animation plugin functions
 
@@ -562,14 +562,14 @@ Have a look in the Blapy_AnimationPlugins.js and add your new functions in it in
 # LIBRARY DEPENDENCIES
 To work properly, you need to include the following javascript libraries:
 
-* jQuery (>= 1.10) 
+* jQuery (>= 1.10)
  * `<script type="text/javascript" src="extlib/jquery-1.10.2.min.js"></script>`
 * [iFSM by intersel](https://github.com/intersel/iFSM/)
  * this library manages finite state machines and needs these libraries:
   * **doTimeout** by ["Cowboy" Ben Alman](http://benalman.com/projects/jquery-dotimeout-plugin/)
    * this library brings some very usefull feature on the usual javascript setTimeout function like Debouncing, Delays & Polling Loops, Hover Intent...
     * `<script type="text/javascript" src="extlib/jquery.dotimeout.js"></script>`
-  * **attrchange** by [Selvakumar Arumugam](http://meetselva.github.io/attrchange/) 
+  * **attrchange** by [Selvakumar Arumugam](http://meetselva.github.io/attrchange/)
    * a simple jQuery function to bind a listener function to any HTML element on attribute change
     * `<script type="text/javascript" src="extlib/jquery.attrchange.js"></script>`
 * [json2html](http://json2html.com/) (optional if blapy block does not use json feature)
@@ -583,11 +583,11 @@ To work properly, you need to include the following javascript libraries:
  * `<script type="text/javascript" src="extlib/jquery.appear/jquery.appear.js"></script>`
 
 # FAQ
-If you have questions or unsolved problems, you can have a look on the our [FAQs](https://github.com/intersel/Blapy/wiki) 
+If you have questions or unsolved problems, you can have a look on the our [FAQs](https://github.com/intersel/Blapy/wiki)
 or leave a message on the [Issue board](https://github.com/intersel/Blapy/issues).
 
 ## When a Blapy link is called, does the server need to send a full HTML page with a body and ...
-No, you can optimize your code by only sending the useful Blapy blocks. 
+No, you can optimize your code by only sending the useful Blapy blocks.
 
 
 ## Is it possible to set Blapy blocks in "head" tags?
@@ -598,8 +598,8 @@ Yes, but in order to have the Blapy see them, set an id on the html tag and call
 ```html
 <html id="myBlapy">
 <head>
-	<title 	data-blapy-container="true" 
-			data-blapy-container-name="Title" 
+	<title 	data-blapy-container="true"
+			data-blapy-container-name="Title"
 			data-blapy-container-content="myTitle">This is a title page</title>
 	<script>
 		$( document ).ready(function() {
@@ -615,7 +615,7 @@ Yes, but in order to have the Blapy see them, set an id on the html tag and call
 
 ## How to define template variables in a blapy template for json blocks
 
-The syntax follows the one defined by [json2html library](http://json2html.com/) : ${myVariableName} 
+The syntax follows the one defined by [json2html library](http://json2html.com/) : ${myVariableName}
 
 ### Example
 
@@ -623,6 +623,60 @@ The syntax follows the one defined by [json2html library](http://json2html.com/)
 		First name: ${fname}<br>
 		Last name: ${lname}<br>
 ```
+
+## How to set a json template driven by Blapy...
+Let's say we would like to create a dynamic table as the following example:
+
+```html
+<section id="tableExample">
+  <table>
+    <tr><td>John</td><td>Doe</td></tr>
+    <tr><td>Bob</td><td>Dylan</td></tr>
+    ....
+  </table>
+</section>
+```
+
+First step is to define the blapy block:
+```html
+<section id="tableExample"
+      data-blapy-container="true"
+			data-blapy-container-name="results"
+			data-blapy-container-content="void"
+			data-blapy-update="json"
+			data-blapy-template-wrap="<table>"
+			data-blapy-template-init="arrayvalues.data.php"
+>
+  <tr><td>${firstname}</td><td>${lastname}</td></tr>
+</section>
+```
+Some explanations on the defined attributes:
+  - _data-blapy-update="json"_: the blapy block is filled with json data. So the content in the block is the template to apply on the json data. The template may be given by an external file with the property "data-blapy-template-file".
+  - _data-blapy-template-wrap="<table>"_: the template is wrapped with a 'table' tag
+  - _data-blapy-template-init="arrayvalues.data.php"_: the values to init our block are to be found in this file
+
+The returned content of the "data-blapy-template-init" file should contain the addressed blapy block definition ("data-blapy-container-name") with a json struture with the data to display, and so should be something like the following example:
+
+```html
+<section id="tableExample"
+	data-blapy-container="true"
+	data-blapy-container-name="results"
+	data-blapy-container-content="initContent"
+>
+[
+{firstname: "John",lastname: "Doe"},
+{firstname: "Bob",lastname: "Dylan"},
+...
+]
+</section>
+```
+
+Of course, this content may be dynamically generated by the server side.
+
+Once you start blapy like with "('#tableExample').Blapy();", blapy will automatically read the json content of the "data-blapy-template-init" file and will apply its content to the html template.
+
+The resulting content will be like the example to produced...
+
 
 ## How to set conditional output in a json template
 
@@ -636,33 +690,33 @@ This example shows how "```<li>```" statement will be inserted according to the 
 
 #### Initial blapy definition
 
-Let's define a UL statement that we want be filled with LI statements. 
+Let's define a UL statement that we want be filled with LI statements.
 
 It will be initialized from the "data-blapy-template-init" variable with the content returned by myInitFile.php file. It could have been initialized with a "loadUrl" or "postData" calls.
 
 ```
 <ul id="MenuExampleWithInitializedWithJSScript"
-    data-blapy-container="true" 
-	data-blapy-container-name="MenuExampleWithInitializedWithJSScript" 
+    data-blapy-container="true"
+	data-blapy-container-name="MenuExampleWithInitializedWithJSScript"
 	data-blapy-container-content="MenuExampleVoid"
 	data-blapy-update="json"
 	data-blapy-template-init="myInitFile.php"
 >
      <blapyScriptJS>
-        	if (!"${dontdisplay}") 
+        	if (!"${dontdisplay}")
             	jQuery('#MenuExampleWithInitializedWithJSScript').append('<li class="${class}"><a href="${url}">${action}</a></li>');
      </blapyScriptJS>
-                                    	
+
 </ul>
 ```
 
-Please note that what myIntFile.php returns as data content should have only data initialization for this block. 
+Please note that what myIntFile.php returns as data content should have only data initialization for this block.
 
 #### Example of data that could be sent to Blapy by myInitFile.php
 ```
 <ul id="MenuExampleWithInitializedWithJSScript"
-	data-blapy-container="true" 
-	data-blapy-container-name="MenuExampleWithInitializedWithJSScript" 
+	data-blapy-container="true"
+	data-blapy-container-name="MenuExampleWithInitializedWithJSScript"
 	data-blapy-update="json"
 >
 	[
@@ -696,19 +750,19 @@ The result will be processed as:
 
 ```
 <blapyScriptJS>
-        	if (!"") 
+        	if (!"")
             	jQuery('#MenuExampleWithInitializedWithJSScript').append('<li class=""><a href="#">Action</a></li>');
 </blapyScriptJS>
 <blapyScriptJS>
-        	if (!"1") 
+        	if (!"1")
             	jQuery('#MenuExampleWithInitializedWithJSScript').append('<li class=""><a href="#">Action Not Shown</a></li>');
 </blapyScriptJS>
 <blapyScriptJS>
-        	if (!"1") 
+        	if (!"1")
             	jQuery('#MenuExampleWithInitializedWithJSScript').append('<li class=""><a href="#">Another action</a></li>');
 </blapyScriptJS>
 <blapyScriptJS>
-        	if (!"") 
+        	if (!"")
             	jQuery('#MenuExampleWithInitializedWithJSScript').append('<li class="myClass"><a href="#">Something else here</a></li>');
 </blapyScriptJS>
 ```     
@@ -717,8 +771,8 @@ and so, giving the following processed DOM:
 
 ```     
 <ul id="MenuExampleWithInitializedWithJSScript"
-	data-blapy-container="true" 
-	data-blapy-container-name="MenuExampleWithInitializedWithJSScript" 
+	data-blapy-container="true"
+	data-blapy-container-name="MenuExampleWithInitializedWithJSScript"
 	data-blapy-update="json"
 >     
 	<li class=""><a href="#">Action</a></li>
@@ -733,8 +787,8 @@ You just defined an array the way you would do in javascript with your json obje
 
 ```html
 	<div  
-		data-blapy-container="true" 
-		data-blapy-container-name="resultFormJson" 
+		data-blapy-container="true"
+		data-blapy-container-name="resultFormJson"
 		data-blapy-container-content="resultFormJson"
 		data-blapy-update="json"
 	>
@@ -770,14 +824,14 @@ That's it! When the blapy link will call your json content, all your blapy block
 **HTML File**
 
 ```html
-<a href="myJsonDataFile.json" 
-	data-blapy-link="true" 
-	data-blapy-embedding-blockid="aBlapyBlockToUpdate" 
+<a href="myJsonDataFile.json"
+	data-blapy-link="true"
+	data-blapy-embedding-blockid="aBlapyBlockToUpdate"
 			>Click here to update my "aBlapyBlockToUpdate" to update
 </a>
 <div  
-		data-blapy-container="true" 
-		data-blapy-container-name="aBlapyBlockToUpdate" 
+		data-blapy-container="true"
+		data-blapy-container-name="aBlapyBlockToUpdate"
 		data-blapy-update="json"
 >
 This is ${jsonContent}<br>
@@ -831,7 +885,7 @@ The following blapy block definitions are the same:
 [
 	{ 	"blapy-container-name":"fnameOptions",
 		"blapy-container-content":"fnameOptionsNew",
-		"blapy-data": 
+		"blapy-data":
 		[
 			{"firstname": "John","lastname": "Doe","selected":"false"},
 			{"firstname": "Bob","lastname": "Dylan","selected":"false"},
@@ -858,9 +912,9 @@ You have two attributes for Blapy blocks named "data-blapy-href " and "data-blap
 
 This example will update the block every second (1000ms) from index.php:
 ```html
-        <div    data-blapy-container="true" 
-                        data-blapy-container-name="dateContainer" 
-                        data-blapy-container-content="aContent_<?php echo uniqid();?>" 
+        <div    data-blapy-container="true"
+                        data-blapy-container-name="dateContainer"
+                        data-blapy-container-content="aContent_<?php echo uniqid();?>"
                         data-blapy-href = "index.php"
                         data-blapy-updateblock-time = "1000"
                 >
@@ -885,7 +939,7 @@ Use the events "Blapy_beforePageLoad" and "Blapy_afterPageChange" in order to ac
 ## What about the id sent in the returned blapy blocks...
 Generally, the new block will replace the old one, and so, the id will follow... and that's mainly ok...
 
-Sometime, if there are several blocks with the same data-blapy-container-name in order to update several blocks with the same info, 
+Sometime, if there are several blocks with the same data-blapy-container-name in order to update several blocks with the same info,
 it could be a problem that several new blocks get the same id after processing...
 
 You can give **no id** on the new sent blocks, this way the system will set the id of the old block to change to the new one...
@@ -896,9 +950,9 @@ You can give **no id** on the new sent blocks, this way the system will set the 
 * Did you verify that your external block has a different **data-blapy-container-content** content than the current one? If not, the content is not updated as it is considered to be the same... The content of **data-blapy-container-content** may be any name. You can use the current time or a unique id to set the name as in this example:
 
 ```html
-<div    data-blapy-container="true" 
-                        data-blapy-container-name="dateContainer" 
-                        data-blapy-container-content="aContent_<?php echo uniqid();?>" 
+<div    data-blapy-container="true"
+                        data-blapy-container-name="dateContainer"
+                        data-blapy-container-content="aContent_<?php echo uniqid();?>"
                 >
                     <b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
         </div>
@@ -907,32 +961,32 @@ You can give **no id** on the new sent blocks, this way the system will set the 
 * Maybe, the code of your external block is not a valid HTML code. For instance, if you use tbody as a blapy block, don't set it alone, but embed it within a table tag.
 
 ## Clicking to a blapy link generates several ajax calls though it should generate only a unique call...
-* Verify your html return of the first ajax call. For instance, ```<img src="" alt="">``` will generate a second ajax call to index.html... 
+* Verify your html return of the first ajax call. For instance, ```<img src="" alt="">``` will generate a second ajax call to index.html...
 
 ## When routing is activated with Sammy, My URL does not work any more...
 * It's generally a problem linked to base URL. YOu can fix it by setting a ```<base>```  html tag in your html head part:
 
 ```html
 	<base href="/demos/todomvc/" target="_blank">
-``` 
+```
 ## How to automate that every A / Form tags are "blapy-link"?
 Blapy expects that you define the A and Form tags as blapy links if you want them to be handled by blapy.
 
 Hereafter, you can add this little script to automate that every A / Form tags become "blapy-link=true":
 
 ```javascript
-// every new page load, will assure that every new links will have the "blapy-link" attribute 
+// every new page load, will assure that every new links will have the "blapy-link" attribute
 $(document).on( "Blapy_PageReady","body", function(event,anError) {
-		$('#[[+BlapyApplicationId]]').find('a,form').attr('data-blapy-link','true'); 
+		$('#[[+BlapyApplicationId]]').find('a,form').attr('data-blapy-link','true');
 		var myBlapy = $('#<You Blapy DOM Object>').getFSM();//get the FSM working behind the scene for blapy
 		myBlapy[0].opts.theBlapy.setBlapyUrl(); // call the function that will make blapy handle the url links
 
-}); 
+});
 ```
 
 Once in place, every url links will be considered as Blapy Links...
 
 
 # Contact
-If you have any ideas, feedback, requests or bug reports, you can reach me at github@intersel.org, 
+If you have any ideas, feedback, requests or bug reports, you can reach me at github@intersel.org,
 or via my website: http://www.intersel.fr
