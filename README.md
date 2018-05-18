@@ -506,7 +506,8 @@ $('#<id of the blapy application tag>').trigger('postData',{aUrl:<aURL to call>,
   * 'post' (default)
   * 'put'
   * 'delete'
-* <any variable name to send>
+* **embeddingBlockId** (optional): a block container id
+* any property/value to send to the server
 
 ### Example
 
@@ -526,14 +527,15 @@ $('#<id of the blapy application tag>').trigger('updateBlock',{html:<a blapy con
 
 * **html**
   * any blapy content (blapy blocks, json...) as it would have been returned from a Url
-* **action** (optional)
-  * **'update'** (default): update the Blapy blocks from the URL
-* **embeddingBlockId** (optional): a block container id
+* **params**:
+  * **action** (optional)
+    * **'update'** (default): update the Blapy blocks from the URL
+  * **embeddingBlockId** (optional): a block container id
 
 ### Example
 
 ```javascript
-$('#myBlapy').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action:'update'}})
+$('#myBlapy').trigger('updateBlock',{html:"[{name:"John Doe"}]",params:{action:'update',embeddingBlockId:'myBlapyBlock'}})
 ```
 
 
