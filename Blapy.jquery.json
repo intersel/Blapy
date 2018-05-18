@@ -37,6 +37,6 @@
     "dotimeout": ">= 1.0",
     "sammy": ">= 1.0",
     "json2html": ">= 1.0"
- 	"jquery.appear": ">=0.3.6"    
- }
+ 	  "jquery.appear": ">=0.3.6"    
+  }
 }
