@@ -503,9 +503,9 @@ $('#<id of the blapy application tag>').trigger('loadUrl',{aUrl:<aURL to call>,p
 
 ### params
 
-* action (optional)
- * 'update' (default): update the Blapy blocks from the URL
-* embeddingBlockId(optional): a block container id
+* **action** (optional)
+  * **'update'** (default): update the Blapy blocks from the URL
+* **embeddingBlockId** (optional): a block container id
 
 ### Example
 
@@ -521,18 +521,40 @@ $('#<id of the blapy application tag>').trigger('postData',{aUrl:<aURL to call>,
 
 ### params
 
-* action (option)
- * 'update' (default) : update the Blapy blocks from the URL
-* method (option)
- * 'post' (default)
- * 'put'
- * 'delete'
+* **action** (option)
+  * **'update'** (default) : update the Blapy blocks from the URL
+* **method** (option)
+  * 'post' (default)
+  * 'put'
+  * 'delete'
 * <any variable name to send>
 
 ### Example
 
 ```javascript
 $("#myBlapy").trigger('postData',{aUrl:"testForm.php",params:{fname:'Emmanuel',lname:'Podvin'}})
+```
+
+## "updateBlock" event
+
+This event allows you to call Blapy to directly update a Blapy block.
+
+```javascript
+$('#<id of the blapy application tag>').trigger('updateBlock',{html:<a blapy content>,params:{action:<anAction>,embeddingBlockId:<a Blapy Block Id>}})
+```
+
+### params
+
+* **html**
+  * any blapy content (blapy blocks, json...) as it would have been returned from a Url
+* **action** (optional)
+  * **'update'** (default): update the Blapy blocks from the URL
+* **embeddingBlockId** (optional): a block container id
+
+### Example
+
+```javascript
+$('#myBlapy').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action:'update'}})
 ```
 
 
@@ -563,7 +585,7 @@ Have a look in the Blapy_AnimationPlugins.js and add your new functions in it in
 To work properly, you need to include the following javascript libraries:
 
 * jQuery (>= 1.10)
- * `<script type="text/javascript" src="extlib/jquery-1.10.2.min.js"></script>`
+ * `<script type="text/javascript" src="extlib/jquery-3.2.0.min.js"></script>`
 * [iFSM by intersel](https://github.com/intersel/iFSM/)
  * this library manages finite state machines and needs these libraries:
   * **doTimeout** by ["Cowboy" Ben Alman](http://benalman.com/projects/jquery-dotimeout-plugin/)
