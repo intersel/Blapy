@@ -8,6 +8,10 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2018/05/26 - E.Podvin - V1.6.1 -
+ *    - updateBlock accepts json object or json string as html input
+ *    - add xmp tags support to escape html in a template definition that could generate errors if not escaped
+ *    - fixes on updateBlock when errors were logged
  * - 2018/05/18 - E.Podvin - V1.6.0 - add the loading/updating of a blapy block from a local call to blapy. cf. new "updateBlock" event
  * - 2017/03/20 - E.Podvin - V1.5.4 - fix on key enter on a field that did not send any info from the submit object to the request
  * - 2016/12/20 - E.Podvin - V1.5.3 - fix https://github.com/intersel/Blapy/issues/4 - form should return the value of button/input of submit type
@@ -270,6 +274,7 @@
    */
   theBlapy.prototype.embedHtmlPage = function(aHtmlSource, aBlapyBlockIdName) {
     htmlBlapyBlock = this.myUIObject.find('#' + aBlapyBlockIdName);
+// @TODO should be a copy of the htmlBlapyBlock...??
     aHtmlSource = $(htmlBlapyBlock[0].outerHTML).html(aHtmlSource);
     aHtmlSource.attr('data-blapy-container-content', aHtmlSource.attr('data-blapy-container-content') + '-' + $.now());
     aHtmlSource.attr('id', ''); //remove id in order that it takes the one of the block to change
@@ -474,6 +479,9 @@
     {
       var htmlTplContent = myContainer.html();
 
+      //remove any xmp tags (used to escape html in a template definition that could generate errors if not escaped)
+      htmlTplContent = htmlTplContent.replace(/(\r\n|\n|\r)?<\/?xmp>(\r\n|\n|\r)?/gi, '');
+
       htmlTplContent = htmlTplContent.replace(/blapyScriptJS/gi, 'script');
 
       //if no template defined within the block
@@ -588,6 +596,10 @@
             crossDomain: true,
             data: "blapycall=1&blapyaction=" + params.action + "&blapyobjectid=" + aObjectId,
             success: function(data, textStatus, jqXHR) {
+              if (typeof (data) == "object") //then it's a json object
+              {
+                  data = JSON.stringify(data);
+              }
               if (aembeddingBlockId) data = aFSM.opts.theBlapy.embedHtmlPage(data, aembeddingBlockId);
               aFSM.trigger('pageLoaded', {
                 htmlPage: data,
@@ -633,6 +645,10 @@
             url: aUrl,
             data: params,
             success: function(data, textStatus, jqXHR) {
+              if (typeof (data) == "object") //then it's a json object
+              {
+                  data = JSON.stringify(data);
+              }
               if (aembeddingBlockId) data = aFSM.opts.theBlapy.embedHtmlPage(data, aembeddingBlockId);
               aFSM.trigger('pageLoaded', {
                 htmlPage: data,
@@ -651,16 +667,24 @@
         init_function: function(p, e, data) {
           if (this.opts.beforePageLoad) this.opts.beforePageLoad(data);
           this.myUIObject.trigger('Blapy_beforePageLoad', data);
+          if (!data || !data.html)
+          {
+            this._log('updateBlock: no html property found');
+            this.trigger('errorOnLoadingPage', 'updateBlock: no html property found');
+          }
         },
         out_function: function(p, e, data) {
-          if (!data.html)
-          {
-            myFSM._log('updateBlock: no html property found');
-            return;
-          }
+          if (!data) return;
           if (!data.params) data.params="";
           var aembeddingBlockId = data.params.embeddingBlockId;
+
+          if (typeof (data.html) == "object") //then it's a json object
+          {
+              data.html = JSON.stringify(data.html);
+          }
+
           if (aembeddingBlockId) data.html = this.opts.theBlapy.embedHtmlPage(data.html, aembeddingBlockId);
+
           this.trigger('pageLoaded', {
             htmlPage: data.html,
             params: data.params
@@ -684,20 +708,30 @@
           try {
             tmpPC = eval(pageContent);
             pageContent = tmpPC;
+
+            //if the received pageContent is pure json then build the equivalent in blapy block
+            if (pageContent instanceof Array) {
+              var newContent = $("");
+              var tmpRes = "";
+              for (i = 0; i < pageContent.length; i++) {
+                tmpRes = this.opts.theBlapy.createBlapyBlock(pageContent[i]);
+                newContent = newContent.add(tmpRes);
+              };
+              pageContent = newContent;
+            }
+            else if (typeof (pageContent) == "object") //then it's a json object? curious... should have been stringify previously
+            {
+                pageContent = JSON.stringify(pageContent);
+            }
+            else
+            {
+              // don't know what to do...? not normal to be here...
+              myFSM._log('downloaded content is not html neither json object, that\'s curious... ' + pageContent + ' - ' + containerName, 1);
+            }
+
           } catch (e) {
             //not json input... but html...
             //myFSM._log('downloaded content can not be evaluated by eval: '+pageContent,1);
-          }
-
-          //if the received pageContent is pure json then build the equivalent in blapy block
-          if (pageContent instanceof Array) {
-            var newContent = $("");
-            var tmpRes = "";
-            for (i = 0; i < pageContent.length; i++) {
-              tmpRes = this.opts.theBlapy.createBlapyBlock(pageContent[i]);
-              newContent = newContent.add(tmpRes);
-            };
-            pageContent = newContent;
           }
 
           switch (params['action']) {

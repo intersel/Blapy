@@ -11,27 +11,28 @@ body {
 }
 
 
-p { 
-	margin-top: 0; 
+p {
+	margin-top: 0;
 	text-align: justify;
 	}
 pre {
 	background-color:#E9E9E9;
 	overflow-x:auto;
+	white-space: pre-wrap;
 	}
 
-a:link { 
-	font-weight: bold; 
-	text-decoration: none;  
+a:link {
+	font-weight: bold;
+	text-decoration: none;
 	color: #8675AA;
 	}
-a:visited { 
-	font-weight: bold; 
-	text-decoration: none; 
+a:visited {
+	font-weight: bold;
+	text-decoration: none;
 	color: #9785BF;
 	}
-a:hover, a:focus, a:active { 
-	text-decoration: underline; 
+a:hover, a:focus, a:active {
+	text-decoration: underline;
 	color: #B7A5DF;
 	}
 abbr {

@@ -11,44 +11,45 @@ body {
 }
 
 
-p { 
-	margin-top: 0; 
+p {
+	margin-top: 0;
 	text-align: justify;
 	}
 pre {
 	background-color:#E9E9E9;
 	overflow-x:auto;
+	white-space: pre-wrap;
 	}
 
 .anchor{
 	cursor:pointer;
 }
-.anchor, a:link { 
-	font-weight: bold; 
-	text-decoration: none;  
+.anchor, a:link {
+	font-weight: bold;
+	text-decoration: none;
 	color: #8675AA;
 	}
-a:visited { 
-	font-weight: bold; 
-	text-decoration: none; 
+a:visited {
+	font-weight: bold;
+	text-decoration: none;
 	color: #9785BF;
 	}
-a:hover, a:focus, a:active { 
-	text-decoration: underline; 
+a:hover, a:focus, a:active {
+	text-decoration: underline;
 	color: #B7A5DF;
 	}
 abbr {
 	border-bottom: none;
 	}
-	
-table 
+
+table
 {
 	background-color: #baaea3;
 	text-align: left;
 	border-spacing: 0px;
 }
 
-table a, table, tbody, tfoot, tr, th, td 
+table a, table, tbody, tfoot, tr, th, td
 {
    font-family: Arial;
 	line-height: 14px;

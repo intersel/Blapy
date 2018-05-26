@@ -526,7 +526,7 @@ $('#<id of the blapy application tag>').trigger('updateBlock',{html:<a blapy con
 ### params
 
 * **html**
-  * any blapy content (blapy blocks, json...) as it would have been returned from a Url
+  * any blapy content (blapy blocks, json string or objects, ...)
 * **params**:
   * **action** (optional)
     * **'update'** (default): update the Blapy blocks from the URL

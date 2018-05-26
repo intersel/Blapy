@@ -1,13 +1,27 @@
 <?php
-	if (empty($_POST['firstname'])) $_POST['firstname'] = '[no first name given]'; 
-	if (empty($_POST['lastname'])) $_POST['lastname'] = '[no last name given]'; 
-	?>
-<div id="results" 
-	data-blapy-container="true" 
-	data-blapy-container-name="results" 
+	if (empty($_REQUEST['firstname'])) $_REQUEST['firstname'] = '[no first name given]';
+	if (empty($_REQUEST['lastname'])) $_REQUEST['lastname'] = '[no last name given]';
+	$_REQUEST['pureJson'] = (empty($_REQUEST['pureJson']))? 0:1;
+
+	$output = '{"firstname":"'.$_REQUEST['firstname'].'","lastname":"'.$_REQUEST['lastname'].'"}';
+
+if ($_REQUEST['pureJson'])
+{
+	header('Content-type:application/json;charset=utf-8');
+	echo $output;
+}
+else
+{
+?>
+<div id="results"
+	data-blapy-container="true"
+	data-blapy-container-name="results"
 	data-blapy-container-content="resultsnew"
 >
 [
-	{firstname: "<?php echo $_POST['firstname'];?>",lastname: "<?php echo $_POST['lastname'];?>"},
+	<?php echo $output;?>
 ]
-</div>	
+</div>
+<?php
+}//end else
+?>

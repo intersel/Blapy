@@ -13,18 +13,21 @@
 	<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>
 </head>
 <body id="myBlapy">
-	<h1>Blapy demos using json data</h1>
-	<p>This demo uses blapy blocks to receive json and to update blocks</p>
-	<p>It updates the "results" block with standard Blapy blocks with json inside</p>
+	<h1>Blapy demos using json data (2)</h1>
+	<p>Form calls pure json and "results" block is updated with the "data-blapy-embedding-blockid" feature</p>
 	<p>Other demos:
 		<ul>
-			<li><a href="index-jsonfromform.html">Form calls pure json and "results" block is updated with the "data-blapy-embedding-blockid" feature</a></li>
+			<li><a href="index.html">Update "results" block with standard Blapy blocks with json inside</a></li>
 			<li><a href="index-purejson.html">Update of "results" block using "updateBlock" blapy event</a></li>
 		</ul>
 	</p>
 	<h1>Select values with the json feature of Blapy </h1>
 	<p>Fill the following form:</p>
-	<form id="myForm" action="testForm.php" data-blapy-link="true" method="POST">
+	<form id="myForm"
+				action="testForm.php?pureJson=1"
+				data-blapy-link="true"
+				method="POST"
+				data-blapy-embedding-blockid="results">
 		Choose a firstname:
 		<span
 			data-blapy-container="true"
