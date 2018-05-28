@@ -1,4 +1,4 @@
-//Copyright (c) 2013 Crystalline Technologies
+//Copyright (c) 2018 Crystalline Technologies
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'),
 //  to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -109,14 +109,20 @@ var json2html = {
 			}
 
 		} else if(typeof transform === 'object') {
+            
+            var _element = '<>';
+            
+            //Add legacy support for tag
+            if(transform[_element] === undefined) _element = 'tag';
+            
+			//Check to see if we have a valid element name
+			if( transform[_element] !== undefined ) {
 
-			//Get the tag element of this transform
-			if( transform.tag !== undefined ) {
-
-				var tag = json2html._getValue(obj,transform,'tag',index);
-
+                //Get the element name (this can be tokenized)
+				var name = json2html._getValue(obj,transform,_element,index);
+                
 				//Create a new element
-				element.html += '<' + tag;
+				element.html += '<' + name;
 
 				//Create a new object for the children
 				var children = {'events':[],'html':''};
@@ -128,38 +134,110 @@ var json2html = {
 				for (var key in transform) {
 
 					switch(key) {
+						
+						//DEPRECATED (use <> instead)
 						case 'tag':
-							//Do nothing as we have already created the element from the tag
+
+						//HTML element to render
+						case '<>':
+							//Do nothing as we have already created the element
 						break;
-
-						case 'children':
-							//Add the children
-							if(json2html._isArray(transform.children)) {
-
-								//Apply the transform to the children
-								children = json2html._append(children,json2html._apply(obj, transform.children, index, options));
-							} else if(typeof transform.children === 'function') {
+						
+						//Encode as text
+						case 'text':
+							//Get the transform value associated with this key
+							var _transform = transform[key];
+							
+							//Determine what kind of object this is
+							// array => NOT SUPPORTED
+							// other => text
+							if(json2html._isArray(_transform)) {
+                                //NOT Supported
+							} else if(typeof _transform === 'function') {
 								
 								//Get the result from the function
-								var temp = transform.children.call(obj, obj, index);
+								var temp = _transform.call(obj, obj, index);
+								
+								//Don't allow arrays as return objects from functions
+    							if(!json2html._isArray(temp)) {
 
-								//Make sure we have an object result with the props
-								// html (string), events (array)
-								// OR a string (then just append it to the children
-								if(typeof temp === 'object') {
-									//make sure this object is a valid json2html response object
-									if(temp.html !== undefined && temp.events !== undefined) children = json2html._append(children,temp);
-								} else if(typeof temp === 'string') {
-
-									//append the result directly to the html of the children
-									children.html += temp;
-								}
+    								//Determine what type of object was returned
+    								switch(typeof temp){
+                                    
+    									//Not supported for text
+    									case 'function':
+    									case 'undefined':
+    									case 'object':
+    									break; 
+    									
+    									//Append as text
+    									// string, number, boolean
+    									default:
+    										//Insure we encode as text first
+    										children.html += json2html.toText(temp);
+    									break;
+    								}
+    							}
+							} else {
+								
+								//Get the encoded text associated with this element
+								html = json2html.toText( json2html._getValue(obj,transform,key,index) );
 							}
 						break;
 
+						//DEPRECATED (use HTML instead)
+						case 'children':
+
+						//Encode as HTML
+						// accepts Array of children, functions, string, number, boolean
 						case 'html':
-							//Create the html attribute for this element
-							html = json2html._getValue(obj,transform,'html',index);
+
+							//Get the transform value associated with this key
+							// added as key could be children or html
+							var _transform = transform[key];
+
+							//Determine what kind of object this is
+							// array & function => children
+							// other => html
+							if(json2html._isArray(_transform)) {
+                                
+								//Apply the transform to the children
+								children = json2html._append(children,json2html._apply(obj, _transform, index, options));
+							} else if(typeof _transform === 'function') {
+								
+								//Get the result from the function
+								var temp = _transform.call(obj, obj, index);
+                                
+                                //Don't allow arrays as return objects from functions
+                                if(!json2html._isArray(temp)) {
+                                    
+    								//Determine what type of object was returned
+    								switch(typeof temp){
+    
+    									//Only returned by json2html.transform or $.json2html calls
+    									case 'object':
+    										//make sure this object is a valid json2html response object
+    										// we ignore all other objects (since we don't know how to represent them in html)
+    										if(temp.html !== undefined && temp.events !== undefined) children = json2html._append(children,temp);
+    									break;
+    									
+    									//Not supported
+    									case 'function':
+    									case 'undefined':
+    									break; 
+    
+    									//Append to html
+    									// string, number, boolean
+    									default:
+    										children.html += temp;
+    									break;
+    								}
+                                }
+							} else {
+								
+								//Get the HTML associated with this element
+								html = json2html._getValue(obj,transform,key,index);
+							}
 						break;
 
 						default:
@@ -207,15 +285,15 @@ var json2html = {
                                     if(typeof val === 'string') out = '"' + val.replace(/"/g, '&quot;') + '"';
                                     else out = val;
                                     
-                                    //creat the name value pair
-								    element.html += ' ' + key + '=' + out;
+                                    //create the name value pair
+                                    element.html += ' ' + key + '=' + out;
                                 }
 							}
 						break;
 					}
 				}
-
-				//close the opening tag
+			
+				//close the opening element
 				element.html += '>';
 				
 				//add the innerHTML (if we have any)
@@ -224,8 +302,8 @@ var json2html = {
 				//add the children (if we have any)
 				element = json2html._append(element,children);
 
-				//add the closing tag
-				element.html += '</' + tag + '>';
+				//add the closing element
+				element.html += '</' + name + '>';
 			}
 		}
 		
@@ -291,6 +369,17 @@ var json2html = {
 		}
 
 		return(out);
+	},
+
+	//Encode the html to text
+	'toText':function(html) {
+		return html
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/\"/g, '&quot;')
+			.replace(/\'/g, '&#39;')
+			.replace(/\//g, '&#x2F;');
 	},
 	
 	//Tokenizer
