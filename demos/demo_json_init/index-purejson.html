@@ -32,9 +32,7 @@
 			data-blapy-update="json"
 			data-blapy-template-wrap='<select name="firstname" onChange="getJson();">'
 		>
-		<xmp>
 			<option value="${firstname}">${firstname}</option>
-		</xmp>
 		</span>
 		<br>
 		Choose a lastname:
@@ -45,7 +43,7 @@
 			data-blapy-update="json"
 			data-blapy-template-init="optionvalues.json"
 		>
-			<input name="lastname" type="radio" value="${lastname}" ${selected} onChange="getJson();">${lastname}</input>
+			<img src="img/${lastname}.png" width="15px"><input name="lastname" type="radio" value="${lastname}" ${selected} onChange="getJson();">${lastname}</input>
 		</span>
 	</form>
 

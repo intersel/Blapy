@@ -29,6 +29,43 @@ All the demos found in the demos directory can be tested there : [http://www.int
 
 We invite you to have a deep look in the code source of the demos as they use quite every possible features and configurations available in Blapy as they are used to test the library.
 
+# How to install
+
+As it is a simple jQuery plugin... copy all the provided Blapy directories somewhere in your project, then include the needed javascript libraries in your code then call the Blapy function... and you're done...
+
+As an "Hello world" example:
+
+```html
+<!DOCTYPE html>
+<!-- To run the current sample code in your own environment, copy this to an html page. -->
+<html>
+<head>
+  <!-- load of the external libraries needed by Blapy (provided in the package) -->
+  <script type="text/javascript" src="<myrootdir>/extlib/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript" src="<myrootdir>/extlib/sammy/lib/sammy.js"></script>
+  <script type="text/javascript" src="<myrootdir>/extlib/iFSM/extlib/jquery.dotimeout.js"	></script>
+  <script type="text/javascript" src="<myrootdir>/extlib/iFSM/extlib/jquery.attrchange.js"></script>
+  <script type="text/javascript" src="<myrootdir>/extlib/iFSM/iFSM.js"></script>
+  <!-- load of the Blapy script -->
+  <script type="text/javascript" src="<myrootdir>/Blapy.js"></script>
+</head>
+<!-- start Blapy -->
+<body id="myBlapy">
+  <div  id="mainContainer"
+        data-blapy-container="true"
+        data-blapy-container-name="mainContainer"
+        data-blapy-container-content="helloWorld Test1">
+  	Hello World...
+  </div>
+  <script>
+  	$( document ).ready(function() {
+  		$('#myBlapy').Blapy();
+  	});
+  </script>
+</body>
+</html>
+```
+
 Table of Contents
 =================
 
@@ -38,8 +75,6 @@ Table of Contents
   * [Why would I use that?!](#why-would-i-use-that)
   * [How does it work?](#how-does-it-work)
   * [How to configure my pages to become pages of a web application?](#how-to-configure-my-pages-to-become-pages-of-a-web-application)
-    * [Identify the common blocks between your different pages](#identify-the-common-blocks-between-your-different-pages)
-    * [Identify the links that update contents](#identify-the-links-that-update-contents)
   * [General algorithm of Blapy](#general-algorithm-of-blapy)
   * [.Blapy(options)](#blapyoptions)
   * [Blapy Blocks](#blapy-blocks)
@@ -156,7 +191,7 @@ Well, just add at the end of your files this little script :
 
 ```javascript
 <!-- load of the external libraries needed by Blapy (provided in the package) -->
-<script type="text/javascript" src="extlib/jquery-2.1.4.min.js"				></script>
+<script type="text/javascript" src="extlib/jquery-3.3.1.min.js"				></script>
 <script type="text/javascript" src="extlib/sammy/lib/sammy.js"				></script>
 <script type="text/javascript" src="extlib/iFSM/extlib/jquery.dotimeout.js"	></script>
 <script type="text/javascript" src="extlib/iFSM/extlib/jquery.attrchange.js"></script>
@@ -566,7 +601,7 @@ Have a look in the Blapy_AnimationPlugins.js and add your new functions in it in
 To work properly, you need to include the following javascript libraries:
 
 * jQuery (>= 1.10)
-  * `<script type="text/javascript" src="extlib/jquery-3.2.0.min.js"></script>`
+  * `<script type="text/javascript" src="extlib/jquery-3.3.1.min.js"></script>`
 * [iFSM by intersel](https://github.com/intersel/iFSM/)
   * this library manages finite state machines and needs these libraries:
     * **doTimeout** by ["Cowboy" Ben Alman](http://benalman.com/projects/jquery-dotimeout-plugin/)
@@ -988,6 +1023,11 @@ $(document).on( "Blapy_PageReady","body", function(event,anError) {
 ```
 
 Once in place, every url links will be considered as Blapy Links...
+
+## When my template contains "img" tag with the name file defined by a placeholder, I've got a 404 error
+As the file is parsed as HTML, img tag will try to load the image that does not exist as the image name is not the placeholder name.
+
+To fix this, simply wrap your html template with the tag "xmp" which will neutralize html analysis.
 
 
 # Contact
