@@ -8,6 +8,7 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2018/05/28 - E.Podvin - V1.6.2 - send container name to server when block requests an update with data-blapy-updateblock-time+compliant to jQuery 3.3.1
  * - 2018/05/26 - E.Podvin - V1.6.1 -
  *    - updateBlock accepts json object or json string as html input
  *    - add xmp tags support to escape html in a template definition that could generate errors if not escaped
