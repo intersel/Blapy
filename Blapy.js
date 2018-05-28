@@ -274,7 +274,6 @@
    */
   theBlapy.prototype.embedHtmlPage = function(aHtmlSource, aBlapyBlockIdName) {
     htmlBlapyBlock = this.myUIObject.find('#' + aBlapyBlockIdName);
-// @TODO should be a copy of the htmlBlapyBlock...??
     aHtmlSource = $(htmlBlapyBlock[0].outerHTML).html(aHtmlSource);
     aHtmlSource.attr('data-blapy-container-content', aHtmlSource.attr('data-blapy-container-content') + '-' + $.now());
     aHtmlSource.attr('id', ''); //remove id in order that it takes the one of the block to change
@@ -703,13 +702,13 @@
           var myFSM = this;
           var tmpPC = null;
 
-          //transform any json text in json object
-          //todo: optimize the json data processing as we eval it then stringify it (createBlapyBlock) then reeval... :(
+          // transform any json text in json object
+          // @TODO : optimize the json data processing as we eval it then stringify it (createBlapyBlock) then reeval... :(
           try {
-            tmpPC = eval(pageContent);
+            tmpPC = JSON.parse(pageContent);
             pageContent = tmpPC;
 
-            //if the received pageContent is pure json then build the equivalent in blapy block
+            // if the received pageContent is pure json then build the equivalent in blapy block
             if (pageContent instanceof Array) {
               var newContent = $("");
               var tmpRes = "";
