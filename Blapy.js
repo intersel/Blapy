@@ -869,7 +869,7 @@
                   }
 
                   try {
-                    eval("jsonData=" + jsonData);
+                    JSON.parse(jsonData);
                   } catch (e) {
                     myFSM._log('downloaded content can not be evaluated, so is not json data: ' + jsonData, 1);
                     return;
