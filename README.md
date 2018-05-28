@@ -45,6 +45,7 @@ As an "Hello world" example:
   <script type="text/javascript" src="<myrootdir>/extlib/sammy/lib/sammy.js"></script>
   <script type="text/javascript" src="<myrootdir>/extlib/iFSM/extlib/jquery.dotimeout.js"	></script>
   <script type="text/javascript" src="<myrootdir>/extlib/iFSM/extlib/jquery.attrchange.js"></script>
+  <script type="text/javascript" src="<myrootdir>/extlib/json2html/json2html.js"></script>  
   <script type="text/javascript" src="<myrootdir>/extlib/iFSM/iFSM.js"></script>
   <!-- load of the Blapy script -->
   <script type="text/javascript" src="<myrootdir>/Blapy.js"></script>
