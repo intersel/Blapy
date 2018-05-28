@@ -31,13 +31,14 @@
  * - 2017/10/14 - E.Podvin - 1.7.3 - small fix in case event is triggered with multiple parameters
  * - 2017/10/17 - E.POdvin - 1.7.4 - change log level - by default, displays the state&event processing step in the console
  * - 2018/03/08 - E.POdvin - 1.7.5 - transfer data transmitted by trigger to enterEvent and exitEvent
+ * - 2018/03/13 - E.Podvin - 1.7.6 - add some controls when starting the state machines: can't start if no id on the object or if still exists
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2013-2018
  * @fileoverview : iFSM : a finite state machine with jQuery
  * @see {@link https://github.com/intersel/iFSM}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.7.5
+ * @version : 1.7.6
  * -----------------------------------------------------------------------------------------
  */
 
