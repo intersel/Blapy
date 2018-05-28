@@ -38,3 +38,8 @@ a:hover, a:focus, a:active {
 abbr {
 	border-bottom: none;
 	}
+#results {
+	font-weight: bold;
+	border: solid 1px green;
+	border-radius: 5px;
+}

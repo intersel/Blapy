@@ -20,52 +20,53 @@ $firstnameSearch = empty($_REQUEST['firstname'])? '':$_REQUEST['firstname'];
 if (empty($firstnameSearch) && empty($lastnameSearch)) $action = 'list';
 
 $outputData = '
-<div id="results" 
-	data-blapy-container="true" 
-	data-blapy-container-name="results" 
+<div id="results"
+	data-blapy-container="true"
+	data-blapy-container-name="results"
 	data-blapy-container-content="resultsnew"
 >
 [
 ';
 
-
 switch ($action)
 {
 	case 'search':
-		if (!empty($firstnameSearch) || !empty($lastnameSearch)) 
+		if (!empty($firstnameSearch) || !empty($lastnameSearch))
 		foreach($values as $aData)
 		{
-			if ($lastnameSearch && $firstnameSearch) 
+			if ($lastnameSearch && $firstnameSearch)
 			{
 				$matches1=preg_match("/$firstnameSearch/i", $aData['firstname']);
 				$matches2=preg_match("/$lastnameSearch/i", $aData['lastname']);
-				if ($matches1&& $matches2)  
-					$outputData .= '{firstname: "'.$aData['firstname'].'",lastname: "'.$aData['lastname'].'"},'."\n";
+				if ($matches1&& $matches2)
+					$outputData .= '{"firstname":"'.$aData['firstname'].'","lastname":"'.$aData['lastname'].'"},'."\n";
 			}
 			else if ($firstnameSearch)
 			{
 				$matches1=preg_match("/$firstnameSearch/i", $aData['firstname']);
-				if ($matches1)  
-					$outputData .= '{firstname: "'.$aData['firstname'].'",lastname: "'.$aData['lastname'].'"},'."\n";
+				if ($matches1)
+					$outputData .= '{"firstname":"'.$aData['firstname'].'","lastname":"'.$aData['lastname'].'"},'."\n";
 			}
 			else if ($lastnameSearch)
 			{
 				$matches2=preg_match("/$lastnameSearch/i", $aData['lastname']);
 				if ($matches2)
-					$outputData .= '{firstname: "'.$aData['firstname'].'",lastname: "'.$aData['lastname'].'"},'."\n";
+					$outputData .= '{"firstname":"'.$aData['firstname'].'","lastname":"'.$aData['lastname'].'"},'."\n";
 			}
-						
+
 		}
 		break;
-		
+
 	case 'list':
 	default:
 			foreach($values as $aData)
 			{
-				$outputData .= '{firstname: "'.$aData['firstname'].'",lastname: "'.$aData['lastname'].'"},'."\n";
+				$outputData .= '{"firstname":"'.$aData['firstname'].'","lastname":"'.$aData['lastname'].'"},'."\n";
 			}
 		break;
 }
+
+$outputData = rtrim($outputData,",\n");//trim ','
 
 $outputData .= '
 ]

@@ -10,7 +10,7 @@
     <meta name="author" content="">
 
 	<base href="<?php echo dirname("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI])").'/' ?>">
-    
+
     <title>SB Admin 2 - Bootstrap Admin Theme Using Blapy :-)</title>
 
     <!-- Bootstrap Core CSS -->
@@ -71,8 +71,8 @@
                         </li>
                      </ul>
                     <ul class="dropdown-menu dropdown-messages" style="margin-top: 42px;"
-                    	data-blapy-container="true" 
-						data-blapy-container-name="messagesList" 
+                    	data-blapy-container="true"
+						data-blapy-container-name="messagesList"
 						data-blapy-container-content="messagesListInit"
 						data-blapy-update="json"
 					>
@@ -105,8 +105,8 @@
                         </li>
                     </ul>
                     <ul class="dropdown-menu dropdown-tasks" style="margin-top: 42px;"
-	                   	data-blapy-container="true" 
-						data-blapy-container-name="tasksList" 
+	                   	data-blapy-container="true"
+						data-blapy-container-name="tasksList"
 						data-blapy-container-content="tasksListInit"
 						data-blapy-update="json"
                     >
@@ -118,11 +118,11 @@
                                         <span class="pull-right text-muted">${completeness}% Complete</span>
                                     </p>
                                     <div class="progress progress-striped active">
-                                        <div 	class="progress-bar progress-bar-${statusTask}" 
-                                        		role="progressbar" 
-                                        		aria-valuenow="${completeness}" 
-                                        		aria-valuemin="0" 
-                                        		aria-valuemax="100" 
+                                        <div 	class="progress-bar progress-bar-${statusTask}"
+                                        		role="progressbar"
+                                        		aria-valuenow="${completeness}"
+                                        		aria-valuemin="0"
+                                        		aria-valuemax="100"
                                         		style="width: ${completeness}%">
                                             <span class="sr-only">${completeness}% Complete (${statusTask})</span>
                                         </div>
@@ -148,8 +148,8 @@
                         </li>
                     </ul>
                     <ul class="dropdown-menu dropdown-alerts"  style="margin-top: 42px;"
-	                   	data-blapy-container="true" 
-						data-blapy-container-name="alertsList" 
+	                   	data-blapy-container="true"
+						data-blapy-container-name="alertsList"
 						data-blapy-container-content="alertsListInit"
 						data-blapy-update="json"
 					>
@@ -171,8 +171,8 @@
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user"
-                    	data-blapy-container="true" 
-						data-blapy-container-name="userFeaturesList" 
+                    	data-blapy-container="true"
+						data-blapy-container-name="userFeaturesList"
 						data-blapy-container-content="userFeaturesListInit"
                     	data-blapy-update="json"
                     >
@@ -189,8 +189,8 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu"
-                                data-blapy-container="true" 
-								data-blapy-container-name="sideMenusList" 
+                                data-blapy-container="true"
+								data-blapy-container-name="sideMenusList"
 								data-blapy-container-content="sideMenusListInit"
 								data-blapy-update="json"
 								>
@@ -221,9 +221,9 @@
                                     <i class="fa fa-comments fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge" 
-					                   	data-blapy-container="true" 
-										data-blapy-container-name="nbNewComments" 
+                                    <div class="huge"
+					                   	data-blapy-container="true"
+										data-blapy-container-name="nbNewComments"
 										data-blapy-container-content="nbNewCommentsVoid"
                                     	></div>
                                     <div>New Comments!</div>
@@ -248,8 +248,8 @@
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge"
-                                    	data-blapy-container="true" 
-										data-blapy-container-name="nbNewTasks" 
+                                    	data-blapy-container="true"
+										data-blapy-container-name="nbNewTasks"
 										data-blapy-container-content="nbNewTasksVoid"
                                     	></div>
                                     <div>New Tasks!</div>
@@ -273,9 +273,9 @@
                                     <i class="fa fa-shopping-cart fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge" 
-										data-blapy-container="true" 
-										data-blapy-container-name="nbNewOrders" 
+                                    <div class="huge"
+										data-blapy-container="true"
+										data-blapy-container-name="nbNewOrders"
 										data-blapy-container-content="nbNewOrdersVoid"
 									></div>
                                     <div>New Orders!</div>
@@ -300,8 +300,8 @@
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge"
-                                    	data-blapy-container="true" 
-										data-blapy-container-name="nbNewTickets" 
+                                    	data-blapy-container="true"
+										data-blapy-container-name="nbNewTickets"
 										data-blapy-container-content="nbNewTicketsVoid"></div>
                                     <div>Support Tickets!</div>
                                 </div>
@@ -330,8 +330,8 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu pull-right" role="menu"
-                                       	data-blapy-container="true" 
-										data-blapy-container-name="areaChart" 
+                                       	data-blapy-container="true"
+										data-blapy-container-name="areaChart"
 										data-blapy-container-content="areaChartVoid"
 										data-blapy-update="json"
                                     >
@@ -358,16 +358,16 @@
                                     </button>
                                     <ul id="barChartExampleMenu"
                                     	class="dropdown-menu pull-right" role="menu"
-                                       	data-blapy-container="true" 
-										data-blapy-container-name="barChartExampleMenu" 
+                                       	data-blapy-container="true"
+										data-blapy-container-name="barChartExampleMenu"
 										data-blapy-container-content="barChartExampleMenuVoid"
 										data-blapy-update="json"
                                     >
                                      <blapyScriptJS>
-	                                    	if (!"${dontdisplay}") 
+	                                    	if (!"${dontdisplay}")
     	                                    	jQuery('#barChartExampleMenu').append('<li class="${class}"><a href="${url}">${action}</a></li>');
                                      </blapyScriptJS>
-                                    	
+
                                     </ul>
                                 </div>
                             </div>
@@ -386,9 +386,9 @@
                                                     <th>Amount</th>
                                                 </tr>
                                             </thead>
-                                            <tbody 
-                                            	data-blapy-container="true" 
-												data-blapy-container-name="barChartExample" 
+                                            <tbody
+                                            	data-blapy-container="true"
+												data-blapy-container-name="barChartExample"
 												data-blapy-container-content="barChartExampleVoid"
 												data-blapy-updateblock-ondisplay="true"
 												data-blapy-href="phpAPI/updateBarChartExample.php"
@@ -416,8 +416,8 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <ul class="timeline"
-                            	data-blapy-container="true" 
-								data-blapy-container-name="timeLine" 
+                            	data-blapy-container="true"
+								data-blapy-container-name="timeLine"
 								data-blapy-container-content="timeLineVoid"
 								data-blapy-template-init="phpAPI/timeLineInit.php"
 								data-blapy-update="json"
@@ -436,7 +436,7 @@
                                         </div>
                                     </div>
                                 </li>
-                            	
+
                             </ul>
                         </div>
                         <!-- /.panel-body -->
@@ -452,8 +452,8 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="list-group"
-                            	data-blapy-container="true" 
-								data-blapy-container-name="NotificationsPanel" 
+                            	data-blapy-container="true"
+								data-blapy-container-name="NotificationsPanel"
 								data-blapy-container-content="NotificationsPanelVoid"
 								data-blapy-template-init="phpAPI/NotificationsPanelInit.json"
 								data-blapy-update="json"
@@ -490,8 +490,8 @@
                                     <i class="fa fa-chevron-down"></i>
                                 </button>
                                 <ul class="dropdown-menu slidedown"
-                            	data-blapy-container="true" 
-								data-blapy-container-name="chatButton" 
+                            	data-blapy-container="true"
+								data-blapy-container-name="chatButton"
 								data-blapy-container-content="chatButtonVoid"
 								data-blapy-template-init="phpAPI/chatButtonInit.json"
 								data-blapy-update="json"
@@ -507,15 +507,17 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <ul class="chat"
-                            	data-blapy-container="true" 
-								data-blapy-container-name="chatTextList" 
+                            	data-blapy-container="true"
+								data-blapy-container-name="chatTextList"
 								data-blapy-container-content="chatTextListVoid"
 								data-blapy-template-init="phpAPI/chatTextListInit.json"
 								data-blapy-update="json"
                             >
                                 <li class="left clearfix">
                                     <span class="chat-img pull-${leftright}">
+																			<xmp>
                                         <img src="${avatarIMG}" alt="User Avatar" class="img-circle" />
+																			</xmp>
                                     </span>
                                     <div class="chat-body clearfix">
                                         <div class="header">
@@ -583,12 +585,12 @@
 		<script type="text/javascript" src="../../../Blapy.js"></script>
 		<script>
 			$( document ).ready(function() {
-		
+
 				//start Blapy
 				$('#myBlapy').Blapy({activeSammy:true,debug:true,LogLevel:1});
 				//init blocks
 				$('#myBlapy').trigger('postData',{aUrl:'phpAPI/initActions.php'});
-		
+
 				//catch errors
 				$( "#myBlapy" ).on( "Blapy_ErrorOnPageChange", function(event,anError) {
 					  alert( 'Blapy error: '+anError );
@@ -597,11 +599,11 @@
 			    $(document).on( "Blapy_afterContentChange","#side-menu", function(event,aBlock) {
 			    	 $('#side-menu').metisMenu();//update behaviour on the left menu bar
 		            });
-								
+
 			});
-			
+
 		</script>
-		
+
 
 
 </body>
