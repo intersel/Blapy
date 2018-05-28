@@ -422,7 +422,7 @@
     $('#' + myBlapy.myUIObjectID + ' [data-blapy-updateblock-time]').each(function() {
       var myContainer = $(this);
       var aUpdateBlockTime = myContainer.attr("data-blapy-updateblock-time");
-      var aUpdateBlockHrefURL = myContainer.attr("data-blapy-href");
+      var aUpdateBlockHrefURL = myContainer.attr("data-blapy-href")+'?blapyContainerName='+myContainer.attr('data-blapy-container-name');
       if (aUpdateBlockTime) {
         myBlapy.intervalsSet[intervalSetId] = setInterval(function() {
           $('#' + myBlapy.myUIObjectID).trigger('loadUrl', {
