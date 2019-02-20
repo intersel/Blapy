@@ -2,6 +2,12 @@
 <!-- To run the current sample code in your own environment, copy this to an html page. -->
 <html id="myBlapy">
 <?php
+/*
+index.php
+
+index.php?file=localfilename.csv
+*/
+
 $defaultTitle = "Email tester";
 include("header.php");
 ?>
@@ -60,7 +66,7 @@ include("header.php");
 		data-blapy-update="json"
 		data-blapy-template-file="resultValues.tpl"
 		data-blapy-template-wrap="<table>"
-		data-blapy-template-init="emailsList.php"
+		data-blapy-template-init="emailsList.php<?php if (array_key_exists('file',$_GET)) echo "?file=".$_GET['file'];?>"
 	>
 	</div>	
 </body>
