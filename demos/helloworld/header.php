@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/iFSM.js"></script>
+	<script type="text/javascript" src="../../extlib/json5/index.min.js"></script>
 </head>
 <body>
 	<div class="wrapper style1 first">

@@ -13,7 +13,7 @@
 		data-blapy-container-name="resultFormJson"
 		data-blapy-update="json"
 	>
-	{fname: "<?php echo $_POST['fname']?>",lname: "<?php echo $_POST['lname']?>"}
+	{"fname": "<?php echo $_POST['fname']?>","lname": "<?php echo $_POST['lname']?>"}
 	</div>
 	<div id="resultForm3"
 		data-blapy-container="true"

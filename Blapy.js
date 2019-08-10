@@ -8,6 +8,9 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/08/10 - E.Podvin - V1.6.4 -
+ *    - use JSON5 instead of JSON
+ *    - store templates in a 'xmp' instead of a div fixing pb when there was comments or special structures
  * - 2018/05/29 - E.Podvin - V1.6.3 - remove all eval by JSON.parse
  * - 2018/05/28 - E.Podvin - V1.6.2 - send container name to server when block requests an update with data-blapy-updateblock-time+compliant to jQuery 3.3.1
  * - 2018/05/26 - E.Podvin - V1.6.1 -
@@ -455,12 +458,17 @@
 
     $(document.body).off('appear');
     $('[data-blapy-updateblock-ondisplay]').appear();
+
     $(document.body).on('appear', '[data-blapy-updateblock-ondisplay]', function(event, $all_appeared_elements) {
-      if ($(this).attr("data-blapy-href") && !$(this).attr("data-blapy-appear")) myBlapy.myUIObject.trigger('loadUrl', {
-        aUrl: $(this).attr("data-blapy-href")
-      });
-      $(this).attr("data-blapy-appear", 'done');
+      if ($(this).attr("data-blapy-href") && !$(this).attr("data-blapy-appear"))
+      {
+        $(this).attr("data-blapy-appear", 'done');
+        myBlapy.myUIObject.trigger('loadUrl', {
+          aUrl: $(this).attr("data-blapy-href")
+        });
+      }
     });
+
     $.force_appear();
 
   }
@@ -493,7 +501,7 @@
           $.get(tplFile, function(htmlTplContent) {
             //store the template in comment in a hidden div
             //needs to be in a comment, if not, template content is filtered by the DOM if the template content not compliant within a div
-            myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true"><!--' + htmlTplContent + '--></div>');
+            myContainer.prepend('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
             var aInitURL = myContainer.attr("data-blapy-template-init");
             if (aInitURL)
               $('#' + myBlapy.myUIObjectID).trigger('loadUrl', {
@@ -510,7 +518,7 @@
         }
       } else //template is defined in the block
       {
-        myContainer.html('<div style="display:none" data-blapy-container-tpl="true"><!--' + htmlTplContent + '--></div>');
+        myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>');
         var aInitURL = myContainer.attr("data-blapy-template-init");
         if (aInitURL)
           $('#' + myBlapy.myUIObjectID).trigger('loadUrl', {
@@ -525,7 +533,7 @@
   /**
    * prepare json templates
    *
-   * json templates are stored in a hidden div with a "data-blapy-container-tpl" attribute set
+   * json templates are stored in a hidden xmp with a "data-blapy-container-tpl" attribute set
    */
   theBlapy.prototype.setBlapyJsonTemplates = function() {
     this._log('setBlapyJsonTemplates');
@@ -703,11 +711,15 @@
           var aObjectId = this.myUIObject.attr('id');
           var myFSM = this;
           var tmpPC = null;
+          var jsonFeatures = null;
+
+          //use JSON5 if present as JSON5.parse is more cool than JSON.parse (cf. https://github.com/json5/json5)
+          if (typeof(JSON5) == "undefined") jsonFeatures=JSON;else jsonFeatures=JSON5;
 
           // transform any json text in json object
           // @TODO : optimize the json data processing as we eval it then stringify it (createBlapyBlock) then reeval... :(
           try {
-            tmpPC = JSON.parse(pageContent);
+            tmpPC = jsonFeatures.parse(pageContent);
             pageContent = tmpPC;
 
             // if the received pageContent is pure json then build the equivalent in blapy block
@@ -862,15 +874,15 @@
                   var htmlTpl = myContainer.find('[data-blapy-container-tpl]');
                   if (htmlTpl.length == 0) {
                     htmlTplContent = myContainer.html();
-                    htmlTpl = myContainer.prepend('<div style="display:none" data-blapy-container-tpl="true"><!--' + htmlTplContent + '--></div>');
+                    htmlTpl = myContainer.prepend('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>');
                   } else {
                     htmlTplContent = htmlTpl.html();
                     //delete comment tag
-                    htmlTplContent = htmlTplContent.substr(4, htmlTplContent.length - 3 - 4);
+                    //htmlTplContent = htmlTplContent.substr(4, htmlTplContent.length - 3 - 4);
                   }
 
                   try {
-                    JSON.parse(jsonData);
+                    jsonData = JSON.stringify(jsonFeatures.parse(jsonData));
                   } catch (e) {
                     myFSM._log('downloaded content can not be evaluated, so is not json data: ' + jsonData, 1);
                     return;
