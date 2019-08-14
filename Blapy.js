@@ -8,6 +8,8 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/08/14 - E.Podvin - 1.7.0
+ *  - Mustache Support
  * - 2019/08/10 - E.Podvin - V1.6.4 -
  *    - use JSON5 instead of JSON
  *    - store templates in a 'xmp' instead of a div fixing pb when there was comments or special structures
@@ -907,13 +909,27 @@
                     //no defined template?
                     newHtml = JSON.stringify(jsonData);
                   else {
-                    newHtml = json2html.transform(jsonData, {
-                      'tag': "void",
-                      'html': htmlTplContent
-                    });
+                    if (typeof(Mustache) != "undefined")
+                    {
+                      jsonDataObj = jsonFeatures.parse(jsonData);
 
-                    //as json2html needs a root tag to render... well, we set void to delete it after rendering...
-                    newHtml = newHtml.replace(/<.?void>/g, "");
+                      newHtml = Mustache.render("{{#.}}"+htmlTplContent+"{{/.}}",jsonDataObj);
+                    }
+                    else if (typeof(json2html) != "undefined")
+                    {
+                      newHtml = json2html.transform(jsonData, {
+                        'tag': "void",
+                        'html': htmlTplContent
+                      });
+
+                      //as json2html needs a root tag to render... well, we set void to delete it after rendering...
+                      newHtml = newHtml.replace(/<.?void>/g, "");
+                    }
+                    else
+                    {
+                      myFSM._log('no json parser loaded... need to include json2html or Mustache library! ', 1);
+                      alert('no json parser loaded... need to include "json2html" or "Mustache" library!');
+                    }
                   }
 
                   if ($(myContainer.attr('data-blapy-template-header')).length > 0) {

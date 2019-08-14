@@ -10,7 +10,7 @@
     "dynamic web",
     "Ajax"
   ],
-  "version": "1.6.3",
+  "version": "1.7.0",
   "author": {
     "name": "Emmanuel Podvin",
     "url": "http://fr.linkedin.com/in/podvin"
@@ -36,10 +36,12 @@
   "download": "https://github.com/intersel/Blapy/archive/master.zip",
   "dependencies":
   {
-    "jquery": ">=1.10",
-    "iFSM": ">=1.6",
-    "sammy": ">= 0.0",
+    "jquery": ">=3.0",
+    "iFSM": ">=1.7",
+    "sammy": ">= 0.7",
     "json2html": ">= 0.0",
-    "jquery.appear": ">=0.0"
+    "jquery.appear": ">=1.0",
+    "Mustache": ">=3.0.0",
+    "json5": ">=2.1.0"
   }
 }

@@ -1,4 +1,6 @@
-<ul class="dropdown-menu" role="menu"
+<ul
+		id="timeLineMenuButtons"
+		class="dropdown-menu" role="menu"
 		data-blapy-container="true"
 		data-blapy-container-name="timeLineMenuButtons"
 		data-blapy-container-content="timeLineMenuButtonsVoid"

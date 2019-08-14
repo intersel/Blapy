@@ -1,12 +1,13 @@
-<?php 
+<?php
 
 $current_id = isset( $_REQUEST['current_id'])?$_REQUEST['current_id']:0;
 $max_articles = 10;
 ?>
 <div
+	id="mainContainer-<?php echo $current_id?>"
 	data-blapy-update="replace"
-	data-blapy-container="true" 
-	data-blapy-container-name="mainContainer-<?php echo $current_id?>" 
+	data-blapy-container="true"
+	data-blapy-container-name="mainContainer-<?php echo $current_id?>"
 	data-blapy-container-content="content-<?php echo time()?>"
 >
 	<div class="row margin-b-2"	id="divB<?php echo $current_id?>">
@@ -39,14 +40,15 @@ $max_articles = 10;
 					</div>
 				</div>
 	</div>
-	<?php 
+	<?php
 	if ($current_id < $max_articles)
 	{
 	?>
-	<div 
+	<div
+		id="mainContainer-<?php echo $current_id+1?>"
 		data-blapy-update="replace"
-		data-blapy-container="true" 
-		data-blapy-container-name="mainContainer-<?php echo $current_id+1?>" 
+		data-blapy-container="true"
+		data-blapy-container-name="mainContainer-<?php echo $current_id+1?>"
 		data-blapy-container-content="content"
 		data-blapy-updateblock-ondisplay="true"
 		data-blapy-href="blog_articles.php?current_id=<?php echo $current_id+1?>"

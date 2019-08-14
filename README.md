@@ -603,7 +603,7 @@ Have a look in the Blapy_AnimationPlugins.js and add your new functions in it in
 # LIBRARY DEPENDENCIES
 To work properly, you need to include the following javascript libraries:
 
-* jQuery (>= 1.10)
+* jQuery (>= 3.x)
   * `<script type="text/javascript" src="extlib/jquery-3.3.1.min.js"></script>`
 * [iFSM by intersel](https://github.com/intersel/iFSM/)
   * this library manages finite state machines and needs these libraries:
@@ -613,13 +613,20 @@ To work properly, you need to include the following javascript libraries:
   * **attrchange** by [Selvakumar Arumugam](http://meetselva.github.io/attrchange/)
     * a simple jQuery function to bind a listener function to any HTML element on attribute change
     * `<script type="text/javascript" src="extlib/jquery.attrchange.js"></script>`
-* [json2html](http://json2html.com/) (optional if blapy block does not use json feature)
+* [json2html](http://json2html.com/) (optional if blapy block does not use json feature or use "Mustache" template engine)
   * json2html is a javascript HTML templating library used to transform JSON objects into HTML using a template.
   * used for json parsing and templating
     * `<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>`
+* [Mustache](http://mustache.github.io/) (optional if blapy block does not use json feature or use "json2html" template engine)
+  * Mustache  is a javascript HTML templating library used to transform JSON objects into HTML using a template.
+  * used for json parsing and templating
+    * `<script type="text/javascript" src="../../extlib/mustache/mustache.js"></script>`
 * [Sammy](http://sammyjs.org/) (optional if you don't need routing management)
   * Sammy is a small framework to make web application providing simple but efficient 'route' services
   * `<script type="text/javascript" src="extlib/sammy/lib/sammy.js"></script>`
+* [json5] (https://json5.org/) (optional if your json are "straight" json)
+  * expands the syntax of JSON in order to be able to process less strict json input (made by humans for example)
+  * `<script type="text/javascript" src="extlib/json/index.min.js"></script>`
 * [jquery.appear] (http://morr.github.io/appear.html) (optional if you don't need to init blocks when they become visible after a scroll)
   * `<script type="text/javascript" src="extlib/jquery.appear/jquery.appear.js"></script>`
 

@@ -6,7 +6,8 @@ $toggleStatusName = $toggleStatus?'On':'Off';
 $toggleChecked = $toggleStatus?'checked':'';
 
 $returnStr = <<<EOD
-<input class="toggle-all"
+<input id="selectAllToggle"
+		class="toggle-all"
 		type="checkbox"
 		$toggleChecked
 		data-blapy-container="true"

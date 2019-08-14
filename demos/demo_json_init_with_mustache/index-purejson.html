@@ -6,28 +6,25 @@
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<link rel="stylesheet" href="main.css" />
 	<script type="text/javascript" src="../../extlib/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="../../extlib/json5/index.min.js"></script>
 	<script type="text/javascript" src="../../extlib/sammy/lib/sammy.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/iFSM.js"></script>
-	<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>
+	<script type="text/javascript" src="../../extlib/mustache/3.0.1/mustache.js"></script>
 </head>
 <body id="myBlapy">
-	<h1>Blapy demos using json data (2)</h1>
-	<p>Form calls pure json and "results" block is updated with the "data-blapy-embedding-blockid" feature</p>
+	<h1>Blapy demos using json data  and Mustache Templating engine (3)</h1>
+	<p>The Form updates the "results" block using "updateBlock" blapy event called from a javascript script.</p>
 	<p>Other demos:
 		<ul>
 			<li><a href="index.html">Update "results" block with standard Blapy blocks with json inside</a></li>
-			<li><a href="index-purejson.html">Update of "results" block using "updateBlock" blapy event</a></li>
+			<li><a href="index-jsonfromform.html">Form calls pure json and "results" block is updated with the "data-blapy-embedding-blockid" feature</a></li>
 		</ul>
 	</p>
 	<h1>Select values with the json feature of Blapy </h1>
 	<p>Fill the following form:</p>
-	<form id="myForm"
-				action="testForm.php?pureJson=1"
-				data-blapy-link="true"
-				method="POST"
-				data-blapy-embedding-blockid="results">
+	<form id="myForm">
 		Choose a firstname:
 		<span
 			id="fnameOptionsFirstName"
@@ -35,9 +32,9 @@
 			data-blapy-container-name="fnameOptions"
 			data-blapy-container-content="fnameOptionsFirstName"
 			data-blapy-update="json"
-			data-blapy-template-file="optionsTemplate.tpl"
-			data-blapy-template-wrap='<select name="firstname" onChange="$(&#39;#myForm&#39;).submit();">'
+			data-blapy-template-wrap='<select name="firstname" onChange="getJson();">'
 		>
+			<option value="{{firstname}}">{{firstname}}</option>
 		</span>
 		<br>
 		Choose a lastname:
@@ -49,7 +46,9 @@
 			data-blapy-update="json"
 			data-blapy-template-init="optionvalues.json"
 		>
-			<input name="lastname" type="radio" value="${lastname}" ${selected} onClick="$('#myForm').submit();">${lastname}</input>
+		<xmp>
+			<img src="img/{{lastname}}.png" width="15px"><input name="lastname" type="radio" value="{{lastname}}" {{selected}} onChange="getJson();">{{lastname}}</input>
+		</xmp>
 		</span>
 	</form>
 
@@ -64,11 +63,20 @@
 			data-blapy-template-init="arrayvalues.data"
 		>
 	</div>
+	<div>
+		<ul>
+			<li>definition of the html template in blapy blocks</li>
+			<li>Use of the "xmp" tag to escape the html definition of our template in firtname</li>
+			<li>Use of the "updateBlock" blapy message to update the results block</li>
+			<li>Data input is a pure json object. (Blapy accepts data to be a string containing a json structure too...)</li>
+		</ul>
+	</div>
 </body>
 
 <script type="text/javascript" src="../../Blapy.js"></script>
 <script type="text/javascript" src="../../Blapy_AnimationPlugins.js"></script>
 <script>
+
 	$( document ).ready(function() {
 
 		//start Blapy
@@ -80,6 +88,25 @@
 			});
 
 	});
+
+	/* update the 'results' block from pure json... */
+	function getJson()
+	{
+		jQuery.ajax({
+			type: 'GET',
+			dataType: 'json',
+			data: {
+				pureJson:1,
+				firstname:$("select[name=firstname]",'#myForm').val(),
+				lastname:$('input[name=lastname]:checked', '#myForm').val()
+			},
+			url: "testForm.php",
+			crossDomain: true,
+			success: function(data, textStatus, jqXHR) {
+				$('#myBlapy').trigger('updateBlock',{html:data,params:{embeddingBlockId:'results'}})
+			}
+		});
+	}
 
 	$("body").append('<h3>HTML code of the page</h3>').append(jQuery('<pre />').text($('html').html()));
 </script>

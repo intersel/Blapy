@@ -1,6 +1,6 @@
 <ul class="timeline"
-	data-blapy-container="true" 
-	data-blapy-container-name="timeLine" 
+	data-blapy-container="true"
+	data-blapy-container-name="timeLine"
 	data-blapy-updateblock-ondisplay="true"
  >
  [
@@ -66,12 +66,13 @@
                                                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
                                                     <i class="fa fa-gear"></i>  <span class="caret"></span>
                                                 </button>
-                                                <ul class="dropdown-menu" role="menu"
-					                            	data-blapy-container="true" 
-													data-blapy-container-name="timeLineMenuButtons" 
-													data-blapy-container-content="timeLineMenuButtonsVoid"
-													data-blapy-template-init="phpAPI/timeLineMenuButtonsInit.php"
-													data-blapy-update="json"
+                                                <ul id="timeLineMenuButtons"
+																								class="dropdown-menu" role="menu"
+					                            					data-blapy-container="true"
+																								data-blapy-container-name="timeLineMenuButtons"
+																								data-blapy-container-content="timeLineMenuButtonsVoid"
+																								data-blapy-template-init="phpAPI/timeLineMenuButtonsInit.php"
+																								data-blapy-update="json"
                                                 >
                                                 	<li class="${class}"><a href="${URL}">${action}</a>
                                                     </li>

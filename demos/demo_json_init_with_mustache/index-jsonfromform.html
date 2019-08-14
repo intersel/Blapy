@@ -6,14 +6,15 @@
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<link rel="stylesheet" href="main.css" />
 	<script type="text/javascript" src="../../extlib/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="../../extlib/json5/index.min.js"></script>
 	<script type="text/javascript" src="../../extlib/sammy/lib/sammy.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/iFSM.js"></script>
-	<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>
+	<script type="text/javascript" src="../../extlib/mustache/3.0.1/mustache.js"></script>
 </head>
 <body id="myBlapy">
-	<h1>Blapy demos using json data (2)</h1>
+	<h1>Blapy demos using json data  and Mustache Templating engine (2)</h1>
 	<p>Form calls pure json and "results" block is updated with the "data-blapy-embedding-blockid" feature</p>
 	<p>Other demos:
 		<ul>
@@ -49,7 +50,7 @@
 			data-blapy-update="json"
 			data-blapy-template-init="optionvalues.json"
 		>
-			<input name="lastname" type="radio" value="${lastname}" ${selected} onClick="$('#myForm').submit();">${lastname}</input>
+			<input name="lastname" type="radio" value="{{lastname}}" {{selected}} onClick="$('#myForm').submit();">{{lastname}}</input>
 		</span>
 	</form>
 

@@ -70,7 +70,9 @@
                             </a>
                         </li>
                      </ul>
-                    <ul class="dropdown-menu dropdown-messages" style="margin-top: 42px;"
+                    <ul
+											id="messagesList"
+											class="dropdown-menu dropdown-messages" style="margin-top: 42px;"
                     	data-blapy-container="true"
 						data-blapy-container-name="messagesList"
 						data-blapy-container-content="messagesListInit"
@@ -104,7 +106,9 @@
                             </a>
                         </li>
                     </ul>
-                    <ul class="dropdown-menu dropdown-tasks" style="margin-top: 42px;"
+                    <ul
+											id="tasksList"
+											class="dropdown-menu dropdown-tasks" style="margin-top: 42px;"
 	                   	data-blapy-container="true"
 						data-blapy-container-name="tasksList"
 						data-blapy-container-content="tasksListInit"
@@ -147,7 +151,9 @@
                             </a>
                         </li>
                     </ul>
-                    <ul class="dropdown-menu dropdown-alerts"  style="margin-top: 42px;"
+                    <ul
+											id="alertsList"
+											class="dropdown-menu dropdown-alerts"  style="margin-top: 42px;"
 	                   	data-blapy-container="true"
 						data-blapy-container-name="alertsList"
 						data-blapy-container-content="alertsListInit"
@@ -170,7 +176,9 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-user"
+                    <ul
+											id="userFeaturesList"
+											class="dropdown-menu dropdown-user"
                     	data-blapy-container="true"
 						data-blapy-container-name="userFeaturesList"
 						data-blapy-container-content="userFeaturesListInit"
@@ -221,10 +229,12 @@
                                     <i class="fa fa-comments fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge"
-					                   	data-blapy-container="true"
-										data-blapy-container-name="nbNewComments"
-										data-blapy-container-content="nbNewCommentsVoid"
+                                    <div
+																		id="nbNewComments"
+																		class="huge"
+																		data-blapy-container="true"
+																		data-blapy-container-name="nbNewComments"
+																		data-blapy-container-content="nbNewCommentsVoid"
                                     	></div>
                                     <div>New Comments!</div>
                                 </div>
@@ -247,10 +257,12 @@
                                     <i class="fa fa-tasks fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge"
+                                    <div
+																			id="nbNewTasks"
+																			class="huge"
                                     	data-blapy-container="true"
-										data-blapy-container-name="nbNewTasks"
-										data-blapy-container-content="nbNewTasksVoid"
+																			data-blapy-container-name="nbNewTasks"
+																			data-blapy-container-content="nbNewTasksVoid"
                                     	></div>
                                     <div>New Tasks!</div>
                                 </div>
@@ -273,11 +285,12 @@
                                     <i class="fa fa-shopping-cart fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge"
-										data-blapy-container="true"
-										data-blapy-container-name="nbNewOrders"
-										data-blapy-container-content="nbNewOrdersVoid"
-									></div>
+                                    <div id="nbNewOrders"
+                                    class="huge"
+                                    data-blapy-container="true"
+                                    data-blapy-container-name="nbNewOrders"
+                                    data-blapy-container-content="nbNewOrdersVoid"
+                                    ></div>
                                     <div>New Orders!</div>
                                 </div>
                             </div>
@@ -299,7 +312,8 @@
                                     <i class="fa fa-support fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge"
+                                    <div id="nbNewTickets"
+																			class="huge"
                                     	data-blapy-container="true"
 										data-blapy-container-name="nbNewTickets"
 										data-blapy-container-content="nbNewTicketsVoid"></div>
@@ -329,11 +343,13 @@
                                         Actions
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu pull-right" role="menu"
-                                       	data-blapy-container="true"
-										data-blapy-container-name="areaChart"
-										data-blapy-container-content="areaChartVoid"
-										data-blapy-update="json"
+                                    <ul
+																		id="areaChart"
+																		class="dropdown-menu pull-right" role="menu"
+                                    data-blapy-container="true"
+																		data-blapy-container-name="areaChart"
+																		data-blapy-container-content="areaChartVoid"
+																		data-blapy-update="json"
                                     >
                                     	<li class="${class}"><a href="${url}">${action}</a></li>
                                     </ul>
@@ -387,6 +403,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody
+																							id="barChartExample"
                                             	data-blapy-container="true"
 												data-blapy-container-name="barChartExample"
 												data-blapy-container-content="barChartExampleVoid"
@@ -416,6 +433,7 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <ul class="timeline"
+															id="timeLine"
                             	data-blapy-container="true"
 								data-blapy-container-name="timeLine"
 								data-blapy-container-content="timeLineVoid"
@@ -450,13 +468,16 @@
                             <i class="fa fa-bell fa-fw"></i> Notifications Panel
                         </div>
                         <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div class="list-group"
-                            	data-blapy-container="true"
-								data-blapy-container-name="NotificationsPanel"
-								data-blapy-container-content="NotificationsPanelVoid"
-								data-blapy-template-init="phpAPI/NotificationsPanelInit.json"
-								data-blapy-update="json"
+                        <div
+														class="panel-body">
+                            <div
+														id="NotificationsPanelVoid"
+														class="list-group"
+                            data-blapy-container="true"
+														data-blapy-container-name="NotificationsPanel"
+														data-blapy-container-content="NotificationsPanelVoid"
+														data-blapy-template-init="phpAPI/NotificationsPanelInit.json"
+														data-blapy-update="json"
                             >
                                 <a href="${URL}" class="list-group-item">
                                     <i class="fa fa-fw ${class}"></i> ${TextNotification}
@@ -490,6 +511,7 @@
                                     <i class="fa fa-chevron-down"></i>
                                 </button>
                                 <ul class="dropdown-menu slidedown"
+																id="chatButton"
                             	data-blapy-container="true"
 								data-blapy-container-name="chatButton"
 								data-blapy-container-content="chatButtonVoid"
@@ -507,6 +529,7 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <ul class="chat"
+															id="chatTextList"
                             	data-blapy-container="true"
 								data-blapy-container-name="chatTextList"
 								data-blapy-container-content="chatTextListVoid"

@@ -3,7 +3,8 @@
 $setFilter = 'completed';
 
 $returnStr = <<<EOD
-<ul class="filters"
+<ul id="filters"
+		class="filters"
 		data-blapy-container="true"
 		data-blapy-container-name="filters"
 		data-blapy-container-content="filters-Completed"

@@ -61,7 +61,7 @@
 			<div class="page-header">
 					<h1>Blapy Demo - Bootstrap Four Column Gallery</h1>
 					<p>
-						This demo shows how Blapy can manage dynamically the loading and the display of blapy blocks only when they should appear...<br><br> 
+						This demo shows how Blapy can manage dynamically the loading and the display of blapy blocks only when they should appear...<br><br>
 						To see it, scroll down the page and the blog articles will be loaded and displayed when they need to be... thanks to Blapy :-)<br>
 						It will stop when it will reach the 10th row... you can of course display more than that! It's just for the demo ;-)
 					</p>
@@ -69,17 +69,18 @@
 					<p>This template ""Bootstrap four column gallery" was created by <a href="http://maxdesign.com.au/">Russ Weakley, Max Design</a>.<br>
 					It can be found on <a href="https://github.com/russmaxdesign/08-bootstrap-four-column-gallery">GitHub here</a><br>
 					</p>
-						
+
 						<p>Posted by <span class="glyphicon glyphicon-user"></span> <a href="#">Emmanuel Podvin</a> on <span class="glyphicon glyphicon-time"></span> 06 june 2016 10:00 am</p>
 			</div>
-			<div 
-				data-blapy-container="true" 
-				data-blapy-container-name="mainContainer-0" 
+			<div
+				id="mainContainer-0"
+				data-blapy-container="true"
+				data-blapy-container-name="mainContainer-0"
 				data-blapy-container-content="content-0"
 				data-blapy-updateblock-ondisplay="true"
 				data-blapy-href="blog_articles.php"
 			>
-			</div>						
+			</div>
 			<!-- /.row -->
 
 			<hr>
@@ -109,7 +110,7 @@
 		<script type="text/javascript" src="../../Blapy.js"></script>
 		<script>
 			$( document ).ready(function() {
-		
+
 				//start Blapy
 				$('#myBlapy').Blapy({activeSammy:true,debug:true,LogLevel:1});
 
@@ -118,10 +119,9 @@
 					  alert( 'Blapy error: '+anError );
 					});
 			});
-			
+
 		</script>
 
 
   </body>
 </html>
-

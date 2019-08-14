@@ -6,6 +6,7 @@
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<link rel="stylesheet" href="main.css" />
 	<script type="text/javascript" src="../../extlib/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="../../extlib/json5/index.min.js"></script>
 	<script type="text/javascript" src="../../extlib/sammy/lib/sammy.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
@@ -26,7 +27,10 @@
 	<p>Fill the following form:</p>
 	<form id="myForm" action="testForm.php" data-blapy-link="true" method="POST">
 		Choose a firstname:
+		<!-- get the template from optionsTemplate.tpl (contains options values) that will be wrapped with a select -->
+		<!-- is initialised by the next blapy bloc by sharing the same data-blapy-container-name -->
 		<span
+			id="fnameOptionsFirstName"
 			data-blapy-container="true"
 			data-blapy-container-name="fnameOptions"
 			data-blapy-container-content="fnameOptionsFirstName"
@@ -37,7 +41,9 @@
 		</span>
 		<br>
 		Choose a lastname:
+		<!-- run the initialisation of the data from data-blapy-template-init -->
 		<span
+			id="fnameOptionsLastName"
 			data-blapy-container="true"
 			data-blapy-container-name="fnameOptions"
 			data-blapy-container-content="fnameOptionsLastName"

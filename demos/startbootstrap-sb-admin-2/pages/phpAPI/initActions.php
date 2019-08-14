@@ -3,9 +3,9 @@
 $currentTime = time();
 
 $returnStr = <<<EOD
-<ul class="dropdown-menu dropdown-messages" 
-                    	data-blapy-container="true" 
-						data-blapy-container-name="messagesList" 
+<ul class="dropdown-menu dropdown-messages"
+                    	data-blapy-container="true"
+						data-blapy-container-name="messagesList"
 						data-blapy-container-content="messagesListValues-$currentTime"
 						data-blapy-update="json"
 >
@@ -18,8 +18,8 @@ $returnStr = <<<EOD
 </ul>
 
 <ul class="dropdown-menu dropdown-tasks"
-	                   	data-blapy-container="true" 
-						data-blapy-container-name="tasksList" 
+	                   	data-blapy-container="true"
+						data-blapy-container-name="tasksList"
 						data-blapy-container-content="tasksListValues-$currentTime"
 						data-blapy-update="json"
 >
@@ -32,8 +32,8 @@ $returnStr = <<<EOD
 </ul>
 
 <ul class="dropdown-menu dropdown-alerts"  style="margin-top: 42px;"
-	                   	data-blapy-container="true" 
-						data-blapy-container-name="alertsList" 
+	                   	data-blapy-container="true"
+						data-blapy-container-name="alertsList"
 						data-blapy-container-content="alertsListValues-$currentTime"
 						data-blapy-update="json"
 					>
@@ -47,8 +47,8 @@ $returnStr = <<<EOD
 </ul>
 
 <ul class="dropdown-menu dropdown-user"
-	data-blapy-container="true" 
-	data-blapy-container-name="userFeaturesList" 
+	data-blapy-container="true"
+	data-blapy-container-name="userFeaturesList"
 	data-blapy-container-content="userFeaturesListInit"
 	data-blapy-update="json"
 >
@@ -57,37 +57,37 @@ $returnStr = <<<EOD
 		{featureIcon:"gear",class:"",feature:"Settings",url:"#"},
 		{featureIcon:"",class:"divider",feature:"",url:"#"},
 		{featureIcon:"sign-out",class:"",feature:"Logout",url:"#"},
-	]	
+	]
 </ul>
 
-<div class="huge" 
-	data-blapy-container="true" 
-	data-blapy-container-name="nbNewComments" 
+<div class="huge"
+	data-blapy-container="true"
+	data-blapy-container-name="nbNewComments"
 	data-blapy-container-content="nbNewComments-$currentTime"
 >26</div>
 
-<div class="huge" 
-	data-blapy-container="true" 
-	data-blapy-container-name="nbNewTasks" 
+<div class="huge"
+	data-blapy-container="true"
+	data-blapy-container-name="nbNewTasks"
 	data-blapy-container-content="nbNewTasks-$currentTime"
 >12</div>
 
-<div class="huge" 
-	data-blapy-container="true" 
-	data-blapy-container-name="nbNewOrders" 
+<div class="huge"
+	data-blapy-container="true"
+	data-blapy-container-name="nbNewOrders"
 	data-blapy-container-content="nbNewOrders-$currentTime"
 >124</div>
 
-<div class="huge" 
-	data-blapy-container="true" 
-	data-blapy-container-name="nbNewTickets" 
+<div class="huge"
+	data-blapy-container="true"
+	data-blapy-container-name="nbNewTickets"
 	data-blapy-container-content="nbNewTickets-$currentTime"
 >13</div>
-			
-			
+
+
 <ul class="nav" id="side-menu"
-		data-blapy-container="true" 
-		data-blapy-container-name="sideMenusList" 
+		data-blapy-container="true"
+		data-blapy-container-name="sideMenusList"
 		data-blapy-container-content="sideMenusListInit"
 		data-blapy-update="json"
 >
@@ -106,8 +106,8 @@ $returnStr = <<<EOD
 			{liInfo:'',subMenuContent:'<a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>'},
 			{liInfo:'',subMenuContent:'<a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
                             <ul id="UIChartsList" class="nav nav-second-level"
-		                        data-blapy-container="true" 
-								data-blapy-container-name="UIChartsList" 
+		                        data-blapy-container="true"
+								data-blapy-container-name="UIChartsList"
 								data-blapy-container-content="UIChartsListInit"
 								data-blapy-update="json"
 								data-blapy-template-init="phpAPI/subMenus.php"
@@ -121,9 +121,10 @@ $returnStr = <<<EOD
 			{liInfo:'',subMenuContent:'<a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>'},
 			{liInfo:'',subMenuContent:'<a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>'},
 			{liInfo:'',subMenuContent:'<a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level"
-		                        data-blapy-container="true" 
-								data-blapy-container-name="UIElementsList" 
+                            <ul id="UIElementsList"
+														class="nav nav-second-level"
+		                        data-blapy-container="true"
+								data-blapy-container-name="UIElementsList"
 								data-blapy-container-content="UIElementsListInit"
 								data-blapy-update="json"
 								>
@@ -169,12 +170,12 @@ $returnStr = <<<EOD
                                     <a href="login.html">Login Page</a>
                                 </li>
                             </ul>
-                            '},        		
+                            '},
 			]
 </ul>
 <ul class="dropdown-menu pull-right" role="menu"
-	data-blapy-container="true" 
-	data-blapy-container-name="areaChart" 
+	data-blapy-container="true"
+	data-blapy-container-name="areaChart"
 	data-blapy-container-content="areaChartVoid"
 >
 	[
@@ -184,11 +185,11 @@ $returnStr = <<<EOD
 		{class: "divider",url: "#",action:""},
 		{class: "",url: "#",action:"Separated link"},
 	]
-</ul>			
+</ul>
 
 <ul class="dropdown-menu pull-right" role="menu"
-	data-blapy-container="true" 
-	data-blapy-container-name="barChartExampleMenu" 
+	data-blapy-container="true"
+	data-blapy-container-name="barChartExampleMenu"
 	data-blapy-container-content="barChartExampleMenuVoid"
 	data-blapy-update="json"
 >
@@ -208,4 +209,3 @@ EOD;
 $returnStr=str_replace("\n",'',$returnStr);
 
 include('callActions.php');
-

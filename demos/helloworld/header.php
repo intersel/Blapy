@@ -2,7 +2,7 @@
 <!-- To run the current sample code in your own environment, copy this to an html page. -->
 <html id="myBlapy">
 <head>
-	<title data-blapy-container="true" data-blapy-container-name="Title" data-blapy-container-content="<?php echo basename($_SERVER["SCRIPT_FILENAME"]);?>"><?php echo $defaultTitle?></title>
+	<title id="headtitle" data-blapy-container="true" data-blapy-container-name="Title" data-blapy-container-content="<?php echo basename($_SERVER["SCRIPT_FILENAME"]);?>"><?php echo $defaultTitle?></title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" href="assets/main.css" />
