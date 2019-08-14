@@ -624,10 +624,10 @@ To work properly, you need to include the following javascript libraries:
 * [Sammy](http://sammyjs.org/) (optional if you don't need routing management)
   * Sammy is a small framework to make web application providing simple but efficient 'route' services
   * `<script type="text/javascript" src="extlib/sammy/lib/sammy.js"></script>`
-* [json5] (https://json5.org/) (optional if your json are "straight" json)
+* [json5](https://json5.org/) (optional if your json are "straight" json)
   * expands the syntax of JSON in order to be able to process less strict json input (made by humans for example)
   * `<script type="text/javascript" src="extlib/json/index.min.js"></script>`
-* [jquery.appear] (http://morr.github.io/appear.html) (optional if you don't need to init blocks when they become visible after a scroll)
+* [jquery.appear](http://morr.github.io/appear.html) (optional if you don't need to init blocks when they become visible after a scroll)
   * `<script type="text/javascript" src="extlib/jquery.appear/jquery.appear.js"></script>`
 
 # FAQ
@@ -663,13 +663,22 @@ Yes, but in order to have the Blapy see them, set an id on the html tag and call
 
 ## How to define template variables in a blapy template for json blocks
 
-The syntax follows the one defined by [json2html library](http://json2html.com/) : ${myVariableName}
+The syntax follows the one defined by [json2html library](http://json2html.com/): ${myVariableName}
+OR the one defined by [Mustache](http://mustache.github.io/): {{myVariableName}}
+according to the library you have set.
 
-### Example
+### Examples
 
+With json2html:
 ```
 		First name: ${fname}<br>
 		Last name: ${lname}<br>
+```
+
+With Mustache:
+```
+		First name: {{fname}}<br>
+		Last name: {{lname}}<br>
 ```
 
 ## How to set a json template driven by Blapy...
