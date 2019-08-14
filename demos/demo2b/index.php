@@ -41,9 +41,9 @@ else if ($ChangeBlapyBlock==-1)
 <body id="myBlapyApp1">
 	<h1>Some of the Blapy features on Blapy blocks</h1>
 	<p></p>
-	<div style="border:solid 1px green;margin:20px;padding:0 20px 20px;">
+	<div style="border:solid 1px green;margin:20px;padding:0 20px 20px;" id="myBlapyApp4">
 		<h4>"myBlapyApp1" Blapy blocks</h4>
-		<div id="bp1_mainContainerApp1" 
+		<div 	id="mainContainerApp1"
 				data-blapy-container="true"
 				data-blapy-container-name="mainContainerApp1"
 				data-blapy-container-content="aContent"
@@ -60,13 +60,15 @@ if ($GetMore)
 else if ($ChangeBlapyBlock==1)
 {
 ?>
-		<div 	data-blapy-container="true"
+		<div 	id="submainContainerApp1"
+				data-blapy-container="true"
 				data-blapy-container-name="submainContainerApp1"
 				data-blapy-container-content="aSubContent"
 		>
 		This is a Sub Content
 		</div>
-		<div 	data-blapy-container="true"
+		<div 	id="submainContainerApp3"
+				data-blapy-container="true"
 				data-blapy-container-name="mainContainerApp3"
 				data-blapy-container-content="aSubContent"
 				data-blapy-update="force-update"
@@ -118,19 +120,35 @@ else
 		<button onclick="$('#myBlapyApp1').trigger('loadUrl',{aUrl:'index.php?ChangeBlapyBlock=1',params:{action:'update'}})">Change Blapy Block with two others blocks...</button>
 		<button onclick="$('#myBlapyApp1').trigger('loadUrl',{aUrl:'index.php?ChangeBlapyBlock=-1',params:{action:'update'}})">Reinitialize the Blapy Block...</button>
 	</div>
-	<div style="border:solid 1px green;margin:20px;padding:0px 20px 20px;" id="myBlapyApp2">
-		<h4>"myBlapyApp2" Blapy blocks</h4>
-		<div 	id="bp2_mainContainerApp2"
+	<div style="border:solid 1px green;margin:20px;padding:0px 20px 20px;" id="myBlapyApp3">
+		<h4>"myBlapyApp3" Blapy blocks</h4>
+
+		<ul>
+			<li><a href="content1_all_app.php" data-blapy-link="true">Content 1 for any Application with a "mainContainerApp3" block</a></li>
+			<li><a href="content2_app3.php" data-blapy-link="true">Content 2 only for "mainContainerApp3" block of 'myBlapyApp3' application</a></li>
+			<li><a href="content3_app1.php" onclick="$('#myBlapyApp4').trigger('loadUrl',{aUrl:$(this).attr('href')});return false;">Content 3 only for "mainContainerApp3" block of 'myBlapyApp1' application</a></li>
+		</ul>
+		<div style="width:100%;">
+			<div style="padding:20px;border:solid 1px green;width:40%;float:left;">
+				<div 	id="left"
 						data-blapy-container="true"
-						data-blapy-container-name="mainContainerApp2"
-						data-blapy-container-content="aContent_<?php echo time();?>"
-						data-blapy-href = "index.php"
-						data-blapy-updateblock-time = "10000"
+						data-blapy-container-name="mainContainerApp3"
+						data-blapy-container-content="aContent"
 				>
-					<b>Time is:</b> <?php echo date('d-M-Y H:i:s');?>
-		</div>
-		<div>
-			Time is updated every 10000ms
+					Fill this part by clicking one of the link above...
+				</div>
+			</div>
+			<div style="padding:20px;border:solid 1px green;width:40%;float:left;">
+				<div 	id="right"
+						data-blapy-container="true"
+						data-blapy-container-name="mainContainerApp3"
+						data-blapy-container-content="aContent"
+				>
+					Right part, duplicated from the left part
+				</div>
+			</div>
+			<hr style="clear:both;border: 0;">
+
 		</div>
 	</div>
 	<hr style="clear:both;">

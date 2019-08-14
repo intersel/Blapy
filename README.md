@@ -443,13 +443,15 @@ To define a Blapy Link, here are its attributes:
 # Triggered events
 Blapy generates the specific events during the Blapy object change processing.
 
-Some events are sent to the DOM element on which you create the jquery blapy object, some apply on the blapy block where occurs the processing.
+Some events are sent to the DOM element on which you create the jquery **blapy object**, some apply on the **blapy block** where occurs the processing.
 
 ## Blapy_PageLoaded
-Triggered when a page is fully and normally loaded and sent to the **blapy object**.
+Triggered when a page is fully and normally loaded and sent to the **blapy object** once when it is initialized.
 
 ## Blapy_PageReady
-Triggered when the page is ready, after a loading page or a change in the page, and sent to the **blapy object**.
+Triggered when the page is ready after a change in the page, and sent to the **blapy object**.
+
+It is triggered after a "loadURL" or "postData" event sent to Blapy (see hereafter).
 
 ## Blapy_beforePageLoad
 Triggered before a page loads its new content and sent to the **blapy object**.
