@@ -8,6 +8,9 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/08/15 - E.Podvin - 1.7.1 
+ *	- process templates whether they are using json2html or mustache tags as long as their libraries are loaded
+ *		(carefull: no mix between the two tag syntaxes in the same template file)
  * - 2019/08/14 - E.Podvin - 1.7.0
  *  - Mustache Support
  * - 2019/08/10 - E.Podvin - V1.6.4 -
@@ -909,13 +912,20 @@
                     //no defined template?
                     newHtml = JSON.stringify(jsonData);
                   else {
-                    if (typeof(Mustache) != "undefined")
-                    {
-                      jsonDataObj = jsonFeatures.parse(jsonData);
+                    let parsed=false;
 
-                      newHtml = Mustache.render("{{#.}}"+htmlTplContent+"{{/.}}",jsonDataObj);
+                    if ( (typeof(Mustache) != "undefined") )
+                    {
+						if (htmlTplContent.includes("{{"))
+						{ //ok that's mustache templating
+							jsonDataObj = jsonFeatures.parse(jsonData);
+
+							newHtml = Mustache.render("{{#.}}"+htmlTplContent+"{{/.}}",jsonDataObj);
+							parsed=true;
+						}
                     }
-                    else if (typeof(json2html) != "undefined")
+                    
+					if ( !parsed && typeof(json2html) != "undefined" )  
                     {
                       newHtml = json2html.transform(jsonData, {
                         'tag': "void",
@@ -924,8 +934,10 @@
 
                       //as json2html needs a root tag to render... well, we set void to delete it after rendering...
                       newHtml = newHtml.replace(/<.?void>/g, "");
+                      parsed=true;
                     }
-                    else
+
+                    if (!parsed)
                     {
                       myFSM._log('no json parser loaded... need to include json2html or Mustache library! ', 1);
                       alert('no json parser loaded... need to include "json2html" or "Mustache" library!');
