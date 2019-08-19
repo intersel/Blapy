@@ -96,19 +96,7 @@ Table of Contents
   * [Blapy animation plugin functions](#blapy-animation-plugin-functions)
   * [LIBRARY DEPENDENCIES](#library-dependencies)
   * [FAQ](#faq)
-    * [When a Blapy link is called, does the server need to send a full HTML page with a body and ...](#when-a-blapy-link-is-called-does-the-server-need-to-send-a-full-html-page-with-a-body-and-)
-    * [Is it possible to set Blapy blocks in "head" tags?](#is-it-possible-to-set-blapy-blocks-in-head-tags)
-    * [How to define template variables in a blapy template for json blocks](#how-to-define-template-variables-in-a-blapy-template-for-json-blocks)
-    * [How to set conditional output in a json template](#how-to-set-conditional-output-in-a-json-template)
-    * [How to send several json objects to a json block](#how-to-send-several-json-objects-to-a-json-block)
-    * [How to send "pure" json as response to a query ?](#how-to-send-pure-json-as-response-to-a-query-)
-    * [How to initialize the blapy blocks after loading the page?](#how-to-initialize-the-blapy-blocks-after-loading-the-page)
-    * [How to update a blapy block at a regular period ?](#how-to-update-a-blapy-block-at-a-regular-period-)
-    * [What about the id sent in the returned blapy blocks...](#what-about-the-id-sent-in-the-returned-blapy-blocks)
   * [Problem resolutions](#problem-resolutions)
-    * [My blapy block does not update from my external content...](#my-blapy-block-does-not-update-from-my-external-content)
-    * [Clicking to a blapy link generates several ajax calls though it should generate only a unique call...](#clicking-to-a-blapy-link-generates-several-ajax-calls-though-it-should-generate-only-a-unique-call)
-    * [When routing is activated with Sammy, My URL does not work any more...](#when-routing-is-activated-with-sammy-my-url-does-not-work-any-more)
   * [Contact](#contact)
 
 
@@ -1033,7 +1021,7 @@ remarks:
   * The Blapy object may be accessed with "this.opts.theBlapy".
   * if you add new iFSM states, think to come back to the "PageReady" state at the end of your processing.
 
-#Problem resolutions
+# Problem resolutions
 ## My blapy block does not update from my external content...
 
 * Did you verify that your external block has a different **data-blapy-container-content** content than the current one? If not, the content is not updated as it is considered to be the same... The content of **data-blapy-container-content** may be any name. You can use the current time or a unique id to set the name as in this example:
