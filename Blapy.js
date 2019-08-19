@@ -8,7 +8,7 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
- * - 2019/08/15 - E.Podvin - 1.7.1 
+ * - 2019/08/15 - E.Podvin - 1.7.1
  *	- process templates whether they are using json2html or mustache tags as long as their libraries are loaded
  *		(carefull: no mix between the two tag syntaxes in the same template file)
  * - 2019/08/14 - E.Podvin - 1.7.0
@@ -81,8 +81,14 @@
 (function($) {
 
   /**
-   *
-   **/
+   * The Blapy Object that controlls a set of blapy blocks
+   * @param  {jQuery} the jquery object handled with blapy [description]
+   * @param  {Object} options
+   * @return {Object}
+   * - opts : set of option
+   * - myUIObject: Target object of the blapy's FSM
+   * - myUIObjectID: Id of the target objet
+   */
   var theBlapy = window.theBlapy = function(anObject, options) {
 
     var $defaults = {
@@ -108,13 +114,21 @@
     this.opts = jQuery.extend({}, $defaults, options || {});
 
     /**
-     * @param myUIObject		- Target object of the FSM
+     * @param myUIObject	public - Target object of the FSM
      */
     this.myUIObject = anObject;
+    /**
+     * @param myUIObjectID public
+     * @type {[type]}
+     */
     this.myUIObjectID = anObject.attr('id');
     if (!this.myUIObjectID) alert('no defined Id on the given jQuery object... Blapy can\'t work properly :-(');
 
-    //intervals of time set to update blapy blocks
+    /**
+     * @param intervalsSet private
+     * @type {Array}
+     * intervals of time set to update blapy blocks
+     */
     this.intervalsSet = new Array();
 
   };
@@ -128,6 +142,7 @@
 
     var myBlapy = this;
 
+    // Sammy routing if set
     if (this.opts.activeSammy) {
       //Standard Routing definition
       if (typeof Sammy != 'function') {
@@ -184,7 +199,10 @@
 
       this.myUIObject.iFSM(manageBlapy, this.opts);
       app.run();
-    } else {
+    }
+    else
+    // no routing - standard blapy links management
+    {
       this.myUIObject.iFSM(manageBlapy, this.opts);
       $(document).on("click", "#" + myBlapy.myUIObjectID + " a[data-blapy-link]", function(event) {
         //if requested, filter the action to be processed only to the defined active blapy object for the link
@@ -209,8 +227,7 @@
         // get all the inputs into an array.
         var $inputs = $(this).serializeArray();
 
-        // not sure if you wanted this, but I thought I'd add it.
-        // get an associative array of the values in the form.
+        // get an associative array of the values in the form and send it
         var formValues = {};
         $.each($inputs, function() {
           formValues[this.name] = this.value;
@@ -481,7 +498,10 @@
   }
 
   /**
-   * prepare a json container
+   * setBlapyContainerJsonTemplate - prepare a json container with its template and initial values
+   * @param  {[type]} myContainer [description]
+   * @param  {[type]} myBlapy     the
+   * @return {[type]}             [description]
    */
   theBlapy.prototype.setBlapyContainerJsonTemplate = function(myContainer, myBlapy) {
     this._log('setBlapyContainerJsonTemplate');
@@ -543,8 +563,7 @@
 
 
   /**
-   * prepare json templates
-   *
+   * setBlapyJsonTemplates - prepare the json templates of the blapy blocks controlled with json (cf [data-blapy-update="json"])
    * json templates are stored in a hidden xmp with a "data-blapy-container-tpl" attribute set
    */
   theBlapy.prototype.setBlapyJsonTemplates = function() {
@@ -561,6 +580,11 @@
   };
 
   /* var & function definitions */
+
+  /**
+   * manageBlapy
+   * @type {Object} Blapy state machine definition
+   */
   var manageBlapy = {
     PageLoaded: {
       enterState: {
@@ -924,8 +948,8 @@
 							parsed=true;
 						}
                     }
-                    
-					if ( !parsed && typeof(json2html) != "undefined" )  
+
+					if ( !parsed && typeof(json2html) != "undefined" )
                     {
                       newHtml = json2html.transform(jsonData, {
                         'tag': "void",

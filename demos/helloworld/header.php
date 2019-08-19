@@ -6,7 +6,7 @@
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" href="assets/main.css" />
-	<script type="text/javascript" src="../../extlib/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="../../extlib/jquery-3.4.1.min.js"></script>
 	<script type="text/javascript" src="../../extlib/sammy/lib/sammy.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
 	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
