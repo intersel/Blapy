@@ -9,6 +9,7 @@
  * -----------------------------------------------------------------------------------------
  * Modifications :
  * - 2019/08/15 - E.Podvin - 1.7.1
+ *  - add fsmExtension option to extend iFSM definition of the blapy object
  *  - send blapycall=1&blapyaction=updateTpl&blapyobjectid=<dom object id> parameters when loading a json template
  *	- process templates whether they are using json2html or mustache tags as long as their libraries are loaded
  *		(carefull: no mix between the two tag syntaxes in the same template file)
@@ -106,7 +107,17 @@
       doCustomChange: null,
       onErrorOnPageChange: null,
       theBlapy: this,
+      /**
+       * activeSammy- if set, activates 'sammy' routing
+       * @type {Boolean}
+       */
       activeSammy: false,
+      /**
+       * fsmExtension - an FSM extension to the default blapy FSM definition
+       * useful to extend the API of the blapy object (in "PageReady" state for example)
+       * @type {[type]}
+       */
+      fsmExtension: null,
 
     };
 
@@ -142,6 +153,10 @@
     this._log('InitApplication');
 
     var myBlapy = this;
+
+    if (myBlapy.opts.fsmExtension) {
+      $.extend(true,manageBlapy, myBlapy.opts.fsmExtension)
+    }
 
     // Sammy routing if set
     if (this.opts.activeSammy) {
@@ -1049,4 +1064,5 @@
       },
     },
   };
+
 })(jQuery);

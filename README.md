@@ -307,6 +307,7 @@ Options is a javascript object. It can take as input the following possible opti
 * **afterContentChange**: (default:null) function to call after a Blapy bloc has its content changed
 * **afterPageChange**: (default:null) function to call when the page had all its content changed
 * **onErrorOnPageChange**: (default:null) function to call when the page got an error during change
+* **fsmExtension**: (default:null) Finite State Machine (iFSM) definition in order to extend the default blapy's iFSM engine
 
 ## Example:
 
@@ -1000,6 +1001,37 @@ Sometime, if there are several blocks with the same data-blapy-container-name in
 it could be a problem that several new blocks get the same id after processing...
 
 You can give **no id** on the new sent blocks, this way the system will set the id of the old block to change to the new one...
+
+## How to add new messages to the blapy objects
+
+The idea is to add behaviour and features to our blapy object when it's ready, in order to do things like:
+```javascript
+$("<myBlypyObject>").trigger('alertUs',"Hey there!");
+```
+
+To do that in the context of the FSM used in the Blapy object, we will extend it using **fsmExtension** option.
+
+The safe state to extend is "PageReady", set when the blapy block object is ready to accept messages like "loadUrl" or "postData"...
+
+In your blapy initialization, add your FSM extension as in this example:
+
+```Javascript
+$('#myBlapy').Blapy({
+  fsmExtension:{
+    'PageReady':{
+      'alertUs': {
+        init_function: function(parameters, event, data){
+          alert('alertUs called in '+this.myUIObject.attr('id')+' says: '+data);
+        }
+      }
+    }
+  }
+});
+```
+remarks:
+  * 'this' refers to the [FSM](https://github.com/intersel/ifsm)
+  * The Blapy object may be accessed with "this.opts.theBlapy".
+  * if you add new iFSM states, think to come back to the "PageReady" state at the end of your processing.
 
 #Problem resolutions
 ## My blapy block does not update from my external content...

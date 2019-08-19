@@ -80,7 +80,18 @@
 	$( document ).ready(function() {
 
 		//start Blapy
-		$('#myBlapy').Blapy();
+		$('#myBlapy').Blapy({
+		  fsmExtension:{
+		    'PageReady':{
+		      'alertUs': {
+		        init_function: function(parameters, event, data){
+							if (data == undefined) data="nothing";
+		          alert('alertUs called in '+this.myUIObject.attr('id')+' says: '+data);
+		        }
+		      }
+		    }
+		  }
+		});
 
 		//catch errors
 		$( "#myBlapy" ).on( "Blapy_ErrorOnPageChange", function(event,anError) {
