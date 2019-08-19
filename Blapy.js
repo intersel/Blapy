@@ -9,6 +9,7 @@
  * -----------------------------------------------------------------------------------------
  * Modifications :
  * - 2019/08/15 - E.Podvin - 1.7.1
+ *  - send blapycall=1&blapyaction=updateTpl&blapyobjectid=<dom object id> parameters when loading a json template
  *	- process templates whether they are using json2html or mustache tags as long as their libraries are loaded
  *		(carefull: no mix between the two tag syntaxes in the same template file)
  * - 2019/08/14 - E.Podvin - 1.7.0
@@ -528,6 +529,7 @@
           $.get(
             {
               url: tplFile,
+              data: "blapycall=1&blapyaction=loadTpl&blapyobjectid=" + myContainer.attr('id'),
               success: function(htmlTplContent) {
               //store the template in comment in a hidden div
               //needs to be in a comment, if not, template content is filtered by the DOM if the template content not compliant within a div
