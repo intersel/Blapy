@@ -985,15 +985,15 @@
                     }
                   }
 
-                  if ($(myContainer.attr('data-blapy-template-header')).length > 0) {
-                    newHtml = $(myContainer).attr('data-blapy-template-header') + newHtml;
+                  if (myContainer.attr('data-blapy-template-header')) {
+                    newHtml = myContainer.attr('data-blapy-template-header') + newHtml;
                   }
-                  if ($(myContainer.attr('data-blapy-template-footer')).length > 0) {
-                    newHtml = newHtml + $(myContainer).attr('data-blapy-template-footer');
+                  if (myContainer.attr('data-blapy-template-footer')) {
+                    newHtml = newHtml + myContainer.attr('data-blapy-template-footer');
                   }
 
                   //Wrap content if needed
-                  if ($(myContainer.attr('data-blapy-template-wrap')).length > 0) {
+                  if (myContainer.attr('data-blapy-template-wrap')) {
                     newHtml = $(myContainer.attr('data-blapy-template-wrap')).html(newHtml)[0];
                     newHtml = newHtml.outerHTML;
                   }
