@@ -514,7 +514,6 @@ This event allows you to call a URL.
 $('#<id of the blapy application tag>').trigger('loadUrl',{
   aUrl:<aURL to call>,
   params:{
-    action:<anAction>,
     embeddingBlockId:<a Blapy Block Id>
   }
 });
@@ -531,7 +530,6 @@ $('#<id of the blapy application tag>').trigger('loadUrl',{
 ```javascript
 $('#myBlapy').trigger('loadUrl',{
   aUrl:"helloworld_2.php",
-  params:{action:'update'}
 });
 ```
 
@@ -541,7 +539,6 @@ $('#myBlapy').trigger('loadUrl',{
 $('#<id of the blapy application tag>').trigger('postData',{
   aUrl:<aURL to call>,
   params:{
-    action:<anAction>,
     embeddingBlockId:<aContainerName>
   },
   method:<http method>
