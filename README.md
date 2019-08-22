@@ -511,7 +511,13 @@ $('#<id of the blapy application tag>').trigger(<anEvent>,{
 This event allows you to call a URL.
 
 ```javascript
-$('#<id of the blapy application tag>').trigger('loadUrl',{aUrl:<aURL to call>,params:{action:<anAction>,embeddingBlockId:<a Blapy Block Id>}})
+$('#<id of the blapy application tag>').trigger('loadUrl',{
+  aUrl:<aURL to call>,
+  params:{
+    action:<anAction>,
+    embeddingBlockId:<a Blapy Block Id>
+  }
+});
 ```
 
 ### params
@@ -523,7 +529,10 @@ $('#<id of the blapy application tag>').trigger('loadUrl',{aUrl:<aURL to call>,p
 ### Example
 
 ```javascript
-$('#myBlapy').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action:'update'}})
+$('#myBlapy').trigger('loadUrl',{
+  aUrl:"helloworld_2.php",
+  params:{action:'update'}
+});
 ```
 
 ## "postData" event
