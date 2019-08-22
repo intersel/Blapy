@@ -45,6 +45,7 @@
 			data-blapy-container-content="fnameOptionsLastName"
 			data-blapy-update="json"
 			data-blapy-template-init="optionvalues.json"
+			data-blapy-template-init-purejson="0"
 		>
 		<xmp>
 			<img src="img/{{lastname}}.png" width="15px"><input name="lastname" type="radio" value="{{lastname}}" {{selected}} onChange="getJson();">{{lastname}}</input>
@@ -60,7 +61,37 @@
 			data-blapy-update="json"
 			data-blapy-template-file="arrayvalues.tpl"
 			data-blapy-template-wrap="<table>"
-			data-blapy-template-init="arrayvalues.data"
+			data-blapy-template-init="arrayvalues.data.php"
+			data-blapy-template-init-params="{'action':'some','purejson':0}"
+			data-blapy-template-init-purejson="0"
+		>
+	</div>
+	<h1>Blapy Block 2 results in a second Table</h1>
+	<div id="resultbis"
+			data-blapy-container="true"
+			data-blapy-container-name="results2"
+			data-blapy-container-content="results"
+			data-blapy-update="json"
+			data-blapy-template-file="arrayvalues2.tpl"
+			data-blapy-template-wrap="<table>"
+			data-blapy-template-init="arrayvalues.data.php"
+			data-blapy-template-init-params="{'action':'all','purejson':1}"
+			data-blapy-template-init-method="POST"
+			data-blapy-template-init-purejson="1"
+		>
+	</div>
+	<h1>Blapy Block 3 results in a third Table</h1>
+	<div id="resultter"
+			data-blapy-container="true"
+			data-blapy-container-name="results3"
+			data-blapy-container-content="results"
+			data-blapy-update="json"
+			data-blapy-template-file="arrayvalues_subblock.tpl"
+			data-blapy-template-wrap="<table>"
+			data-blapy-template-init="arrayvalues.data.php"
+			data-blapy-template-init-params="{'action':'all','purejson':1}"
+			data-blapy-template-init-method="POST"
+			data-blapy-template-init-purejson="1"
 		>
 	</div>
 	<div>

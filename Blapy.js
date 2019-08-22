@@ -8,6 +8,12 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/08/23 - E.Podvin - 1.8.0
+ *  - add "reloadBlock" feature
+ *  - embeddingBlockId should be "block container name" (and not DOM id)
+ *  - fix/improvement on json update management (mainly setBlapyContainerJsonTemplate)
+ * - 2019/08/22 - E.Podvin - 1.7.2
+ *  - fix on header and footer in json template
  * - 2019/08/15 - E.Podvin - 1.7.1
  *  - add fsmExtension option to extend iFSM definition of the blapy object
  *  - send blapycall=1&blapyaction=updateTpl&blapyobjectid=<dom object id> parameters when loading a json template
@@ -219,7 +225,9 @@
     else
     // no routing - standard blapy links management
     {
+      //start Blapy Engine
       this.myUIObject.iFSM(manageBlapy, this.opts);
+
       $(document).on("click", "#" + myBlapy.myUIObjectID + " a[data-blapy-link]", function(event) {
         //if requested, filter the action to be processed only to the defined active blapy object for the link
         if (($(event.target).attr("data-blapy-active-blapyid")) && ($(event.target).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID))
@@ -269,7 +277,7 @@
           aObjectId: myBlapy.myUIObjectID,
           method: $(this).attr("method")
         });
-      });
+      });//end on submit
     }
 
   }; //
@@ -318,7 +326,8 @@
    * returns the embedded html source
    */
   theBlapy.prototype.embedHtmlPage = function(aHtmlSource, aBlapyBlockIdName) {
-    htmlBlapyBlock = this.myUIObject.find('#' + aBlapyBlockIdName);
+//    htmlBlapyBlock = this.myUIObject.find('#' + aBlapyBlockIdName);
+    htmlBlapyBlock = this.myUIObject.find("[data-blapy-container-name='" + aBlapyBlockIdName + "']");
     aHtmlSource = $(htmlBlapyBlock[0].outerHTML).html(aHtmlSource);
     aHtmlSource.attr('data-blapy-container-content', aHtmlSource.attr('data-blapy-container-content') + '-' + $.now());
     aHtmlSource.attr('id', ''); //remove id in order that it takes the one of the block to change
@@ -340,7 +349,6 @@
       "data-blapy-container": true,
       "data-blapy-container-name": aJsonObject["blapy-container-name"],
       "data-blapy-container-content": aJsonObject["blapy-container-content"],
-      "data-blapy-update": aJsonObject["blapy-update"],
       "data-blapy-update": "json"
     }).html(JSON.stringify(aJsonObject['blapy-data']));
     return htmlBlapyBlock;
@@ -519,8 +527,44 @@
    * @param  {[type]} myBlapy     the
    * @return {[type]}             [description]
    */
-  theBlapy.prototype.setBlapyContainerJsonTemplate = function(myContainer, myBlapy) {
+  theBlapy.prototype.setBlapyContainerJsonTemplate = function(myContainer, myBlapy, forceReload) {
     this._log('setBlapyContainerJsonTemplate');
+
+    if (forceReload == undefined) forceReload=false;
+
+    /**
+     * postDataFunc - activate the initialization of the json block
+     * @return {[type]} [description]
+     */
+    var postDataFunc = function() {
+
+      //use JSON5 if present as JSON5.parse is more cool than JSON.parse (cf. https://github.com/json5/json5)
+      var jsonFeatures = null;
+      if (typeof(JSON5) == "undefined") jsonFeatures=JSON;else jsonFeatures=JSON5;
+
+      var aInitURL = myContainer.attr("data-blapy-template-init");
+      if (aInitURL)
+      {
+        aInitURL_Param = myContainer.attr("data-blapy-template-init-params");
+        if (aInitURL_Param != undefined) aInitURL_Param = jsonFeatures.parse(aInitURL_Param);
+        else aInitURL_Param = {};
+
+        aInitURL_EmbeddingBlockId = myContainer.attr("data-blapy-template-init-purejson");
+//        if ( (aInitURL_EmbeddingBlockId == undefined) || (aInitURL_EmbeddingBlockId == "1") ) //default: purejson
+        if ( (aInitURL_EmbeddingBlockId == "1") ) //default: pure blapy json
+          aInitURL_Param = jQuery.extend({'embeddingBlockId':myContainer.attr("data-blapy-container-name")}, aInitURL_Param);
+
+        aInitURL_Method = myContainer.attr("data-blapy-template-init-method");
+        if (aInitURL_Method == undefined) aInitURL_Method = "GET";
+
+        $('#' + myBlapy.myUIObjectID).trigger('postData', {
+          "aUrl": aInitURL,
+          "params":aInitURL_Param,
+          "method":aInitURL_Method
+        });
+      }
+    };
+
 
     //if block is declared json, then we take local update rule (json)
     myContainer.attr('data-blapy-update-rule', 'local');
@@ -546,35 +590,26 @@
               url: tplFile,
               data: "blapycall=1&blapyaction=loadTpl&blapyobjectid=" + myContainer.attr('id'),
               success: function(htmlTplContent) {
-              //store the template in comment in a hidden div
-              //needs to be in a comment, if not, template content is filtered by the DOM if the template content not compliant within a div
-              myContainer.prepend('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
-              var aInitURL = myContainer.attr("data-blapy-template-init");
-              if (aInitURL)
-                $('#' + myBlapy.myUIObjectID).trigger('loadUrl', {
-                  aUrl: aInitURL
-                });
+                //store the template in comment in a hidden div
+                //needs to be in a comment, if not, template content is filtered by the DOM if the template content not compliant within a div
+                myContainer.prepend('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
+                postDataFunc();
               },
               async: false,
             });
         } else // no defined template...?
         {
-          var aInitURL = myContainer.attr("data-blapy-template-init");
-          if (aInitURL)
-            $('#' + myBlapy.myUIObjectID).trigger('loadUrl', {
-              aUrl: aInitURL
-            });
+          postDataFunc();
         }
       } else //template is defined in the block
       {
         myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>');
-        var aInitURL = myContainer.attr("data-blapy-template-init");
-        if (aInitURL)
-          $('#' + myBlapy.myUIObjectID).trigger('loadUrl', {
-            aUrl: aInitURL
-          });
-
+        postDataFunc();
       }
+    }
+    else if (forceReload)
+    {
+      postDataFunc();
     }
   };
 
@@ -582,17 +617,24 @@
   /**
    * setBlapyJsonTemplates - prepare the json templates of the blapy blocks controlled with json (cf [data-blapy-update="json"])
    * json templates are stored in a hidden xmp with a "data-blapy-container-tpl" attribute set
+   *
+   * @param  {boolean} forceReload reload initial json content
+   * @return void
    */
-  theBlapy.prototype.setBlapyJsonTemplates = function() {
+  theBlapy.prototype.setBlapyJsonTemplates = function(forceReload,aEmbeddingBlock) {
     this._log('setBlapyJsonTemplates');
 
     var myBlapy = this;
+    if (forceReload == undefined) forceReload=false;
+
+    if (aEmbeddingBlock) aEmbeddingBlock="[data-blapy-container-name='"+aEmbeddingBlock+"']";
+    else aEmbeddingBlock="";
 
     //for any json template block
-    $('[data-blapy-update="json"]').each(function() {
+    $('[data-blapy-update="json"]'+aEmbeddingBlock).each(function() {
       var myContainer = $(this);
 
-      myBlapy.setBlapyContainerJsonTemplate(myContainer, myBlapy);
+      myBlapy.setBlapyContainerJsonTemplate(myContainer, myBlapy, forceReload);
     });
   };
 
@@ -648,6 +690,7 @@
           var aFSM = this;
           var aUrl = data.aUrl;
           var aObjectId = data.aObjectId ? data.aObjectId : e.currentTarget.id;
+          if ( (aObjectId == undefined) && (typeof(e.currentTarget.attr) != "undefined") ) aObjectId = e.currentTarget.attr('id');
           var params = data.params;
           if (!params) params = {
             action: 'update'
@@ -689,6 +732,7 @@
           var aFSM = this;
           var aUrl = data.aUrl;
           var aObjectId = data.aObjectId ? data.aObjectId : e.currentTarget.id;
+          if ( (aObjectId == undefined) && (typeof(e.currentTarget.attr) != "undefined") ) aObjectId = e.currentTarget.attr('id');
           var params = data.params;
           if (!params) params = {
             action: 'update'
@@ -757,7 +801,26 @@
           });
         },
         next_state: 'ProcessPageChange'
-      }
+      },
+      /**
+       * reloadBlock - reload the (json) blocks
+       * @type {data}
+       *  - data.embeddingBlockId - a block container name
+       */
+      reloadBlock:{
+        init_function: function(p, e, data) {
+
+          var params = {};
+          if (data) params = data.params;
+
+          // process json blocks
+          this.opts.theBlapy.setBlapyJsonTemplates(true,params.embeddingBlockId);
+
+          //@todo for block types other than json blocks
+          //init blapy block that should be initialized on display
+//          this.opts.theBlapy.setBlapyUpdateOnDisplay();
+        },
+      }//reloadBlock
     },
     ProcessPageChange: {
       enterState: {},
@@ -840,7 +903,11 @@
                 }
 
                 //update the id with the current container id, if none given in the new container
-                if (!myContainer.attr('id')) alert('a blapy block has no id:\n'+myContainer[0].outerHTML.substring(0,250));
+                if (!myContainer.attr('id'))
+                {
+                  myFSM._log('a blapy block has no id:\n'+myContainer[0].outerHTML.substring(0,250), 1);
+                  //alert('a blapy block has no id:\n'+myContainer[0].outerHTML.substring(0,250));
+                }
                 if (!aBlapyContainer.attr('id')) aBlapyContainer.attr('id', myContainer.attr('id'));
 
 
@@ -957,16 +1024,16 @@
 
                     if ( (typeof(Mustache) != "undefined") )
                     {
-						if (htmlTplContent.includes("{{"))
-						{ //ok that's mustache templating
-							jsonDataObj = jsonFeatures.parse(jsonData);
+          						if (htmlTplContent.includes("{{"))
+          						{ //ok that's mustache templating
+          							jsonDataObj = jsonFeatures.parse(jsonData);
 
-							newHtml = Mustache.render("{{#.}}"+htmlTplContent+"{{/.}}",jsonDataObj);
-							parsed=true;
-						}
+          							newHtml = Mustache.render("{{#.}}"+htmlTplContent+"{{/.}}",jsonDataObj);
+          							parsed=true;
+          						}
                     }
 
-					if ( !parsed && typeof(json2html) != "undefined" )
+					          if ( !parsed && typeof(json2html) != "undefined" )
                     {
                       newHtml = json2html.transform(jsonData, {
                         'tag': "void",

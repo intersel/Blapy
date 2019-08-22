@@ -353,11 +353,14 @@ To define a Blapy Block, you need to use the following attributes:
   * **json**: the content of the current container is considered to be a template.
  If the container-name is found, then it is considered that the external content is a json object or an array of json objects.
  These json objects will be applied on the template. Theses parameters allows the json configuration:
-      * **data-blapy-template-file**: defines a template file name where to get the template if the container is empty
-      * **data-blapy-template-wrap**: once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "```<table>```")
-      * **data-blapy-template-header**: once the json data are rendered, it is possible to set a header(ex: "```<tr><th>header</th></tr>```")
-      * **data-blapy-template-footer**: once the json data are rendered, it is possible to set a footer(ex: "```<tr><th>footer</th></tr>```")
-      * **data-blapy-template-init**: a file name that contains a json data blapy block to use to initialize the block
+      * **data-blapy-template-file** (option): defines a URL called to get the template to apply on json data if the container (that is used to define the template) is empty
+      * **data-blapy-template-wrap** (option): once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "```<table>```")
+      * **data-blapy-template-header** (option): once the json data are rendered, it is possible to set a header(ex: "```<tr><th>header</th></tr>```")
+      * **data-blapy-template-footer** (option): once the json data are rendered, it is possible to set a footer(ex: "```<tr><th>footer</th></tr>```")
+      * **data-blapy-template-init** (option): a (REST) URL to get json data to use to initialize the block
+        * **data-blapy-template-init-params** (option): json string of the parameters to send to the URL
+        * **data-blapy-template-init-method** (option): 'GET' (default) || 'POST' || 'PUT' || 'DELETE'
+        * **data-blapy-template-init-purejson** (option): '0' ("blapy oriented" json) || '1' (default) (not "blapy oriented" json),
   * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
   * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined
  and send the Blapy_doCustomChange event.
@@ -496,7 +499,11 @@ To listen to Blapy events, you may use the jQuery 'on' function as in this examp
 You can activate some features of Blapy by sending events to it with the 'trigger' function of jQuery:
 
 ```javascript
-$('#<id of the blapy application tag>').trigger(<anEvent>,{aUrl:<aURL to call>,params:<someParameters>)
+$('#<id of the blapy application tag>').trigger(<anEvent>,{
+  aUrl:<aURL to call>,
+  params:{<someParameters>}
+  ...
+  });
 ```
 
 ## "loadURL" event
@@ -509,9 +516,9 @@ $('#<id of the blapy application tag>').trigger('loadUrl',{aUrl:<aURL to call>,p
 
 ### params
 
-* **action** (optional)
-  * **'update'** (default): update the Blapy blocks from the URL
-* **embeddingBlockId** (optional): a block container id
+* **aUrl**: the Url to call
+* **params**:
+  * **embeddingBlockId** (optional): a block container name (data-blapy-container-name)
 
 ### Example
 
@@ -522,24 +529,35 @@ $('#myBlapy').trigger('loadUrl',{aUrl:"helloworld_2.php",params:{action:'update'
 ## "postData" event
 
 ```javascript
-$('#<id of the blapy application tag>').trigger('postData',{aUrl:<aURL to call>,params:{action:<anAction>},method:<http method>});
+$('#<id of the blapy application tag>').trigger('postData',{
+  aUrl:<aURL to call>,
+  params:{
+    action:<anAction>,
+    embeddingBlockId:<aContainerName>
+  },
+  method:<http method>
+});
 ```
 
 ### params
 
-* **action** (option)
-  * **'update'** (default) : update the Blapy blocks from the URL
+* **aUrl**: the Url to call
+* **params**:
+  * **embeddingBlockId** (optional): a block container name (data-blapy-container-name)
+  * any property/value to send to the server
 * **method** (option)
   * 'post' (default)
   * 'put'
   * 'delete'
-* **embeddingBlockId** (optional): a block container id
-* any property/value to send to the server
+  * 'get' (same behaviour than "loadURL" event in this case)
 
 ### Example
 
 ```javascript
-$("#myBlapy").trigger('postData',{aUrl:"testForm.php",params:{fname:'Emmanuel',lname:'Podvin'}})
+$("#myBlapy").trigger('postData',{
+  aUrl:"testForm.php",
+  params:{fname:'Emmanuel',lname:'Podvin'}
+});
 ```
 
 ## "updateBlock" event
@@ -547,7 +565,10 @@ $("#myBlapy").trigger('postData',{aUrl:"testForm.php",params:{fname:'Emmanuel',l
 This event allows you to call Blapy to directly update a Blapy block.
 
 ```javascript
-$('#<id of the blapy application tag>').trigger('updateBlock',{html:<a blapy content>,params:{action:<anAction>,embeddingBlockId:<a Blapy Block Id>}})
+$('#<id of the blapy application tag>').trigger('updateBlock',{
+  html:<a blapy content>,
+  params:{embeddingBlockId:<a Blapy Block Container Name>}
+});
 ```
 
 ### params
@@ -555,14 +576,38 @@ $('#<id of the blapy application tag>').trigger('updateBlock',{html:<a blapy con
 * **html**
   * any blapy content (blapy blocks, json string or objects, ...)
 * **params**:
-  * **action** (optional)
-    * **'update'** (default): update the Blapy blocks from the URL
-  * **embeddingBlockId** (optional): a block container id
+  * **embeddingBlockId** (optional): a block container name (data-blapy-container-name)
 
 ### Example
 
 ```javascript
-$('#myBlapy').trigger('updateBlock',{html:"[{name:"John Doe"}]",params:{action:'update',embeddingBlockId:'myBlapyBlock'}})
+$('#myBlapy').trigger('updateBlock',{
+    html:"[{name:"John Doe"}]",
+    params:{embeddingBlockId:'myBlapyBlock'}
+  });
+```
+
+## "reloadBlock" event
+
+This event allows you to reload the Blapy blocks using their init configuration (init url).
+
+```javascript
+$('#<id of the blapy application tag>').trigger('reloadBlock',{
+  params:{embeddingBlockId:<a Blapy Block Container Name>}
+});
+```
+
+### params
+
+* **params**:
+  * **embeddingBlockId** (optional): a block container name (data-blapy-container-name). If none given, all the json blocks are reloaded.
+
+### Example
+
+```javascript
+$('#myBlapy').trigger('reloadBlock',{
+  params:{embeddingBlockId:'myBlapyBlock'}
+});
 ```
 
 
