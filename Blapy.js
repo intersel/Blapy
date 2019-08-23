@@ -8,6 +8,8 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/08/23 - E.Podvin - 1.9.0
+ *   - add multi templating for json blapy blocks
  * - 2019/08/23 - E.Podvin - 1.8.0
  *  - add "reloadBlock" feature
  *  - embeddingBlockId should be "block container name" (and not DOM id)
@@ -570,7 +572,7 @@
     myContainer.attr('data-blapy-update-rule', 'local');
 
     //Search for a template container already defined within the blapy container
-    var htmlTpl = myContainer.find('[data-blapy-container-tpl]'); // if still processed, a block data-blapy-container-tpl will be inside
+    var htmlTpl = myContainer.children('[data-blapy-container-tpl]'); // if still processed, a block data-blapy-container-tpl will be inside
     if (htmlTpl.length == 0) // ok so not processed, so let's do it
     {
       var htmlTplContent = myContainer.html();
@@ -590,9 +592,16 @@
               url: tplFile,
               data: "blapycall=1&blapyaction=loadTpl&blapyobjectid=" + myContainer.attr('id'),
               success: function(htmlTplContent) {
-                //store the template in comment in a hidden div
-                //needs to be in a comment, if not, template content is filtered by the DOM if the template content not compliant within a div
-                myContainer.prepend('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
+                if ($(htmlTplContent).siblings('[data-blapy-container-tpl="true"]').length == 0)
+                {
+                  //store the template in comment in a hidden xmp
+                  myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
+                }
+                else
+                {
+                  myContainer.html(htmlTplContent.replace(/<!--(.*?)-->/gm, ""));
+                }
+
                 postDataFunc();
               },
               async: false,
@@ -603,7 +612,15 @@
         }
       } else //template is defined in the block
       {
-        myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>');
+        if ($(htmlTplContent).siblings('[data-blapy-container-tpl="true"]').length == 0)
+        {
+          //store the template in comment in a hidden xmp
+          myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
+        }
+        else
+        {
+          myContainer.html(htmlTplContent.replace(/<!--(.*?)-->/gm, ""));
+        }
         postDataFunc();
       }
     }
@@ -618,10 +635,12 @@
    * setBlapyJsonTemplates - prepare the json templates of the blapy blocks controlled with json (cf [data-blapy-update="json"])
    * json templates are stored in a hidden xmp with a "data-blapy-container-tpl" attribute set
    *
-   * @param  {boolean} forceReload reload initial json content
+   * @param  boolean forceReload reload initial json content
+   * @param  string (option/default:undefined) aEmbeddingBlock a specific block container name
+   * @param  string (option/default:undefined) aTemplateId     default template to set on the block
    * @return void
    */
-  theBlapy.prototype.setBlapyJsonTemplates = function(forceReload,aEmbeddingBlock) {
+  theBlapy.prototype.setBlapyJsonTemplates = function(forceReload,aEmbeddingBlock,aTemplateId) {
     this._log('setBlapyJsonTemplates');
 
     var myBlapy = this;
@@ -629,6 +648,12 @@
 
     if (aEmbeddingBlock) aEmbeddingBlock="[data-blapy-container-name='"+aEmbeddingBlock+"']";
     else aEmbeddingBlock="";
+
+    // set the default template
+    if (aTemplateId)
+    {
+      $('[data-blapy-update="json"]'+aEmbeddingBlock).attr('data-blapy-template-default-id',aTemplateId);
+    }
 
     //for any json template block
     $('[data-blapy-update="json"]'+aEmbeddingBlock).each(function() {
@@ -814,7 +839,7 @@
           if (data) params = data.params;
 
           // process json blocks
-          this.opts.theBlapy.setBlapyJsonTemplates(true,params.embeddingBlockId);
+          this.opts.theBlapy.setBlapyJsonTemplates(true,params.embeddingBlockId,params.templateId);
 
           //@todo for block types other than json blocks
           //init blapy block that should be initialized on display
@@ -996,22 +1021,41 @@
                 else if (dataBlapyUpdate == 'json') {
                   //get json data and remove return chars (for the eval)
                   var jsonData = aBlapyContainer.html().replace(/(\r\n|\n|\r)/g, "");
-
-                  var htmlTpl = myContainer.find('[data-blapy-container-tpl]');
-                  if (htmlTpl.length == 0) {
-                    htmlTplContent = myContainer.html();
-                    htmlTpl = myContainer.prepend('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>');
-                  } else {
-                    htmlTplContent = htmlTpl.html();
-                    //delete comment tag
-                    //htmlTplContent = htmlTplContent.substr(4, htmlTplContent.length - 3 - 4);
-                  }
-
                   try {
                     jsonData = JSON.stringify(jsonFeatures.parse(jsonData));
                   } catch (e) {
                     myFSM._log('downloaded content can not be evaluated, so is not json data: ' + jsonData, 1);
                     return;
+                  }
+
+                  // Get the json Template
+                  var htmlTpl = $();
+                  var htmlAllTpl = myContainer.children('[data-blapy-container-tpl]');
+
+                  var tplId = myContainer.attr('data-blapy-template-default-id');
+                  if (tplId != undefined)
+                  {
+                    //get tpl from the tplId of the object
+                    tplId = "[data-blapy-container-tpl-id='"+tplId+"']";
+                    htmlTpl = myContainer.children('[data-blapy-container-tpl]'+tplId);
+                    if (htmlTpl.length == 0)
+                    {
+                      myFSM._log('The json template of id '+tplId+' was not found for the block '+ myContainer.attr('data-blapy-container-name')+'!', 1);
+                    }
+                  }
+
+                  if (htmlTpl.length == 0)
+                    htmlTpl = htmlAllTpl;
+
+                  if (htmlTpl.length == 0)
+                  {
+                    myFSM._log('can not find any json template for the block: ' + myContainer.attr('data-blapy-container-name'), 1);
+                    htmlTplContent='';
+                  }
+                  else
+                  {
+                    // Great! Template was found
+                    htmlTplContent = htmlTpl.html();
                   }
 
                   //get the rendering
@@ -1065,7 +1109,14 @@
                     newHtml = newHtml.outerHTML;
                   }
 
-                  myContainer.html(htmlTpl[0].outerHTML + newHtml); //replace content with the new one
+                  //prepare to replace the content by the new parsed one
+                  //get the available templates
+                  var tplList = "";
+                  htmlAllTpl.each(function(){tplList += this.outerHTML});
+                  //replace content with the new one
+                  myContainer.html(tplList + newHtml);
+
+                  // initialize the sub blapy blocks found in the new content if any
                   var myBlapy = myFSM.opts.theBlapy;
                   myContainer.find('[data-blapy-update="json"]').each(function() {
                     var mySubContainer = $(this);
@@ -1073,6 +1124,7 @@
                     myBlapy.setBlapyContainerJsonTemplate(mySubContainer, myBlapy);
                   });
 
+                  //reset container to its original jquery object
                   myContainer = aBlapyContainer;
 
                 } else {

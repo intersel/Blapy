@@ -350,13 +350,14 @@ To define a Blapy Block, you need to use the following attributes:
   * **append**: if the container-name is found from the external content, the external content should be added to the end of the current Blapy block content.
   * **prepend**: if the container-name is found from the external content, the external content should be added before the current Blapy block content.
   * **replace**: if the container-name is found from the external content, the inner content of the external content should replace the current Blapy block content.
-  * **json**: the content of the current container is considered to be a template.
- If the container-name is found, then it is considered that the external content is a json object or an array of json objects.
- These json objects will be applied on the template. Theses parameters allows the json configuration:
+  * **json**: the content of the current container is considered to be a (Mustache or json2html) template to apply on json data.
+ When the blapy block needs to be updated, then it is considered that the new content is a json object or an array of json objects that will be parsed with the given template.
+ These json data will be applied on the template. These parameters allows the json configuration:
       * **data-blapy-template-file** (option): defines a URL called to get the template to apply on json data if the container (that is used to define the template) is empty
       * **data-blapy-template-wrap** (option): once the json data are rendered, it is possible to wrap the result by giving the wrap html tag (ex: "```<table>```")
-      * **data-blapy-template-header** (option): once the json data are rendered, it is possible to set a header(ex: "```<tr><th>header</th></tr>```")
-      * **data-blapy-template-footer** (option): once the json data are rendered, it is possible to set a footer(ex: "```<tr><th>footer</th></tr>```")
+      * **data-blapy-template-header** (option): once the json data are rendered, it is possible to set a header (ex: "```<tr><th>header</th></tr>```")
+      * **data-blapy-template-footer** (option): once the json data are rendered, it is possible to set a footer (ex: "```<tr><th>footer</th></tr>```")
+      * **data-blapy-template-default-id** (option): if multiple templates are set, set the default one to use on initialization. Default to the first found one.
       * **data-blapy-template-init** (option): a (REST) URL to get json data to use to initialize the block
         * **data-blapy-template-init-params** (option): json string of the parameters to send to the URL
         * **data-blapy-template-init-method** (option): 'GET' (default) || 'POST' || 'PUT' || 'DELETE'
@@ -429,7 +430,7 @@ To define a Blapy Link, here are its attributes:
 	<li><a href="content1.php" data-blapy-link="true">Content 1</a></li>
 	<li data-blapy-link="true" data-blapy-href="content2.php">Content 2</a></li>
 	<li><a href="jsoncontent3.php" data-blapy-link="true" data-blapy-embedding-blockid="mainContainerApp3">Content 3</a></li>
-</ul
+</ul>
 ```
 
 # Triggered events
@@ -599,7 +600,10 @@ This event allows you to reload the Blapy blocks using their init configuration 
 
 ```javascript
 $('#<id of the blapy application tag>').trigger('reloadBlock',{
-  params:{embeddingBlockId:<a Blapy Block Container Name>}
+  params:{
+    embeddingBlockId:<a Blapy Block Container Name>,
+    templateId:<a xmp id of a json template>
+  }
 });
 ```
 
@@ -607,6 +611,7 @@ $('#<id of the blapy application tag>').trigger('reloadBlock',{
 
 * **params**:
   * **embeddingBlockId** (optional): a block container name (data-blapy-container-name). If none given, all the json blocks are reloaded.
+  * **templateId** (optional): an id of an xmp object that describes a json template of a json block. if "embeddingBlockId" set, then only this block will be updated, else all the blocks will be updated with this new setting.
 
 ### Example
 
@@ -625,6 +630,84 @@ When Blapy calls a 'Blapy Link', the following parameters are sent as GET parame
   * **update**: blocks will be updated
 
 Knowing these parameters allow you to optimize the generated html returned by the server to the client, so sending back only the useful html blocks instead of the full html page.
+
+# JSON template
+
+The json template are the content definition of a blapy json block type (cf. data-blapy-update) that will be parsed on json data sent to the block.
+
+A json template may use "[Mustache](https://github.com/janl/mustache.js)" or "[json2html](http://json2html.com/)" tags.
+
+When the blapy block has its property "data-blapy-update" set to "json", the content of the block is considered to be a template.
+
+## Example
+
+```html
+<section id="jsonTPLExample"
+      data-blapy-container="true"
+			data-blapy-container-name="jsonTPLExample"
+			data-blapy-container-content="aTPL"
+			data-blapy-update="json"
+			data-blapy-template-init="myJsonData.json"
+>
+  My name is {{firstname}}!<br>
+</section>
+```
+
+if the response of "myJsonData.json" is something like that:
+```json
+[
+  {"firstname":"Emmanuel"},
+  {"firstname":"Maryse"},
+  {"firstname":"Augustin"},
+]
+```
+
+The resulting parse of the blapy block in the browser will be:
+```html
+<section id="jsonTPLExample"
+      data-blapy-container="true"
+			data-blapy-container-name="jsonTPLExample"
+			data-blapy-container-content="aTPL"
+			data-blapy-update="json"
+			data-blapy-template-init="myJsonData.json"
+>
+  My name is Emmanuel!<br>
+  My name is Maryse!<br>
+  My name is Augustin!<br>
+</section>
+```
+
+It is possible to have blapy blocks inside your template.
+
+## Multiple templates
+According to the context, you may need to change the template of your block to display differently your data.
+
+It is so possible to define several templates for the same block. These templates can be selected through the Blapy API with the message "reloadBlock".
+
+The way to describe them needs the use of the XMP tag and the "data-blapy-container-tpl" (to be set to true) and "data-blapy-container-tpl-id" properties, like in the following example:
+
+The "data-blapy-template-default-id" property may be used to set the default template by default.
+
+```html
+<section id="jsonTPLExample"
+      data-blapy-container="true"
+			data-blapy-container-name="jsonTPLExample"
+			data-blapy-container-content="aTPL"
+			data-blapy-update="json"
+			data-blapy-template-init="myJsonData.json"
+      data-blapy-template-default-id="secondTPL"
+>
+  <xmp style="display:none" data-blapy-container-tpl="true" data-blapy-container-tpl-id="firstTPL">
+    My name is {{firstname}}!<br>
+  <xmp>
+  <xmp style="display:none" data-blapy-container-tpl="true" data-blapy-container-tpl-id="secondTPL">
+    Is {{firstname}} your firstname?<br>
+  <xmp>
+</section>
+```
+
+You may call the "reloadBlock" event message to change the template. It will reload the json data from the server too.
+
 
 # Blapy animation plugin functions
 
