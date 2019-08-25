@@ -694,6 +694,8 @@ For the above example, the json data to be parsed on the template will actually 
 
 This "blapyIndex" may be used in your template as any other of properties (${blapyIndex} or {{blapyIndex}})...
 
+It starts from 1... if json data is not an array, then blapyIndex is set to 0.
+
 ## Multiple templates
 According to the context, you may need to change the template of your block to display differently your data.
 

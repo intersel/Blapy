@@ -1066,7 +1066,11 @@
                   if (htmlTplContent.length < 3)
                     //no defined template?
                     newHtml = jsonData;
-                  else {
+                  else
+                  {
+                    //template defined...
+                    //let's parse it with the json data...
+                    
                     let parsed=false;
 
                     // create an "idx" property to access to the index of the array
@@ -1076,9 +1080,14 @@
                         if (jsonDataObj[i].blapyIndex == undefined)
                           jsonDataObj[i].blapyIndex = (function(in_i){return in_i+1;})(i);
                       }
-                      //update jsonData with the index
-                      jsonData= JSON.stringify(jsonDataObj);
                     }
+                    else
+                    {
+                      //not a json array
+                      jsonDataObj.blapyIndex = 0;
+                    }
+                    //update jsonData with the index
+                    jsonData= JSON.stringify(jsonDataObj);
 
                     if ( (typeof(Mustache) != "undefined") )
                     {
@@ -1108,7 +1117,7 @@
                       myFSM._log('no json parser loaded... need to include json2html or Mustache library! ', 1);
                       alert('no json parser loaded... need to include "json2html" or "Mustache" library!');
                     }
-                  }
+                  }//else of htmlTplContent.length<3
 
                   if (myContainer.attr('data-blapy-template-header')) {
                     newHtml = myContainer.attr('data-blapy-template-header') + newHtml;
