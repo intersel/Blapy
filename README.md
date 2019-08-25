@@ -373,7 +373,7 @@ To define a Blapy Block, you need to use the following attributes:
 If defined, the external container will only be applied on the matched Blapy blocks contained in the given application id element.
 * **data-blapy-href** (option): a URL to call on **data-blapy-updateblock-time** (if set) or on **data-blapy-updateblock-ondisplay**
 * **data-blapy-updateblock-time** (option): a time in milliseconds when the URL set in 'data-blapy-href' should be called to update the block.
-* **data-blapy-updateblock-ondisplay** (option): if set to true, will update the block from **data-blapy-href** when the element is visible (after a scroll).
+* **data-blapy-updateblock-ondisplay** (option): if set to true, the block will be initialized from **data-blapy-href** or from **data-blapy-template-init** (if data-blapy-update is set to "json") when the element becomes visible (after a scroll).
 
 
 ## Examples
@@ -1219,6 +1219,14 @@ As the file is parsed as HTML, img tag will try to load the image that does not 
 
 To fix this, simply wrap your html template with the tag "xmp" which will neutralize html analysis.
 
+## My Blapy block does not appear when I change its style from "display:off" to "display:block" when "data-blapy-updateblock-ondisplay" is set
+
+The jquery.appear object is not aware of a change in the display...
+
+In order to alert it, you can simulate a scroll on the window just after changing the display status of your block with :
+```Javascript
+$(window).scroll();
+```
 
 # Contact
 If you have any ideas, feedback, requests or bug reports, you can reach me at github@intersel.org,

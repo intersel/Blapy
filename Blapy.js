@@ -8,6 +8,9 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/08/25 - E.Podvin - 1.9.2
+ *  - fix on search embeding block name id in setBlapyJsonTemplates to set template id to blapy object
+ *  - data-blapy-updateblock-ondisplay works now on json blocks
  * - 2019/08/25 - E.Podvin - 1.9.1
  *  - add automatically property "blapyIndex" for each item in json data that is an array
  * - 2019/08/23 - E.Podvin - 1.9.0
@@ -512,11 +515,22 @@
     $('[data-blapy-updateblock-ondisplay]').appear();
 
     $(document.body).on('appear', '[data-blapy-updateblock-ondisplay]', function(event, $all_appeared_elements) {
-      if ($(this).attr("data-blapy-href") && !$(this).attr("data-blapy-appear"))
+      if (!$(this).attr("data-blapy-appear"))
+          $(this).attr("data-blapy-appear", 'done');
+      else return;
+
+      if ($(this).attr("data-blapy-href"))
       {
-        $(this).attr("data-blapy-appear", 'done');
         myBlapy.myUIObject.trigger('loadUrl', {
           aUrl: $(this).attr("data-blapy-href")
+        });
+      }
+      else if ($(this).attr("data-blapy-template-init"))
+      {
+        myBlapy.myUIObject.trigger('reloadBlock',{
+          params:{
+            embeddingBlockId:$(this).attr("data-blapy-container-name"),
+          }
         });
       }
     });
@@ -540,11 +554,21 @@
      * postDataFunc - activate the initialization of the json block
      * @return {[type]} [description]
      */
-    var postDataFunc = function() {
+    var postDataFunc = function(forceReload) {
 
       //use JSON5 if present as JSON5.parse is more cool than JSON.parse (cf. https://github.com/json5/json5)
       var jsonFeatures = null;
       if (typeof(JSON5) == "undefined") jsonFeatures=JSON;else jsonFeatures=JSON5;
+
+      //do we have to get the data only when block is displayed?
+      if (   !forceReload
+          &&  myContainer.attr("data-blapy-updateblock-ondisplay")
+          &&  (myContainer.attr("data-blapy-appear") != 'done')
+        )
+      {
+        //$(document).scroll();//force appear to work...
+        return;
+      }
 
       var aInitURL = myContainer.attr("data-blapy-template-init");
       if (aInitURL)
@@ -628,7 +652,7 @@
     }
     else if (forceReload)
     {
-      postDataFunc();
+      postDataFunc(forceReload);
     }
   };
 
@@ -654,11 +678,11 @@
     // set the default template
     if (aTemplateId)
     {
-      $('[data-blapy-update="json"]'+aEmbeddingBlock).attr('data-blapy-template-default-id',aTemplateId);
+      $(myBlapy.myUIObject).find('[data-blapy-update="json"]'+aEmbeddingBlock).attr('data-blapy-template-default-id',aTemplateId);
     }
 
     //for any json template block
-    $('[data-blapy-update="json"]'+aEmbeddingBlock).each(function() {
+    $(myBlapy.myUIObject).find('[data-blapy-update="json"]'+aEmbeddingBlock).each(function() {
       var myContainer = $(this);
 
       myBlapy.setBlapyContainerJsonTemplate(myContainer, myBlapy, forceReload);
@@ -1070,7 +1094,7 @@
                   {
                     //template defined...
                     //let's parse it with the json data...
-                    
+
                     let parsed=false;
 
                     // create an "idx" property to access to the index of the array
@@ -1190,6 +1214,8 @@
         },
         next_state: 'PageReady',
       },
+      reloadBlock: 'loadUrl',
+      updateBlock: 'loadUrl',
       postData: 'loadUrl',
       loadUrl: //someone try to load an URL but page is not ready... try it later...
       {
