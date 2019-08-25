@@ -683,7 +683,7 @@ It is possible to have blapy blocks inside your template. They will be parsed on
 
 If the received json data is an array (like in the above example), Blapy will automatically add a property "blapyIndex" setting the index of the item in the array.
 
-For the above example, the parsed data will actually be
+For the above example, the json data to be parsed on the template will actually be
 ```json
 [
   {"firstname":"Emmanuel","blapyIndex":"1"},
