@@ -8,6 +8,8 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/08/25 - E.Podvin - 1.9.1
+ *  - add automatically property "idx" for each item in json data that is an array
  * - 2019/08/23 - E.Podvin - 1.9.0
  *   - add multi templating for json blapy blocks
  * - 2019/08/23 - E.Podvin - 1.8.0
@@ -1022,7 +1024,8 @@
                   //get json data and remove return chars (for the eval)
                   var jsonData = aBlapyContainer.html().replace(/(\r\n|\n|\r)/g, "");
                   try {
-                    jsonData = JSON.stringify(jsonFeatures.parse(jsonData));
+                    var jsonDataObj = jsonFeatures.parse(jsonData);
+                    jsonData = JSON.stringify(jsonDataObj);
                   } catch (e) {
                     myFSM._log('downloaded content can not be evaluated, so is not json data: ' + jsonData, 1);
                     return;
@@ -1062,15 +1065,25 @@
                   var newHtml = '';
                   if (htmlTplContent.length < 3)
                     //no defined template?
-                    newHtml = JSON.stringify(jsonData);
+                    newHtml = jsonData;
                   else {
                     let parsed=false;
+
+                    // create an "idx" property to access to the index of the array
+                    if (jsonDataObj.length)
+                    {
+                      for( var i=0; i< jsonDataObj.length; i++) {
+                        jsonDataObj[i].idx = (function(in_i){return in_i+1;})(i);
+                      }
+                      //update jsonData with the index
+                      jsonData= JSON.stringify(jsonDataObj);
+                    }
 
                     if ( (typeof(Mustache) != "undefined") )
                     {
           						if (htmlTplContent.includes("{{"))
           						{ //ok that's mustache templating
-          							jsonDataObj = jsonFeatures.parse(jsonData);
+          							//jsonDataObj = jsonFeatures.parse(jsonData);
 
           							newHtml = Mustache.render("{{#.}}"+htmlTplContent+"{{/.}}",jsonDataObj);
           							parsed=true;

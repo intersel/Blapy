@@ -653,7 +653,7 @@ When the blapy block has its property "data-blapy-update" set to "json", the con
 </section>
 ```
 
-if the response of "myJsonData.json" is something like that:
+if the response of "myJsonData.json" is an array of json data, something like that:
 ```json
 [
   {"firstname":"Emmanuel"},
@@ -677,7 +677,22 @@ The resulting parse of the blapy block in the browser will be:
 </section>
 ```
 
-It is possible to have blapy blocks inside your template.
+## Remarks
+
+It is possible to have blapy blocks inside your template. They will be parsed once the template was applied on the json data. This way, you can have blapy blocks that are configured with your json data...
+
+If the received json data is an array (like in the above example), Blapy will automatically add a property "idx" setting the index of the item in the array.
+
+For the above example, the parsed data will be
+```json
+[
+  {"firstname":"Emmanuel","idx":"1"},
+  {"firstname":"Maryse","idx":"2"},
+  {"firstname":"Augustin","idx":"3"},
+]
+```
+
+This "idx" may be used in your template as any other of properties (${idx} or {{idx}})...
 
 ## Multiple templates
 According to the context, you may need to change the template of your block to display differently your data.
