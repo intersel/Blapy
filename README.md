@@ -679,20 +679,20 @@ The resulting parse of the blapy block in the browser will be:
 
 ## Remarks
 
-It is possible to have blapy blocks inside your template. They will be parsed once the template was applied on the json data. This way, you can have blapy blocks that are configured with your json data...
+It is possible to have blapy blocks inside your template. They will be parsed once the template is applied on the json data. This way, you can have blapy blocks that are configured with your json data...
 
-If the received json data is an array (like in the above example), Blapy will automatically add a property "idx" setting the index of the item in the array.
+If the received json data is an array (like in the above example), Blapy will automatically add a property "blapyIndex" setting the index of the item in the array.
 
-For the above example, the parsed data will be
+For the above example, the parsed data will actually be
 ```json
 [
-  {"firstname":"Emmanuel","idx":"1"},
-  {"firstname":"Maryse","idx":"2"},
-  {"firstname":"Augustin","idx":"3"},
+  {"firstname":"Emmanuel","blapyIndex":"1"},
+  {"firstname":"Maryse","blapyIndex":"2"},
+  {"firstname":"Augustin","blapyIndex":"3"},
 ]
 ```
 
-This "idx" may be used in your template as any other of properties (${idx} or {{idx}})...
+This "blapyIndex" may be used in your template as any other of properties (${blapyIndex} or {{blapyIndex}})...
 
 ## Multiple templates
 According to the context, you may need to change the template of your block to display differently your data.

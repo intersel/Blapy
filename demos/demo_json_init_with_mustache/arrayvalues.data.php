@@ -16,6 +16,11 @@ EOT;
 
 switch($_REQUEST['action'])
 {
+	case 'one':
+		echo <<<EOT
+			{firstname: "John",lastname: "Doe"}
+EOT;
+		break;
 	case 'some':
 		echo <<<EOT
 			[
@@ -30,7 +35,7 @@ EOT;
 			[
 				{firstname: "John",lastname: "Doe"},
 				{firstname: "Bob",lastname: "Dylan"},
-				{firstname: "Peter",lastname: "Rabbit"},
+				{blapyIndex:25, firstname: "Peter",lastname: "Rabbit"},
 				{firstname: "Nina",lastname: "Hagen"},
 			]
 EOT;

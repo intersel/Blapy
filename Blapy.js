@@ -9,7 +9,7 @@
  * -----------------------------------------------------------------------------------------
  * Modifications :
  * - 2019/08/25 - E.Podvin - 1.9.1
- *  - add automatically property "idx" for each item in json data that is an array
+ *  - add automatically property "blapyIndex" for each item in json data that is an array
  * - 2019/08/23 - E.Podvin - 1.9.0
  *   - add multi templating for json blapy blocks
  * - 2019/08/23 - E.Podvin - 1.8.0
@@ -1073,7 +1073,8 @@
                     if (jsonDataObj.length)
                     {
                       for( var i=0; i< jsonDataObj.length; i++) {
-                        jsonDataObj[i].idx = (function(in_i){return in_i+1;})(i);
+                        if (jsonDataObj[i].blapyIndex == undefined)
+                          jsonDataObj[i].blapyIndex = (function(in_i){return in_i+1;})(i);
                       }
                       //update jsonData with the index
                       jsonData= JSON.stringify(jsonDataObj);
