@@ -422,6 +422,7 @@ To define a Blapy Link, here are its attributes:
 
 * **data-blapy-embedding-blockid**: tells to embed the return source of the link in a blapy block of the given name. Usefull for return sources that are not 'blapy' formatted and that address a specific block...
 * **data-blapy-active-blapyId**: useful in the case the link is embedded in several different blapy objects, it gives the correct blapy object for the link. If not set, the link will be processed by all the blapy objects that contain the link.
+* **data-blapy-noblapydata**: if set to "1", no blapy information data are sent to the URL.
 
 ## Examples
 
@@ -516,7 +517,8 @@ $('#<id of the blapy application tag>').trigger('loadUrl',{
   aUrl:<aURL to call>,
   params:{
     embeddingBlockId:<a Blapy Block Id>
-  }
+  },
+  noBlapyData:"<0|1>"
 });
 ```
 
@@ -525,6 +527,7 @@ $('#<id of the blapy application tag>').trigger('loadUrl',{
 * **aUrl**: the Url to call
 * **params**:
   * **embeddingBlockId** (optional): a block container name (data-blapy-container-name)
+* **noBlapyData**: if set to "1", no blapy information are sent (default: blapy data are sent)
 
 ### Example
 
@@ -538,11 +541,12 @@ $('#myBlapy').trigger('loadUrl',{
 
 ```javascript
 $('#<id of the blapy application tag>').trigger('postData',{
-  aUrl:<aURL to call>,
+  aUrl:"<aURL to call>",
   params:{
-    embeddingBlockId:<aContainerName>
+    embeddingBlockId:"<aContainerName>"
   },
-  method:<http method>
+  method:"<http method>",
+  noBlapyData:"<0|1>"
 });
 ```
 
@@ -557,6 +561,7 @@ $('#<id of the blapy application tag>').trigger('postData',{
   * 'put'
   * 'delete'
   * 'get' (same behaviour than "loadURL" event in this case)
+* **noBlapyData**: if set to "1", no blapy information are sent (default: blapy data are sent)
 
 ### Example
 
