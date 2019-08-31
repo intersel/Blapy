@@ -8,6 +8,9 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/08/29 - E.Podvin - 1.9.3
+ *  - fix on tplid == "" in json process
+ *  - add possibility to not send any blapy data on loadURL or postData
  * - 2019/08/25 - E.Podvin - 1.9.2
  *  - fix on search embeding block name id in setBlapyJsonTemplates to set template id to blapy object
  *  - data-blapy-updateblock-ondisplay works now on json blocks
@@ -191,7 +194,8 @@
         myBlapy.myUIObject.trigger('loadUrl', {
           aUrl: myBlapy.hashURL(),
           params: myBlapy.filterAttributes(this.params),
-          aObjectId: myBlapy.myUIObjectID
+          aObjectId: myBlapy.myUIObjectID,
+          noBlapyData:$(this).attr("data-blapy-noblapydata")
         });
       });
       app.post(/(.*)\#blapylink/, function() {
@@ -205,7 +209,7 @@
           aUrl: myBlapy.hashURL(this.path),
           params: myBlapy.filterAttributes(this.params),
           aObjectId: myBlapy.myUIObjectID,
-          method: "post"
+          method: "post",
         });
       });
       app.put(/(.*)\#blapylink/, function() {
@@ -246,7 +250,8 @@
           params: {
             embeddingBlockId: $(this).attr('data-blapy-embedding-blockid')
           },
-          aObjectId: myBlapy.myUIObjectID
+          aObjectId: myBlapy.myUIObjectID,
+          noBlapyData:$(this).attr("data-blapy-noblapydata")
         });
       });
       $(document).on("submit", "#" + myBlapy.myUIObjectID + " form[data-blapy-link]", function(event) {
@@ -282,7 +287,8 @@
           aUrl: myBlapy.hashURL($(this).attr("action")),
           params: formValues,
           aObjectId: myBlapy.myUIObjectID,
-          method: $(this).attr("method")
+          method: $(this).attr("method"),
+          noBlapyData:$(this).attr("data-blapy-noblapydata")
         });
       });//end on submit
     }
@@ -454,7 +460,8 @@
             myBlapy.myUIObject.trigger('loadUrl', {
               aUrl: aHref,
               params: '',
-              aObjectId: myBlapy.myUIObjectID
+              aObjectId: myBlapy.myUIObjectID,
+              noBlapyData:$(this).attr("data-blapy-noblapydata")
             });
           });
         }
@@ -486,7 +493,8 @@
       if (aUpdateBlockTime) {
         myBlapy.intervalsSet[intervalSetId] = setInterval(function() {
           $('#' + myBlapy.myUIObjectID).trigger('loadUrl', {
-            aUrl: aUpdateBlockHrefURL
+            aUrl: aUpdateBlockHrefURL,
+            noBlapyData:myContainer.attr("data-blapy-noblapydata")
           });
         }, aUpdateBlockTime);
 
@@ -522,7 +530,8 @@
       if ($(this).attr("data-blapy-href"))
       {
         myBlapy.myUIObject.trigger('loadUrl', {
-          aUrl: $(this).attr("data-blapy-href")
+          aUrl: $(this).attr("data-blapy-href"),
+          noBlapyData:$(this).attr("data-blapy-noblapydata")
         });
       }
       else if ($(this).attr("data-blapy-template-init"))
@@ -577,10 +586,14 @@
         if (aInitURL_Param != undefined) aInitURL_Param = jsonFeatures.parse(aInitURL_Param);
         else aInitURL_Param = {};
 
-        aInitURL_EmbeddingBlockId = myContainer.attr("data-blapy-template-init-purejson");
+        let aInitURL_EmbeddingBlockId = myContainer.attr("data-blapy-template-init-purejson");
 //        if ( (aInitURL_EmbeddingBlockId == undefined) || (aInitURL_EmbeddingBlockId == "1") ) //default: purejson
         if ( (aInitURL_EmbeddingBlockId == "1") ) //default: pure blapy json
           aInitURL_Param = jQuery.extend({'embeddingBlockId':myContainer.attr("data-blapy-container-name")}, aInitURL_Param);
+
+        let noBlapyData = myContainer.attr("data-blapy-noblapydata");
+  //        if ( (aInitURL_EmbeddingBlockId == undefined) || (aInitURL_EmbeddingBlockId == "1") ) //default: purejson
+        if ( (noBlapyData == undefined) ) noBlapyData = "0";
 
         aInitURL_Method = myContainer.attr("data-blapy-template-init-method");
         if (aInitURL_Method == undefined) aInitURL_Method = "GET";
@@ -588,7 +601,8 @@
         $('#' + myBlapy.myUIObjectID).trigger('postData', {
           "aUrl": aInitURL,
           "params":aInitURL_Param,
-          "method":aInitURL_Method
+          "method":aInitURL_Method,
+          'noBlapyData':noBlapyData
         });
       }
     };
@@ -740,6 +754,7 @@
         out_function: function(p, e, data) {
           var aFSM = this;
           var aUrl = data.aUrl;
+          var noBlapyData = data.noBlapyData;
           var aObjectId = data.aObjectId ? data.aObjectId : e.currentTarget.id;
           if ( (aObjectId == undefined) && (typeof(e.currentTarget.attr) != "undefined") ) aObjectId = e.currentTarget.attr('id');
           var params = data.params;
@@ -750,11 +765,23 @@
 
           var aembeddingBlockId = params.embeddingBlockId;
 
+          let dataToSend = "";
+
+          if (noBlapyData != "1")
+          {
+            dataToSend = "blapycall=1&blapyaction=" + params.action + "&blapyobjectid=" + aObjectId;
+          }
+          else
+          {
+            delete(params.embeddingBlockId);
+            delete(params.action);
+          }
+
           jQuery.ajax({
             type: 'GET',
             url: aUrl,
             crossDomain: true,
-            data: "blapycall=1&blapyaction=" + params.action + "&blapyobjectid=" + aObjectId,
+            data: dataToSend,
             success: function(data, textStatus, jqXHR) {
               if (typeof (data) == "object") //then it's a json object
               {
@@ -782,6 +809,7 @@
         out_function: function(p, e, data) {
           var aFSM = this;
           var aUrl = data.aUrl;
+          var noBlapyData = data.noBlapyData;
           var aObjectId = data.aObjectId ? data.aObjectId : e.currentTarget.id;
           if ( (aObjectId == undefined) && (typeof(e.currentTarget.attr) != "undefined") ) aObjectId = e.currentTarget.attr('id');
           var params = data.params;
@@ -795,11 +823,19 @@
           var method = data.method;
           if (!method) method = 'post';
 
-          params = jQuery.extend(params, {
-            blapycall: "1",
-            blapyaction: params.action,
-            blapyobjectid: aObjectId
-          });
+          if (noBlapyData != "1")
+          {
+            params = jQuery.extend(params, {
+              blapycall: "1",
+              blapyaction: params.action,
+              blapyobjectid: aObjectId
+            });
+          }
+          else
+          {
+            delete(params.embeddingBlockId);
+            delete(params.action);
+          }
 
           jQuery.ajax({
             type: method,
@@ -1060,7 +1096,7 @@
                   var htmlAllTpl = myContainer.children('[data-blapy-container-tpl]');
 
                   var tplId = myContainer.attr('data-blapy-template-default-id');
-                  if (tplId != undefined)
+                  if ( (tplId != undefined) && (tplId != "") )
                   {
                     //get tpl from the tplId of the object
                     tplId = "[data-blapy-container-tpl-id='"+tplId+"']";
