@@ -8,9 +8,10 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
- * - 2019/08/29 - E.Podvin - 1.9.3
+ * - 2019/09/01 - E.Podvin - 1.9.3
  *  - fix on tplid == "" in json process
  *  - add possibility to not send any blapy data on loadURL or postData
+ *  - loadURL now embeds "postData"
  * - 2019/08/25 - E.Podvin - 1.9.2
  *  - fix on search embeding block name id in setBlapyJsonTemplates to set template id to blapy object
  *  - data-blapy-updateblock-ondisplay works now on json blocks
@@ -748,6 +749,13 @@
       },
       loadUrl: {
         init_function: function(p, e, data) {
+          data.method='GET';
+          this.trigger('postData',data);
+        },
+      },
+/*
+      loadUrl: {
+        init_function: function(p, e, data) {
           if (this.opts.beforePageLoad) this.opts.beforePageLoad(data);
           this.myUIObject.trigger('Blapy_beforePageLoad', data);
         },
@@ -801,6 +809,7 @@
         next_state: 'ProcessPageChange'
 
       },
+*/
       postData: {
         init_function: function(p, e, data) {
           if (this.opts.beforePageLoad) this.opts.beforePageLoad(data);
@@ -812,7 +821,8 @@
           var noBlapyData = data.noBlapyData;
           var aObjectId = data.aObjectId ? data.aObjectId : e.currentTarget.id;
           if ( (aObjectId == undefined) && (typeof(e.currentTarget.attr) != "undefined") ) aObjectId = e.currentTarget.attr('id');
-          var params = data.params;
+          var urlparams = data.params;
+          var params = urlparams;
           if (!params) params = {
             action: 'update'
           };
@@ -823,24 +833,21 @@
           var method = data.method;
           if (!method) method = 'post';
 
+          params = jQuery.extend(params, {
+            blapycall: "1",
+            blapyaction: params.action,
+            blapyobjectid: aObjectId
+          });
+
           if (noBlapyData != "1")
           {
-            params = jQuery.extend(params, {
-              blapycall: "1",
-              blapyaction: params.action,
-              blapyobjectid: aObjectId
-            });
-          }
-          else
-          {
-            delete(params.embeddingBlockId);
-            delete(params.action);
+            urlparams= params;
           }
 
           jQuery.ajax({
             type: method,
             url: aUrl,
-            data: params,
+            data: urlparams,
             success: function(data, textStatus, jqXHR) {
               if (typeof (data) == "object") //then it's a json object
               {

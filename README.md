@@ -628,13 +628,15 @@ $('#myBlapy').trigger('reloadBlock',{
 
 
 # Blapy parameters sent when calling a URL
-When Blapy calls a 'Blapy Link', the following parameters are sent as GET parameters:
+When Blapy calls a 'Blapy Link', the following parameters are sent along the other GET/POST/PUT/DELETE parameters:
 
 * **blapycall**=1 - tells that the call is coming from Blapy
 * **blapyaction**=[anAction] -tells the kind of action that will be operated
   * **update**: blocks will be updated
 
-Knowing these parameters allow you to optimize the generated html returned by the server to the client, so sending back only the useful html blocks instead of the full html page.
+Knowing these parameters allows you to optimize the generated html returned by the server to the client, so sending back only the useful html blocks instead of the full html page.
+
+You can deactivate the sending of these data by configuring the data-blapy-noblapydata parameter.
 
 # JSON template
 
