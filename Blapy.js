@@ -8,6 +8,9 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/09/02 - E.Podvin - 1.9.4
+ *  - fix on undeclared variable in postDataFunc
+ *  - fix on bad variable initialisation in postData event
  * - 2019/09/01 - E.Podvin - 1.9.3
  *  - fix on tplid == "" in json process
  *  - add possibility to not send any blapy data on loadURL or postData
@@ -38,7 +41,7 @@
  *    - fix in setBlapyContainerJsonTemplate the async loading of the template done with $.get, template that could be not there when a loadurl or postdata was just received
  *    - alert when a blapy block has no id
  * - 2018/05/29 - E.Podvin - V1.6.3 - remove all eval by JSON.parse
- * - 2018/05/28 - E.Podvin - V1.6.2 - send container name to server when block requests an update with data-blapy-updateblock-time+compliant to jQuery 3.3.1
+ * - 2018/05/28 - E.Podvin - V1.6.2 - send container name to server when block requests an update with data-blapy-updateblock-time+compliant to $ 3.3.1
  * - 2018/05/26 - E.Podvin - V1.6.1 -
  *    - updateBlock accepts json object or json string as html input
  *    - add xmp tags support to escape html in a template definition that could generate errors if not escaped
@@ -140,7 +143,7 @@
 
     // on charge les options passées en paramètre
     if (options == undefined) options = null;
-    this.opts = jQuery.extend({}, $defaults, options || {});
+    this.opts = $.extend({}, $defaults, options || {});
 
     /**
      * @param myUIObject	public - Target object of the FSM
@@ -580,23 +583,21 @@
         return;
       }
 
-      var aInitURL = myContainer.attr("data-blapy-template-init");
+      let aInitURL = myContainer.attr("data-blapy-template-init");
       if (aInitURL)
       {
-        aInitURL_Param = myContainer.attr("data-blapy-template-init-params");
+        let aInitURL_Param = myContainer.attr("data-blapy-template-init-params");
         if (aInitURL_Param != undefined) aInitURL_Param = jsonFeatures.parse(aInitURL_Param);
         else aInitURL_Param = {};
 
         let aInitURL_EmbeddingBlockId = myContainer.attr("data-blapy-template-init-purejson");
-//        if ( (aInitURL_EmbeddingBlockId == undefined) || (aInitURL_EmbeddingBlockId == "1") ) //default: purejson
         if ( (aInitURL_EmbeddingBlockId == "1") ) //default: pure blapy json
-          aInitURL_Param = jQuery.extend({'embeddingBlockId':myContainer.attr("data-blapy-container-name")}, aInitURL_Param);
+          aInitURL_Param = $.extend({'embeddingBlockId':myContainer.attr("data-blapy-container-name")}, aInitURL_Param);
 
         let noBlapyData = myContainer.attr("data-blapy-noblapydata");
-  //        if ( (aInitURL_EmbeddingBlockId == undefined) || (aInitURL_EmbeddingBlockId == "1") ) //default: purejson
         if ( (noBlapyData == undefined) ) noBlapyData = "0";
 
-        aInitURL_Method = myContainer.attr("data-blapy-template-init-method");
+        let aInitURL_Method = myContainer.attr("data-blapy-template-init-method");
         if (aInitURL_Method == undefined) aInitURL_Method = "GET";
 
         $('#' + myBlapy.myUIObjectID).trigger('postData', {
@@ -785,7 +786,7 @@
             delete(params.action);
           }
 
-          jQuery.ajax({
+          $.ajax({
             type: 'GET',
             url: aUrl,
             crossDomain: true,
@@ -821,8 +822,8 @@
           var noBlapyData = data.noBlapyData;
           var aObjectId = data.aObjectId ? data.aObjectId : e.currentTarget.id;
           if ( (aObjectId == undefined) && (typeof(e.currentTarget.attr) != "undefined") ) aObjectId = e.currentTarget.attr('id');
-          var urlparams = data.params;
-          var params = urlparams;
+          var urlparams = $.extend({}, data.params);
+          var params = $.extend({}, data.params);
           if (!params) params = {
             action: 'update'
           };
@@ -833,7 +834,7 @@
           var method = data.method;
           if (!method) method = 'post';
 
-          params = jQuery.extend(params, {
+          params = $.extend(params, {
             blapycall: "1",
             blapyaction: params.action,
             blapyobjectid: aObjectId
@@ -844,7 +845,7 @@
             urlparams= params;
           }
 
-          jQuery.ajax({
+          $.ajax({
             type: method,
             url: aUrl,
             data: urlparams,
@@ -974,9 +975,9 @@
                 try {
 
                   //get the Blapy Container named <containerName>
-                  var aBlapyContainer = jQuery(pageContent)
+                  var aBlapyContainer = $(pageContent)
                     .filter('[data-blapy-container-name="' + containerName + '"]')
-                    .add(jQuery(pageContent)
+                    .add($(pageContent)
                       .find('[data-blapy-container-name="' + containerName + '"]')
                     ).first();
                 } catch (e) {
