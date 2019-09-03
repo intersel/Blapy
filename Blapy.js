@@ -8,6 +8,8 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/09/02 - E.Podvin - 1.9.5
+ *  - fix bad blapy fsm to do things when blocks appear
  * - 2019/09/02 - E.Podvin - 1.9.4
  *  - fix on undeclared variable in postDataFunc
  *  - fix on bad variable initialisation in postData event
@@ -523,10 +525,10 @@
 
     var myBlapy = this;
 
-    $(document.body).off('appear');
-    $('[data-blapy-updateblock-ondisplay]').appear();
+    $(myBlapy.myUIObject).off('appear');
+    $(myBlapy.myUIObject).find('[data-blapy-updateblock-ondisplay]').appear();
 
-    $(document.body).on('appear', '[data-blapy-updateblock-ondisplay]', function(event, $all_appeared_elements) {
+    $(myBlapy.myUIObject).on('appear', '[data-blapy-updateblock-ondisplay]', function(event, $all_appeared_elements) {
       if (!$(this).attr("data-blapy-appear"))
           $(this).attr("data-blapy-appear", 'done');
       else return;
@@ -540,9 +542,10 @@
       }
       else if ($(this).attr("data-blapy-template-init"))
       {
+        let myContainerName = $(this).attr("data-blapy-container-name");
         myBlapy.myUIObject.trigger('reloadBlock',{
           params:{
-            embeddingBlockId:$(this).attr("data-blapy-container-name"),
+            embeddingBlockId:myContainerName,
           }
         });
       }
