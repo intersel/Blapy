@@ -8,6 +8,8 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/09/05 - E.Podvin - 1.10.0
+ *  - add data-blapy-template-init-fromproperty and a-blapy-template-init-search options
  * - 2019/09/02 - E.Podvin - 1.9.5
  *  - fix bad blapy fsm to do things when blocks appear
  * - 2019/09/02 - E.Podvin - 1.9.4
@@ -444,7 +446,12 @@
       if (aHref.indexOf('#blapylink') == -1) {
         aHref += '#blapylink';
 
-        if ($(this).attr('data-blapy-embedding-blockid')) aHref += '#' + $(this).attr('data-blapy-embedding-blockid');
+        if ($(this).attr('data-blapy-embedding-blockid')
+            && ($(this).attr('data-blapy-embedding-blockid') != "")
+          )
+        {
+          aHref += '#' + $(this).attr('data-blapy-embedding-blockid');
+        }
 
         if ($(this)[0].tagName == 'A')
           $(this).attr("href", aHref);
@@ -707,6 +714,37 @@
       myBlapy.setBlapyContainerJsonTemplate(myContainer, myBlapy, forceReload);
     });
   };
+
+/**
+ * getObjects - return an array of objects according to key, value, or key and value matching
+ * @param  {Object} obj a json object
+ * @param  {string} key a json property
+ * @param  {string} val a json value
+ * @return {Array}     results of the search
+ * @example
+ * this.getObjects(js,'ID','SGML');// look for sub objects whose properties 'ID' in the json tree have their value == 'SGML'
+ * this.getObjects(js,'ID',''); //  look for sub objects whose properties 'ID' in the json tree with any value
+ * this.getObjects(js,'','SGML');// look for any sub object that contains a property with the value == 'SGML'
+ */
+theBlapy.prototype.getObjects = function (obj, key, val) {
+    var objects = [];
+    for (var i in obj) {
+        if (!obj.hasOwnProperty(i)) continue;
+        if (typeof obj[i] == 'object') {
+            objects = objects.concat(this.getObjects(obj[i], key, val));
+        } else
+        //if key matches and value matches or if key matches and value is not passed (eliminating the case where key matches but passed value does not)
+        if (i == key && obj[i] == val || i == key && val == '') { //
+            objects.push(obj);
+        } else if (obj[i] == val && key == ''){
+            //only add if the object is not already in the array
+            if (objects.lastIndexOf(obj) == -1){
+                objects.push(obj);
+            }
+        }
+    }
+    return objects;
+}
 
   /* var & function definitions */
 
@@ -1097,6 +1135,40 @@
                   try {
                     var jsonDataObj = jsonFeatures.parse(jsonData);
                     jsonData = JSON.stringify(jsonDataObj);
+                    if (myContainer.attr('data-blapy-template-init-fromproperty')
+                        && (myContainer.attr('data-blapy-template-init-fromproperty') != "")
+                      )
+                    {
+                      jsonDataObj = myContainer
+                                      .attr('data-blapy-template-init-fromproperty')
+                                      .split('.')
+                                      .reduce((acc,item)=>acc[item]!=undefined?acc[item]:acc,jsonDataObj);
+                    }
+                    if (myContainer.attr('data-blapy-template-init-search')
+                        && (myContainer.attr('data-blapy-template-init-search') != "")
+                      )
+                    {
+                      //search -> "<property>==<value>[,<property>==<value>,...]"
+                      //get array of objects matching the query
+                      jsonDataObj = myContainer
+                                        .attr('data-blapy-template-init-search')
+                                        .split(',')
+                                        .map(propval => propval.split('=='))
+                                        .reduce( (acc,item) => {
+                                          let founds = myFSM.opts.theBlapy.getObjects(jsonDataObj,item[0],item[1]);
+                                          if (founds.length)
+                                            return acc.concat(founds);
+                                          else
+                                            return acc;
+                                        },[])
+                                        ;
+                      //remove duplicate
+                      jsonDataObj = jsonDataObj.filter((thing,index) => {
+                        return index === jsonDataObj.findIndex(obj => {
+                          return JSON.stringify(obj) === JSON.stringify(thing);
+                        });
+                      });
+                    }
                   } catch (e) {
                     myFSM._log('downloaded content can not be evaluated, so is not json data: ' + jsonData, 1);
                     return;

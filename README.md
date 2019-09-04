@@ -361,6 +361,11 @@ To define a Blapy Block, you need to use the following attributes:
       * **data-blapy-template-init** (option): a (REST) URL to get json data to use to initialize the block
         * **data-blapy-template-init-params** (option): json string of the parameters to send to the URL
         * **data-blapy-template-init-method** (option): 'GET' (default) || 'POST' || 'PUT' || 'DELETE'
+        * **data-blapy-template-init-fromproperty** (option): path to the property in the returned json that should be used as data input. eg: "data.results" will use the object found in jsonReturnData.data.results as the json data to use
+        * **data-blapy-template-init-search** (option): ```"<property>==<value>[,<property>==<value>,...]"``` will get the objects that match the query. Examples:
+          * id==2, will get all objects that have their 'id' property equals to '2'
+          * id==  , will get all objects that have an 'id' property
+          * ==2, will get all objects that have properties equals to '2'
         * **data-blapy-template-init-purejson** (option): '0' ("blapy oriented" json) || '1' (default) (not "blapy oriented" json),
   * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
   * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined

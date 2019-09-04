@@ -26,6 +26,7 @@
 	</p>
 	<h1>Select values with the json feature of Blapy </h1>
 	<p>Fill the following form:</p>
+
 	<form id="myForm">
 		Choose a firstname:
 		<span
@@ -94,6 +95,25 @@
 			data-blapy-template-init-params="{'action':'one','purejson':1}"
 			data-blapy-template-init-method="GET"
 			data-blapy-template-init-purejson="1"
+			data-blapy-updateblock-ondisplay="1"
+			data-blapy-noblapydata="1"
+		>
+	</div>
+
+	<h1>Blapy Block 4 results in a forth Table</h1>
+	<div id="resultquart"
+			data-blapy-container="true"
+			data-blapy-container-name="results4"
+			data-blapy-container-content="results"
+			data-blapy-update="json"
+			data-blapy-template-file="arrayvalues2.tpl"
+			data-blapy-template-wrap="<table>"
+			data-blapy-template-init="arrayvalues.data.php"
+			data-blapy-template-init-params="{'action':'someinresults','purejson':1}"
+			data-blapy-template-init-method="GET"
+			data-blapy-template-init-purejson="1"
+			data-blapy-template-init-fromproperty="data"
+			data-blapy-template-init-search="firstname=="
 			data-blapy-updateblock-ondisplay="1"
 			data-blapy-noblapydata="1"
 		>

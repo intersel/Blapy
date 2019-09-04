@@ -29,6 +29,19 @@ EOT;
 			]
 EOT;
 		break;
+	case 'someinresults':
+			echo <<<EOT
+				{
+					"message":"multiple in results",
+					"data":{
+						"results":[
+							{firstname: "John",lastname: "Doe"},
+							{firstname: "Nina",lastname: "Hagen"},
+						]
+					}
+				}
+EOT;
+		break;
 	case 'all':
 	default:
 		echo <<<EOT
