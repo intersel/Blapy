@@ -8,6 +8,8 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/10/02 - E.Podvin - 1.10.1
+ *  - fix on json data that contains html
  * - 2019/09/05 - E.Podvin - 1.10.0
  *  - add data-blapy-template-init-fromproperty and a-blapy-template-init-search options
  * - 2019/09/02 - E.Podvin - 1.9.5
@@ -349,6 +351,8 @@
   theBlapy.prototype.embedHtmlPage = function(aHtmlSource, aBlapyBlockIdName) {
 //    htmlBlapyBlock = this.myUIObject.find('#' + aBlapyBlockIdName);
     htmlBlapyBlock = this.myUIObject.find("[data-blapy-container-name='" + aBlapyBlockIdName + "']");
+    //embed html source in an xmp to avoid any tampering by the browser
+    aHtmlSource = '<xmp class="blapybin">'+btoa(aHtmlSource)+'</xmp>';
     aHtmlSource = $(htmlBlapyBlock[0].outerHTML).html(aHtmlSource);
     aHtmlSource.attr('data-blapy-container-content', aHtmlSource.attr('data-blapy-container-content') + '-' + $.now());
     aHtmlSource.attr('id', ''); //remove id in order that it takes the one of the block to change
@@ -1046,6 +1050,9 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                 }
                 if (!aBlapyContainer.attr('id')) aBlapyContainer.attr('id', myContainer.attr('id'));
 
+                //is our container embed in an xmp? if yes, remove it...
+                var tmpContainer = aBlapyContainer.children('xmp.blapybin');
+                if (tmpContainer.length) aBlapyContainer.html(atob(tmpContainer.html()));
 
                 //alert that the content of the block will change
                 if (myFSM.opts.beforeContentChange) myFSM.opts.beforeContentChange(myContainer);
@@ -1130,8 +1137,14 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                 }
                 //json update
                 else if (dataBlapyUpdate == 'json') {
-                  //get json data and remove return chars (for the eval)
-                  var jsonData = aBlapyContainer.html().replace(/(\r\n|\n|\r)/g, "");
+                  var jsonData = null;
+                  if (tmpContainer.length)
+                    jsonData = atob(tmpContainer.html());//
+                  else
+                    jsonData = aBlapyContainer.html();
+
+                    //get json data and remove return chars
+                  jsonData = jsonData.replace(/(\r\n|\n|\r)/g, "");
                   try {
                     var jsonDataObj = jsonFeatures.parse(jsonData);
                     jsonData = JSON.stringify(jsonDataObj);
