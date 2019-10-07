@@ -8,6 +8,8 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/10/07 - E.Podvin - 1.10.2
+ *  - fix on xmp to remove in template that could contains data like 'display:none'...
  * - 2019/10/02 - E.Podvin - 1.10.1
  *  - fix on json data that contains html
  * - 2019/09/05 - E.Podvin - 1.10.0
@@ -634,7 +636,7 @@
       var htmlTplContent = myContainer.html();
 
       //remove any xmp tags (used to escape html in a template definition that could generate errors if not escaped)
-      htmlTplContent = htmlTplContent.replace(/(\r\n|\n|\r)?<\/?xmp>(\r\n|\n|\r)?/gi, '');
+      htmlTplContent = htmlTplContent.replace(/(\r\n|\n|\r)?<\/?xmp[^>]*>(\r\n|\n|\r)?/gi, '');
 
       htmlTplContent = htmlTplContent.replace(/blapyScriptJS/gi, 'script');
 
@@ -1230,6 +1232,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                     let parsed=false;
 
                     // create an "idx" property to access to the index of the array
+                    // so is it a json array?
                     if (jsonDataObj.length)
                     {
                       for( var i=0; i< jsonDataObj.length; i++) {
