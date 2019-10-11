@@ -8,6 +8,8 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/10/11 - E.Podvin - 1.10.3
+ *  - fix on xmp that did not handle the extended char properly...
  * - 2019/10/07 - E.Podvin - 1.10.2
  *  - fix on xmp to remove in template that could contains data like 'display:none'...
  * - 2019/10/02 - E.Podvin - 1.10.1
@@ -109,6 +111,24 @@
  */
 
 (function($) {
+
+  /**
+   * ASCII to Unicode (decode Base64 to original data)
+   * @param {string} b64
+   * @return {string}
+   */
+  var atou = function(b64) {
+    return decodeURIComponent(escape(atob(b64)));
+  }
+
+  /**
+   * Unicode to ASCII (encode data to Base64)
+   * @param {string} data
+   * @return {string}
+   */
+  var utoa = function (data) {
+    return btoa(unescape(encodeURIComponent(data)));
+  }
 
   /**
    * The Blapy Object that controlls a set of blapy blocks
@@ -354,7 +374,7 @@
 //    htmlBlapyBlock = this.myUIObject.find('#' + aBlapyBlockIdName);
     htmlBlapyBlock = this.myUIObject.find("[data-blapy-container-name='" + aBlapyBlockIdName + "']");
     //embed html source in an xmp to avoid any tampering by the browser
-    aHtmlSource = '<xmp class="blapybin">'+btoa(aHtmlSource)+'</xmp>';
+    aHtmlSource = '<xmp class="blapybin">'+utoa(aHtmlSource)+'</xmp>';
     aHtmlSource = $(htmlBlapyBlock[0].outerHTML).html(aHtmlSource);
     aHtmlSource.attr('data-blapy-container-content', aHtmlSource.attr('data-blapy-container-content') + '-' + $.now());
     aHtmlSource.attr('id', ''); //remove id in order that it takes the one of the block to change
@@ -1054,7 +1074,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
                 //is our container embed in an xmp? if yes, remove it...
                 var tmpContainer = aBlapyContainer.children('xmp.blapybin');
-                if (tmpContainer.length) aBlapyContainer.html(atob(tmpContainer.html()));
+                if (tmpContainer.length) aBlapyContainer.html(atou(tmpContainer.html()));
 
                 //alert that the content of the block will change
                 if (myFSM.opts.beforeContentChange) myFSM.opts.beforeContentChange(myContainer);
@@ -1141,7 +1161,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                 else if (dataBlapyUpdate == 'json') {
                   var jsonData = null;
                   if (tmpContainer.length)
-                    jsonData = atob(tmpContainer.html());//
+                    jsonData = atou(tmpContainer.html());//
                   else
                     jsonData = aBlapyContainer.html();
 
