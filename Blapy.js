@@ -8,6 +8,10 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/10/19 - E.Podvin - 1.11.0
+ *  - add data-blapy-template-init-processdata
+ * - 2019/10/18 - E.Podvin - 1.10.4
+ *  - remove html comments to test if no template in the block
  * - 2019/10/11 - E.Podvin - 1.10.3
  *  - fix on xmp that did not handle the extended char properly...
  * - 2019/10/07 - E.Podvin - 1.10.2
@@ -661,7 +665,13 @@
       htmlTplContent = htmlTplContent.replace(/blapyScriptJS/gi, 'script');
 
       //if no template defined within the block
-      if (htmlTplContent.replace(/\s{2,}/g, ' ').replace(/\t/g, ' ').toString().trim().replace(/(\r\n|\n|\r)/g, "") == "") {
+      if (htmlTplContent
+          .replace(/\s{2,}/g, ' ')
+          .replace(/\t/g, ' ')
+          .toString().trim()
+          .replace(/(\r\n|\n|\r)/g, "")
+          .replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, '')
+          .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '') == "") {
         //look for partial template file
         var tplFile = myContainer.attr("data-blapy-template-file");
         if (tplFile) {
@@ -821,63 +831,6 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
           this.trigger('postData',data);
         },
       },
-/*
-      loadUrl: {
-        init_function: function(p, e, data) {
-          if (this.opts.beforePageLoad) this.opts.beforePageLoad(data);
-          this.myUIObject.trigger('Blapy_beforePageLoad', data);
-        },
-        out_function: function(p, e, data) {
-          var aFSM = this;
-          var aUrl = data.aUrl;
-          var noBlapyData = data.noBlapyData;
-          var aObjectId = data.aObjectId ? data.aObjectId : e.currentTarget.id;
-          if ( (aObjectId == undefined) && (typeof(e.currentTarget.attr) != "undefined") ) aObjectId = e.currentTarget.attr('id');
-          var params = data.params;
-          if (!params) params = {
-            action: 'update'
-          };
-          else if (!params.action) params['action'] = 'update';
-
-          var aembeddingBlockId = params.embeddingBlockId;
-
-          let dataToSend = "";
-
-          if (noBlapyData != "1")
-          {
-            dataToSend = "blapycall=1&blapyaction=" + params.action + "&blapyobjectid=" + aObjectId;
-          }
-          else
-          {
-            delete(params.embeddingBlockId);
-            delete(params.action);
-          }
-
-          $.ajax({
-            type: 'GET',
-            url: aUrl,
-            crossDomain: true,
-            data: dataToSend,
-            success: function(data, textStatus, jqXHR) {
-              if (typeof (data) == "object") //then it's a json object
-              {
-                  data = JSON.stringify(data);
-              }
-              if (aembeddingBlockId) data = aFSM.opts.theBlapy.embedHtmlPage(data, aembeddingBlockId);
-              aFSM.trigger('pageLoaded', {
-                htmlPage: data,
-                params: params
-              });
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-              aFSM.trigger('errorOnLoadingPage', aUrl + ': ' + errorThrown);
-            }
-          });
-        },
-        next_state: 'ProcessPageChange'
-
-      },
-*/
       postData: {
         init_function: function(p, e, data) {
           if (this.opts.beforePageLoad) this.opts.beforePageLoad(data);
@@ -919,7 +872,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
             success: function(data, textStatus, jqXHR) {
               if (typeof (data) == "object") //then it's a json object
               {
-                  data = JSON.stringify(data);
+                data = JSON.stringify(data);
               }
               if (aembeddingBlockId) data = aFSM.opts.theBlapy.embedHtmlPage(data, aembeddingBlockId);
               aFSM.trigger('pageLoaded', {
@@ -1203,6 +1156,13 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                           return JSON.stringify(obj) === JSON.stringify(thing);
                         });
                       });
+                    }
+                    if (myContainer.attr('data-blapy-template-init-processdata')
+                        && (myContainer.attr('data-blapy-template-init-processdata') != "")
+                      )
+                    {
+                      aJsonDataFunction = myContainer.attr("data-blapy-template-init-processdata");
+                      if (aJsonDataFunction) eval('if (typeof '+aJsonDataFunction+' === "function") jsonDataObj='+aJsonDataFunction+'(jsonDataObj)');
                     }
                   } catch (e) {
                     myFSM._log('downloaded content can not be evaluated, so is not json data: ' + jsonData, 1);

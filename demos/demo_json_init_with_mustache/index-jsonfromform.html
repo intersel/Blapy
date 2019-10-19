@@ -64,6 +64,7 @@
 			data-blapy-template-file="arrayvalues.tpl"
 			data-blapy-template-wrap="<table>"
 			data-blapy-template-init="arrayvalues.data"
+			data-blapy-template-init-processdata="setColorToData"
 		>
 	</div>
 </body>
@@ -80,6 +81,18 @@
 		$( "#myBlapy" ).on( "Blapy_ErrorOnPageChange", function(event,anError) {
 			  alert( 'Blapy error: '+anError );
 			});
+
+		window.setColorToData = function(aJson)
+		{
+			aJson = aJson.map( (aData) => {
+				if (aData.firstname == "John") aData["colorFirstName"] = "green";
+				else aData["colorFirstName"] = "blue";
+				if (aData.lastname == "Rabbit") aData["colorLastName"] = "red";
+				else aData["colorLastName"] = "cyan";
+				return aData;
+			});
+			return aJson;
+		}
 
 	});
 

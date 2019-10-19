@@ -366,6 +366,7 @@ To define a Blapy Block, you need to use the following attributes:
           * id==2, will get all objects that have their 'id' property equals to '2'
           * id==  , will get all objects that have an 'id' property
           * ==2, will get all objects that have properties equals to '2'
+        * **data-blapy-template-init-processdata** (option): a function name that take a json object and should return a json object. It will be called once the json data is received from the url and before to be processed in its blapy block.
         * **data-blapy-template-init-purejson** (option): '0' ("blapy oriented" json) || '1' (default) (not "blapy oriented" json),
   * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
   * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined
