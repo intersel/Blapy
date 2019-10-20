@@ -84,13 +84,20 @@
 
 		window.setColorToData = function(aJson)
 		{
-			aJson = aJson.map( (aData) => {
+			var aJsonArray = [];
+			if (!Array.isArray(aJson))
+				aJsonArray[0] = aJson;
+			else
+			 	aJsonArray = aJson;
+
+			aJson = aJsonArray.map( (aData) => {
 				if (aData.firstname == "John") aData["colorFirstName"] = "green";
 				else aData["colorFirstName"] = "blue";
 				if (aData.lastname == "Rabbit") aData["colorLastName"] = "red";
 				else aData["colorLastName"] = "cyan";
 				return aData;
 			});
+
 			return aJson;
 		}
 
