@@ -8,6 +8,10 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/10/22 - E.Podvin - 1.12.0
+ *  - add data-blapy-template-mustache-delimiterStart and data-blapy-template-mustache-delimiterEnd to be able to change mustache delimiters when rendering template
+ * - 2019/10/19 - E.Podvin - 1.11.1
+ *  - set eval of data-blapy-template-init-processdata function out of the catch error test for json validation
  * - 2019/10/19 - E.Podvin - 1.11.0
  *  - add data-blapy-template-init-processdata
  * - 2019/10/18 - E.Podvin - 1.10.4
@@ -1157,16 +1161,17 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                         });
                       });
                     }
-                    if (myContainer.attr('data-blapy-template-init-processdata')
-                        && (myContainer.attr('data-blapy-template-init-processdata') != "")
-                      )
-                    {
-                      aJsonDataFunction = myContainer.attr("data-blapy-template-init-processdata");
-                      if (aJsonDataFunction) eval('if (typeof '+aJsonDataFunction+' === "function") jsonDataObj='+aJsonDataFunction+'(jsonDataObj)');
-                    }
                   } catch (e) {
                     myFSM._log('downloaded content can not be evaluated, so is not json data: ' + jsonData, 1);
                     return;
+                  }
+
+                  if (myContainer.attr('data-blapy-template-init-processdata')
+                      && (myContainer.attr('data-blapy-template-init-processdata') != "")
+                    )
+                  {
+                    aJsonDataFunction = myContainer.attr("data-blapy-template-init-processdata");
+                    if (aJsonDataFunction) eval('if (typeof '+aJsonDataFunction+' === "function") jsonDataObj='+aJsonDataFunction+'(jsonDataObj)');
                   }
 
                   // Get the json Template
@@ -1230,11 +1235,26 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
                     if ( (typeof(Mustache) != "undefined") )
                     {
-          						if (htmlTplContent.includes("{{"))
-          						{ //ok that's mustache templating
-          							//jsonDataObj = jsonFeatures.parse(jsonData);
+                      var mustacheStartDelimiter = '{{';
+                      var mustacheEndDelimiter = '}}';
+                      var newDelimiters = '';
+                      if (myContainer.attr('data-blapy-template-mustache-delimiterStart')
+                          && (myContainer.attr('data-blapy-template-mustache-delimiterStart') != "")
+                        )
+                      {
+                        //want to apply other mustache tag delimiters
+                        mustacheStartDelimiter = myContainer.attr('data-blapy-template-mustache-delimiterStart');
+                        mustacheEndDelimiter = myContainer.attr('data-blapy-template-mustache-delimiterEnd');
+                        newDelimiters =   "{{="+mustacheStartDelimiter+" "+mustacheEndDelimiter+"=}}";
+                      }
 
-          							newHtml = Mustache.render("{{#.}}"+htmlTplContent+"{{/.}}",jsonDataObj);
+          						if ( (newDelimiters != '') || htmlTplContent.includes("{{") )
+          						{ //ok that's mustache templating
+          							newHtml = Mustache.render(
+                          newDelimiters
+                          +mustacheStartDelimiter+"#."+mustacheEndDelimiter
+                          +htmlTplContent
+                          +mustacheStartDelimiter+"/."+mustacheEndDelimiter,jsonDataObj);
           							parsed=true;
           						}
                     }

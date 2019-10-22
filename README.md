@@ -358,6 +358,8 @@ To define a Blapy Block, you need to use the following attributes:
       * **data-blapy-template-header** (option): once the json data are rendered, it is possible to set a header (ex: "```<tr><th>header</th></tr>```")
       * **data-blapy-template-footer** (option): once the json data are rendered, it is possible to set a footer (ex: "```<tr><th>footer</th></tr>```")
       * **data-blapy-template-default-id** (option): if multiple templates are set, set the default one to use on initialization. Default to the first found one.
+      * **data-blapy-template-mustache-delimiterStart** (option): available for mustache template, blapy will change the default start and end delimiters and use the new mustache delimiters when parsing the block. Actually, the new delimiters are set at the beginning of the template just before rendering, allowing blocks parsed within blocks with different rendering tags. Example: "<%"
+      * **data-blapy-template-mustache-delimiterEnd** (option): available for mustache template and should be defined if  data-blapy-template-mustache-delimiterStart is defined. Example: "%>"
       * **data-blapy-template-init** (option): a (REST) URL to get json data to use to initialize the block
         * **data-blapy-template-init-params** (option): json string of the parameters to send to the URL
         * **data-blapy-template-init-method** (option): 'GET' (default) || 'POST' || 'PUT' || 'DELETE'

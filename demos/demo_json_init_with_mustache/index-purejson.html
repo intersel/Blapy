@@ -36,8 +36,12 @@
 			data-blapy-container-content="fnameOptionsFirstName"
 			data-blapy-update="json"
 			data-blapy-template-wrap='<select name="firstname" onChange="getJson();">'
+			data-blapy-template-mustache-delimiterStart="<%"
+			data-blapy-template-mustache-delimiterEnd="%>"
 		>
-			<option value="{{firstname}}">{{firstname}}</option>
+		<xmp style="display:none;">
+			<option value="<%firstname%>"><%firstname%></option>
+		</xmp>
 		</span>
 		<br>
 		Choose a lastname:
