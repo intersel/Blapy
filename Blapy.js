@@ -8,6 +8,8 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/10/22 - E.Podvin - 1.12.1
+ *  - remove only external xmp in setBlapyContainerJsonTemplate allowing templates in xmp within templates
  * - 2019/10/22 - E.Podvin - 1.12.0
  *  - add data-blapy-template-mustache-delimiterStart and data-blapy-template-mustache-delimiterEnd to be able to change mustache delimiters when rendering template
  * - 2019/10/19 - E.Podvin - 1.11.1
@@ -664,7 +666,8 @@
       var htmlTplContent = myContainer.html();
 
       //remove any xmp tags (used to escape html in a template definition that could generate errors if not escaped)
-      htmlTplContent = htmlTplContent.replace(/(\r\n|\n|\r)?<\/?xmp[^>]*>(\r\n|\n|\r)?/gi, '');
+      //htmlTplContent = htmlTplContent.replace(/(\r\n|\n|\r)?<\/?xmp[^>]*>(\r\n|\n|\r)?/gi, '');
+      if ($(htmlTplContent).prop("tagName") == "XMP") htmlTplContent = $(htmlTplContent).html();
 
       htmlTplContent = htmlTplContent.replace(/blapyScriptJS/gi, 'script');
 
