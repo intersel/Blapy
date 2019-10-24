@@ -536,11 +536,10 @@
 								data-blapy-template-init="phpAPI/chatTextListInit.json"
 								data-blapy-update="json"
                             >
+                            <xmp>
                                 <li class="left clearfix">
                                     <span class="chat-img pull-${leftright}">
-																			<xmp>
                                         <img src="${avatarIMG}" alt="User Avatar" class="img-circle" />
-																			</xmp>
                                     </span>
                                     <div class="chat-body clearfix">
                                         <div class="header">
@@ -554,6 +553,7 @@
                                         </p>
                                     </div>
                                 </li>
+                              </xmp>
                             </ul>
                         </div>
                         <!-- /.panel-body -->

@@ -8,6 +8,8 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/10/24 - E.Podvin - 1.12.2
+ *  - add a console report when json template is not html for whatever reason...
  * - 2019/10/22 - E.Podvin - 1.12.1
  *  - remove only external xmp in setBlapyContainerJsonTemplate allowing templates in xmp within templates
  * - 2019/10/22 - E.Podvin - 1.12.0
@@ -667,7 +669,13 @@
 
       //remove any xmp tags (used to escape html in a template definition that could generate errors if not escaped)
       //htmlTplContent = htmlTplContent.replace(/(\r\n|\n|\r)?<\/?xmp[^>]*>(\r\n|\n|\r)?/gi, '');
-      if ($(htmlTplContent).prop("tagName") == "XMP") htmlTplContent = $(htmlTplContent).html();
+      try {
+        if ($(htmlTplContent).prop("tagName") == "XMP") htmlTplContent = $(htmlTplContent).html();
+      }
+      catch(error) {
+        //htmlTplContent is not html???...
+        this._log("htmlTplContent from "+myContainer.attr("id")+" is not html template...?\n"+htmlTplContent,1);
+      }
 
       htmlTplContent = htmlTplContent.replace(/blapyScriptJS/gi, 'script');
 
