@@ -1258,7 +1258,7 @@ Blapy will remove the "|" according to the level of parsing... and this way to n
 
 ### Demo
 
-Have a look to the full demonstration in demos/demo_json_nested_blocks/index.html
+Have a look to the full demonstration in [demos/demo_json_nested_blocks/index.html](http://intersel.net/demos/intersel/Blapy/demos/demo_json_nested_blocks/)
 
 # Problem resolutions
 ## My blapy block does not update from my external content...
