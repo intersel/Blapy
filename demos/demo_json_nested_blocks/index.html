@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!-- To run the current sample code in your own environment, copy this to an html page. -->
+<html>
+<head>
+	<title>Json Example</title>
+	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+	<link rel="stylesheet" href="main.css" />
+	<script type="text/javascript" src="../../extlib/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="../../extlib/json5/index.min.js"></script>
+	<script type="text/javascript" src="../../extlib/sammy/lib/sammy.js"></script>
+	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
+	<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
+	<script type="text/javascript" src="../../extlib/iFSM/iFSM.js"></script>
+	<script type="text/javascript" src="../../extlib/json2html/json2html.js"></script>
+	<script type="text/javascript" src="../../extlib/mustache/3.0.1/mustache.js"></script>
+	<script type="text/javascript" src="../../extlib/jquery.appear/jquery.appear.js"></script>
+</head>
+<body id="myBlapy">
+	<h1>Blapy demos using json data  and Mustache Templating engine with nested blocks</h1>
+	<p>Xmp sub blocks are escaped with the <|xmp><|/xmp>!</p>
+	<h1>Blapy Block results in a Table</h1>
+	<div id="results"
+			data-blapy-container="true"
+			data-blapy-container-name="results_level0"
+			data-blapy-container-content="results"
+			data-blapy-update="json"
+			data-blapy-template-wrap="<table>"
+			data-blapy-template-init="arrayvalues.data.php"
+			data-blapy-template-init-params="{'action':'list','purejson':1}"
+		>
+		<xmp style="display:none">
+			<tr><td>
+				<p>{{firstname}}:</p>
+				<div id="results2"
+						data-blapy-container="true"
+						data-blapy-container-name="results_level1_{{blapyIndex}}"
+						data-blapy-container-content="results_level1_{{blapyIndex}}"
+						data-blapy-update="json"
+						data-blapy-template-wrap="<table>"
+						data-blapy-template-init="arrayvalues.data.php"
+						data-blapy-template-init-params="{'action':'search','firstname':'{{firstname}}'}"
+						data-blapy-template-mustache-delimiterStart="{%"
+						data-blapy-template-mustache-delimiterEnd="%}"
+					>
+					<|xmp style="display:none">
+						<tr><td>
+							<p>{%lastname%}:</p>
+							<div id="results3"
+									data-blapy-container="true"
+									data-blapy-container-name="results_level2_{{blapyIndex}}_{%blapyIndex%}"
+									data-blapy-container-content="results_level2"
+									data-blapy-update="json"
+									data-blapy-template-wrap="<table>"
+									data-blapy-template-init="arrayvalues.data.php"
+									data-blapy-template-init-params="{'action':'search','lastname':'{%lastname%}'}"
+									data-blapy-template-mustache-delimiterStart="{$"
+									data-blapy-template-mustache-delimiterEnd="$}"
+								>
+								<||xmp style="display:none">
+									<tr><td>
+										<h1>Block {{blapyIndex}} {%blapyIndex%} {$blapyIndex$}</h1>
+										<p> Well... it is really the firstname: {$firstname$} !</p>
+										<script>
+											//call the script only if we are in the blapy block results_level2_2_3...
+											if ("results_level2_{{blapyIndex}}_{%blapyIndex%}" == "results_level2_2_1")
+												$('#myBlapy').trigger('alertUs','Yes really it is {$firstname$} {%$lastname%}')
+										</script>
+
+									</td></tr>
+								<||/xmp>
+							</div>
+
+						</td></tr>
+					<|/xmp>
+				</div>
+
+			</td></tr>
+		</xmp>
+	</div>
+	<div>
+		<h1>Some of the Blapy features used in this demo:</h1>
+		<ul>
+			<li>definition of the html template in blapy blocks</li>
+			<li>Recursive calls of blapy blocks nested in blapy blocks...
+				<ul>
+					<li>Use of the "xmp" tag to escape the html definition of our template in firtname</li>
+					<li>Use of the "|xmp" escape tag to escape the nesting of xmp in the html definition of our sub templates</li>
+				</ul>
+			</li>
+			<li>Use of the "blapyIndex" to have distinct blapy block names nested in other</li>
+			<li>Use of the "fsmExtension" of blapy to centralized function calls within the iFSM state engine</li>
+			<li>Data input is a pure json object.</li>
+		</ul>
+	</div>
+</body>
+
+<script type="text/javascript" src="../../Blapy.js"></script>
+<script type="text/javascript" src="../../Blapy_AnimationPlugins.js"></script>
+<script>
+
+	$( document ).ready(function() {
+
+		//start Blapy
+		$('#myBlapy').Blapy({
+		  fsmExtension:{
+		    'PageReady':{
+		      'alertUs': {
+		        init_function: function(parameters, event, data){
+							if (data == undefined) data="nothing";
+		          alert('alertUs called in '+this.myUIObject.attr('id')+' says: '+data);
+		        }
+		      }
+		    }
+		  }
+		});
+
+		//catch errors
+		$( "#myBlapy" ).on( "Blapy_ErrorOnPageChange", function(event,anError) {
+			  alert( 'Blapy error: '+anError );
+			});
+
+	});
+
+	$("body").append('<h3>HTML code of the page</h3>').append(jQuery('<pre />').text($('html').html()));
+</script>
+
+</html>

@@ -1187,6 +1187,79 @@ remarks:
   * The Blapy object may be accessed with "this.opts.theBlapy".
   * if you add new iFSM states, think to come back to the "PageReady" state at the end of your processing.
 
+## How to have nested json templates ?
+
+The problem addressed here is to be able to have json blocks initialized according to an upper block configuration.
+
+For example, if you have a request that gives you a list of people with their id like ```[{"id":0,"name":"Paul"}, ...]```, you perhaps would like get their details from another request that would need the id of the person to get the information.
+
+To do that, you would need to nest your blapy blocks: the first level will get the list of your people, the second level will get for each one their details...
+
+Using Mustache, You will need to accomplish this:
+* the data-blapy-template-mustache-delimiterStart and data-blapy-template-mustache-delimiterEnd modifiers
+  * they will allow to distinguish between the first template (using the default Mustache delimiters "{{" and "}}") and the second one using an other set of tags like "{%" "%}"
+* to define data-blapy-container-name according to upper identifier tags. you can use the "blapyIndex" tag to get different names for your second level block.
+
+### Examples
+
+  ```
+  <div data-blapy-container="true"...blapy block 1st level definition...>
+  The id is {{id}}.<br>
+  The details are:<br>
+    <div  data-blapy-container="true"
+          data-blapy-container-name="details_{{blapyIndex}}"
+          data-blapy-template-mustache-delimiterStart="{%"
+          data-blapy-template-mustache-delimiterEnd="%}"
+          data-blapy-template-init="/people/getDetails/?id={{id}}"
+          ...Blapy block 2nd level definition...>
+    age of {{name}} is {%age%}<br>...
+    </div>
+  </div>
+  ```
+
+In a first pass, Blapy will get you the first level block parsed for every people using the "{{ delimiters }}", configuring your "data-blapy-template-init" URL with the id sent in the url.
+In a second pass, all the sub blocks will be parsed by Blapy, getting all the details for each sub blocks and parsed the results with the new "{% delimiters %}"...
+
+### Escaping sub XMP
+
+As recommanded, you can use ```<XMP>``` html tag to escape your json templates when needed... But there is a drawback as you can not nest this tag...
+```
+<XMP>
+  Hello,
+  <XMP>
+    I'm nested
+  </XMP>
+  xmp...
+</XMP>
+```
+ Won't work as expected... and the text after the first closing XMP tag will close the whole xmp blocks...
+
+The solution proposed by Blapy is to escape your sub XMP blocks. This is done by adding as many '|' as there is sub XMP level as in this example:
+
+ ```
+ //I'm a json template
+ <XMP>
+   Hello,
+   ....
+   //I'm a sub json template
+   <|XMP>
+     I'm nested
+     ....
+     //I'm a sub sub json template
+     <||XMP>
+       and subnested...
+     <||/XMP>
+   <|/XMP>
+   xmp...
+ </XMP>
+ ```
+
+Blapy will remove the "|" according to the level of parsing... and this way to nest as many json templates you like...
+
+### Demo
+
+Have a look to the full demonstration in demos/demo_json_nested_blocks/index.html
+
 # Problem resolutions
 ## My blapy block does not update from my external content...
 

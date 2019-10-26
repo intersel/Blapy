@@ -8,6 +8,9 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/10/26 - E.Podvin - 1.13.0
+ *  - add nested json blocks by escaping xmp tags that does not accept to be nested :-( see demos/demo_json_nested_blocks/
+ *  - fix data-blapy-template-init-purejson to default to 1
  * - 2019/10/24 - E.Podvin - 1.12.2
  *  - add a console report when json template is not html for whatever reason...
  * - 2019/10/22 - E.Podvin - 1.12.1
@@ -404,6 +407,11 @@
   theBlapy.prototype.createBlapyBlock = function(aJsonObject) {
     this._log('createBlapyBlock');
 
+    if (!aJsonObject["blapy-container-name"])
+    {
+      this._log('createBlapyBlock: Error on received json where blapy-container-name is not defined!\nPerhaps it\'s pure json not defined as such in Blapy block configuration (cf. data-blapy-template-init-purejson)...\n'+JSON.stringify(aJsonObject),1);
+    }
+
     htmlBlapyBlock = $('<div/>', {
       "data-blapy-container": true,
       "data-blapy-container-name": aJsonObject["blapy-container-name"],
@@ -639,7 +647,7 @@
         else aInitURL_Param = {};
 
         let aInitURL_EmbeddingBlockId = myContainer.attr("data-blapy-template-init-purejson");
-        if ( (aInitURL_EmbeddingBlockId == "1") ) //default: pure blapy json
+        if ( (aInitURL_EmbeddingBlockId !== "0") ) //default: pure blapy json
           aInitURL_Param = $.extend({'embeddingBlockId':myContainer.attr("data-blapy-container-name")}, aInitURL_Param);
 
         let noBlapyData = myContainer.attr("data-blapy-noblapydata");
@@ -676,8 +684,6 @@
         //htmlTplContent is not html???...
         this._log("htmlTplContent from "+myContainer.attr("id")+" is not html template...?\n"+htmlTplContent,1);
       }
-
-      htmlTplContent = htmlTplContent.replace(/blapyScriptJS/gi, 'script');
 
       //if no template defined within the block
       if (htmlTplContent
@@ -860,9 +866,9 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
           var urlparams = $.extend({}, data.params);
           var params = $.extend({}, data.params);
           if (!params) params = {
-            action: 'update'
+            blapyaction: 'update'
           };
-          else if (!params.action) params['action'] = 'update';
+          else if (!params.blapyaction) params['blapyaction'] = 'update';
 
           var aembeddingBlockId = params.embeddingBlockId;
 
@@ -871,7 +877,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
           params = $.extend(params, {
             blapycall: "1",
-            blapyaction: params.action,
+//            blapyaction: params.blapyaction,
             blapyobjectid: aObjectId
           });
 
@@ -997,7 +1003,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
             //myFSM._log('downloaded content can not be evaluated by eval: '+pageContent,1);
           }
 
-          switch (params['action']) {
+          switch (params['blapyaction']) {
             case 'update':
             default:
 
@@ -1243,6 +1249,13 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                     }
                     //update jsonData with the index
                     jsonData= JSON.stringify(jsonDataObj);
+
+                    //remove one level of escaped xmp
+                    //+ escaped script with blapyScriptJS
+                    htmlTplContent = htmlTplContent
+                    .replace(/\|xmp/gi, 'xmp')
+                    .replace(/\|\/xmp/gi, '/xmp')
+                    .replace(/blapyScriptJS/gi, 'script');
 
                     if ( (typeof(Mustache) != "undefined") )
                     {
