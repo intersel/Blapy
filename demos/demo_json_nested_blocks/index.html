@@ -17,7 +17,22 @@
 </head>
 <body id="myBlapy">
 	<h1>Blapy demos using json data  and Mustache Templating engine with nested blocks</h1>
-	<p>Xmp sub blocks are escaped with the <|xmp><|/xmp>!</p>
+	<div>
+		<h2>Some of the Blapy features used in this demo:</h2>
+		<ul>
+			<li>Definition of the html template in blapy blocks</li>
+			<li>Recursive calls of blapy blocks nested in blapy blocks...
+				<ul>
+					<li>Use of the "xmp" tag to escape the html definition of our template in firtname</li>
+					<li>Use of the "|xmp" escape tag to escape the nesting of xmp in the html definition of our sub templates</li>
+				</ul>
+			</li>
+			<li>Use of the "blapyIndex" to have distinct blapy block names nested in other</li>
+			<li>Use of the "fsmExtension" of blapy to centralized function calls within the iFSM state engine. See "alertUs" message call</li>
+			<li>Use of data-blapy-template-init-processdata feature to analyse if we have to alert about Nina and add a new data in the Json set of data (see ShouldNinaTalk function)</li>
+			<li>Data input is a pure json object.</li>
+		</ul>
+	</div>
 	<h1>Blapy Block results in a Table</h1>
 	<div id="results"
 			data-blapy-container="true"
@@ -55,15 +70,18 @@
 									data-blapy-template-init-params="{'action':'search','lastname':'{%lastname%}'}"
 									data-blapy-template-mustache-delimiterStart="{$"
 									data-blapy-template-mustache-delimiterEnd="$}"
+									data-blapy-template-init-processdata="ShouldNinaTalk"
 								>
 								<||xmp style="display:none">
 									<tr><td>
 										<h1>Block {{blapyIndex}} {%blapyIndex%} {$blapyIndex$}</h1>
 										<p> Well... it is really the firstname: {$firstname$} !</p>
 										<script>
-											//call the script only if we are in the blapy block results_level2_2_3...
+											//call the script only if we are in the blapy block results_level2_2_1...
 											if ("results_level2_{{blapyIndex}}_{%blapyIndex%}" == "results_level2_2_1")
-												$('#myBlapy').trigger('alertUs','Yes really it is {$firstname$} {%$lastname%}')
+												$('#myBlapy').trigger('alertUs','Yes really it is {$firstname$} {%lastname%}')
+											if ({$NinaShouldTalk$} == "1")
+													$('#myBlapy').trigger('alertUs','{$firstname$} is there!')
 										</script>
 
 									</td></tr>
@@ -76,21 +94,6 @@
 
 			</td></tr>
 		</xmp>
-	</div>
-	<div>
-		<h1>Some of the Blapy features used in this demo:</h1>
-		<ul>
-			<li>definition of the html template in blapy blocks</li>
-			<li>Recursive calls of blapy blocks nested in blapy blocks...
-				<ul>
-					<li>Use of the "xmp" tag to escape the html definition of our template in firtname</li>
-					<li>Use of the "|xmp" escape tag to escape the nesting of xmp in the html definition of our sub templates</li>
-				</ul>
-			</li>
-			<li>Use of the "blapyIndex" to have distinct blapy block names nested in other</li>
-			<li>Use of the "fsmExtension" of blapy to centralized function calls within the iFSM state engine</li>
-			<li>Data input is a pure json object.</li>
-		</ul>
 	</div>
 </body>
 
@@ -120,6 +123,23 @@
 			});
 
 	});
+
+// function that will modify the received json data
+	window.ShouldNinaTalk = function(aJsonData)
+	{
+		aJsonData = aJsonData.map(aData => {
+			if (aData.firstname == "Nina")
+				aData["NinaShouldTalk"] = "1";
+			else
+				aData["NinaShouldTalk"] = "0";
+
+			//console.log("nina:"+JSON.stringify(aData));
+
+			return aData;
+		});
+		//console.log("nina:"+JSON.stringify(aJsonData));
+		return aJsonData;
+	}
 
 	$("body").append('<h3>HTML code of the page</h3>').append(jQuery('<pre />').text($('html').html()));
 </script>
