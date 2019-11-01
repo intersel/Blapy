@@ -469,12 +469,12 @@ Triggered after a page loaded its new content and sent to the **blapy object**.
 
 
 ## Blapy_beforeContentChange
-Triggered before a Blapy block content change and sent to the **blapy Block** that will change.
+Triggered before a Blapy block content change and sent to the (jquery) **blapy Block** that will change.
 * Parameters:
   * the Blapy block
 
 ## Blapy_afterContentChange
-Triggered after a a Blapy block content has changed and sent to the **blapy Block** that has changed..
+Triggered after a a Blapy block content has changed and sent to the (jquery) **blapy Block** that has changed..
 * Parameters:
   * the Blapy block
 
@@ -500,7 +500,7 @@ To listen to Blapy events, you may use the jQuery 'on' function as in this examp
 	});
 	//assure that the event will be received by the new DOM object #mainContainer if it has been replaced by Blapy
 	$(document).on( "Blapy_afterContentChange","#mainContainer", function(event,aBlock) {
-			  alert( 'Blapy_afterContentChange');
+			  alert( 'Blapy_afterContentChange of block '+aBlock.attr('id'));
 			});
 ```
 
@@ -1186,6 +1186,43 @@ remarks:
   * 'this' refers to the [FSM](https://github.com/intersel/ifsm)
   * The Blapy object may be accessed with "this.opts.theBlapy".
   * if you add new iFSM states, think to come back to the "PageReady" state at the end of your processing.
+
+## How can I preprocess received json Data before they are processed by Mustache ?
+
+Thanks to the "data-blapy-template-init-processdata" parameter, you can give the name of function to do the preprocessing of your data and change and add any new properties to be processed by Mustache.
+
+### Example
+
+```html
+
+<div ....
+  data-blapy-template-init-processdata="initMyJsonData"
+>
+color is {{#greenColor}}green{{/greenColor}}{{^greenColor}}... well... I don't know...{{/greenColor}}
+</div>
+
+//....
+
+<script>
+// declare a function visible from Blapy
+// aJson is an array of element(s) to process
+window.initMyJsonData = function(aJson)
+{
+  //for each elements, do an analysis and add/remove or do whatever you need to be done...
+  aJson = aJson.map(aData => {
+    if (aData["myPropertyColor"] == "green")
+    {
+      aData["greenColor"]=true;//add a new property
+      delete aData.myPropertyColor; //remove a property
+    }
+    return aData;//returns the modified array item
+  });
+  //return our modified json data array
+  return aJson;
+}
+</script>
+```
+
 
 ## How to have nested json templates ?
 

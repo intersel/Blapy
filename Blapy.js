@@ -11,6 +11,7 @@
  * - 2019/11/01 - E.Podvin - 1.13.1
  *   - alert when htmllBlapyBlock id is not found in embedHtmlPage
  *   - use of log.warn when error/warning
+ *   - fix load of img or script by the system in setBlapyContainerJsonTemplate
  * - 2019/10/26 - E.Podvin - 1.13.0
  *  - add nested json blocks by escaping xmp tags that does not accept to be nested :-( see demos/demo_json_nested_blocks/
  *  - fix data-blapy-template-init-purejson to default to 1
@@ -715,7 +716,9 @@
               url: tplFile,
               data: "blapycall=1&blapyaction=loadTpl&blapyobjectid=" + myContainer.attr('id'),
               success: function(htmlTplContent) {
-                if ($(htmlTplContent).siblings('[data-blapy-container-tpl="true"]').length == 0)
+                //replace img by anything in order that the system don't want to load them... same for script
+                // as we only want to know if there are siblings...
+                if ($(htmlTplContent.replace("img","blapyimg").replace("script","blapyscript")).siblings('[data-blapy-container-tpl="true"]').length == 0)
                 {
                   //store the template in comment in a hidden xmp
                   myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
@@ -735,7 +738,9 @@
         }
       } else //template is defined in the block
       {
-        if ($(htmlTplContent).siblings('[data-blapy-container-tpl="true"]').length == 0)
+        //replace img by anything in order that the system don't want to load them... same for script
+        // as we only want to know if there are siblings...
+        if ($(htmlTplContent.replace("img","blapyimg").replace("script","blapyscript")).siblings('[data-blapy-container-tpl="true"]').length == 0)
         {
           //store the template in comment in a hidden xmp
           myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
