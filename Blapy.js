@@ -8,6 +8,9 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/11/01 - E.Podvin - 1.13.1
+ *   - alert when htmllBlapyBlock id is not found in embedHtmlPage
+ *   - use of log.warn when error/warning
  * - 2019/10/26 - E.Podvin - 1.13.0
  *  - add nested json blocks by escaping xmp tags that does not accept to be nested :-( see demos/demo_json_nested_blocks/
  *  - fix data-blapy-template-init-purejson to default to 1
@@ -360,7 +363,10 @@
     if ((arguments.length <= 1) && (3 > this.opts.LogLevel)) return; // pas de niveau de msg défini => niveau notice (3)
 
     if (window.console && console.log) {
-      console.log('[blapy] ' + message);
+      if ((arguments.length > 1) && (arguments[1] <= 2))
+        console.warn('[blapy] ' + message);
+      else
+        console.log('[blapy] ' + message);
       if ((arguments[1] == 1) && this.opts.alertError) alert(message);
     }
 
@@ -388,6 +394,14 @@
   theBlapy.prototype.embedHtmlPage = function(aHtmlSource, aBlapyBlockIdName) {
 //    htmlBlapyBlock = this.myUIObject.find('#' + aBlapyBlockIdName);
     htmlBlapyBlock = this.myUIObject.find("[data-blapy-container-name='" + aBlapyBlockIdName + "']");
+
+    if (!htmlBlapyBlock[0])
+    {
+      this._log('embedHtmlPage: Error on blapy-container-name... "'+aBlapyBlockIdName+'" does not exist!\n',1);
+
+      return '';
+    }
+
     //embed html source in an xmp to avoid any tampering by the browser
     aHtmlSource = '<xmp class="blapybin">'+utoa(aHtmlSource)+'</xmp>';
     aHtmlSource = $(htmlBlapyBlock[0].outerHTML).html(aHtmlSource);
@@ -1379,7 +1393,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
       loadUrl: //someone try to load an URL but page is not ready... try it later...
       {
         how_process_event: {
-          delay: 20,
+          delay: 100,
           preventcancel: true
         },
         propagate_event: true,
