@@ -718,7 +718,12 @@
               success: function(htmlTplContent) {
                 //replace img by anything in order that the system don't want to load them... same for script
                 // as we only want to know if there are siblings...
-                if ($(htmlTplContent.replace("img","blapyimg").replace("script","blapyscript")).siblings('[data-blapy-container-tpl="true"]').length == 0)
+                if ($(htmlTplContent
+                          .split("script")
+                          .join("scriptblapy")
+                          .split("img")
+                          .join("imgblapy"))
+                      .siblings('[data-blapy-container-tpl="true"]').length == 0)
                 {
                   //store the template in comment in a hidden xmp
                   myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
@@ -740,7 +745,12 @@
       {
         //replace img by anything in order that the system don't want to load them... same for script
         // as we only want to know if there are siblings...
-        if ($(htmlTplContent.replace("img","blapyimg").replace("script","blapyscript")).siblings('[data-blapy-container-tpl="true"]').length == 0)
+        if ($(htmlTplContent
+                  .split("script")
+                  .join("scriptblapy")
+                  .split("img")
+                  .join("imgblapy"))
+              .siblings('[data-blapy-container-tpl="true"]').length == 0)
         {
           //store the template in comment in a hidden xmp
           myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
@@ -1014,12 +1024,11 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
             else
             {
               // don't know what to do...? not normal to be here...
-              myFSM._log('downloaded content is not html neither json object, that\'s curious... ' + pageContent + ' - ' + containerName, 1);
+              myFSM.opts.theBlapy._log('downloaded content is not html neither json object, that\'s curious... ' + pageContent + ' - ' + containerName, 1);
             }
 
           } catch (e) {
             //not json input... but html...
-            //myFSM._log('downloaded content can not be evaluated by eval: '+pageContent,1);
           }
 
           switch (params['blapyaction']) {
@@ -1041,7 +1050,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                       .find('[data-blapy-container-name="' + containerName + '"]')
                     ).first();
                 } catch (e) {
-                  myFSM._log('downloaded content can not be evaluated by jQuery, so perhaps it is json data: ' + pageContent + ' - ' + containerName, 1);
+                  myFSM.opts.theBlapy._log('downloaded content can not be evaluated by jQuery, so perhaps it is json data: ' + pageContent + ' - ' + containerName, 1);
                   return;
                 }
 
@@ -1060,7 +1069,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                 //update the id with the current container id, if none given in the new container
                 if (!myContainer.attr('id'))
                 {
-                  myFSM._log('a blapy block has no id:\n'+myContainer[0].outerHTML.substring(0,250), 1);
+                  myFSM.opts.theBlapy._log('a blapy block has no id:\n'+myContainer[0].outerHTML.substring(0,250), 1);
                   //alert('a blapy block has no id:\n'+myContainer[0].outerHTML.substring(0,250));
                 }
                 if (!aBlapyContainer.attr('id')) aBlapyContainer.attr('id', myContainer.attr('id'));
@@ -1198,7 +1207,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                       });
                     }
                   } catch (e) {
-                    myFSM._log('downloaded content can not be evaluated, so is not json data: ' + jsonData, 1);
+                    myFSM.opts.theBlapy._log('downloaded content can not be evaluated, so is not json data: ' + jsonData, 1);
                     return;
                   }
 
@@ -1207,7 +1216,20 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                     )
                   {
                     aJsonDataFunction = myContainer.attr("data-blapy-template-init-processdata");
-                    if (aJsonDataFunction) eval('if (typeof '+aJsonDataFunction+' === "function") jsonDataObj='+aJsonDataFunction+'(jsonDataObj)');
+                    if (aJsonDataFunction)
+                    {
+                      let previousJsonDataObj = jsonDataObj;
+                      eval(   'if (typeof '+aJsonDataFunction+' === "function") '
+                            + '   jsonDataObj='+aJsonDataFunction+'(jsonDataObj);'
+                            + 'else '
+                            +'    myFSM.opts.theBlapy._log("'+aJsonDataFunction+' does not exist :(! '
+                                      +'Have a look on the : data-blapy-template-init-processdata of container '
+                                      + myContainer.attr('id') +'", 1);');
+                      if (typeof jsonDataObj !== 'object') {
+                          myFSM.opts.theBlapy._log('returned Json Data was not a json structure :(! Perhaps it is due to the processing of this function on them: ' + aJsonDataFunction, 1);
+                          jsonDataObj = previousJsonDataObj;
+                      }
+                    }
                   }
 
                   // Get the json Template
@@ -1222,7 +1244,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                     htmlTpl = myContainer.children('[data-blapy-container-tpl]'+tplId);
                     if (htmlTpl.length == 0)
                     {
-                      myFSM._log('The json template of id '+tplId+' was not found for the block '+ myContainer.attr('data-blapy-container-name')+'!', 1);
+                      myFSM.opts.theBlapy._log('The json template of id '+tplId+' was not found for the block '+ myContainer.attr('data-blapy-container-name')+'!', 1);
                     }
                   }
 
@@ -1231,7 +1253,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
                   if (htmlTpl.length == 0)
                   {
-                    myFSM._log('can not find any json template for the block: ' + myContainer.attr('data-blapy-container-name'), 1);
+                    myFSM.opts.theBlapy._log('can not find any json template for the block: ' + myContainer.attr('data-blapy-container-name'), 1);
                     htmlTplContent='';
                   }
                   else
@@ -1316,7 +1338,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
                     if (!parsed)
                     {
-                      myFSM._log('no json parser loaded... need to include json2html or Mustache library! ', 1);
+                      myFSM.opts.theBlapy._log('no json parser loaded... need to include json2html or Mustache library! ', 1);
                       alert('no json parser loaded... need to include "json2html" or "Mustache" library!');
                     }
                   }//else of htmlTplContent.length<3
@@ -1363,7 +1385,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                       pluginUpdateFunction(myContainer, aBlapyContainer);
                     }
 
-                  } else myFSM._log(aBlapyContainer.attr('data-blapy-update') + ' does not exist', 1);
+                  } else myFSM.opts.theBlapy._log(aBlapyContainer.attr('data-blapy-update') + ' does not exist', 1);
 
                 }
 
