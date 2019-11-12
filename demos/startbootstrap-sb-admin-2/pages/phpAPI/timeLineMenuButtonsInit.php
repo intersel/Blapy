@@ -6,6 +6,7 @@
 		data-blapy-container-content="timeLineMenuButtonsVoid"
 		data-blapy-template-init="phpAPI/timeLineMenuButtonsInit.php"
 		data-blapy-update="json"
+		data-blapy-template-init-purejson="0"
 		>
 [
 	{URL:"#",action:"Action"},

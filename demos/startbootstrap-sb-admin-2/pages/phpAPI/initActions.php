@@ -8,6 +8,7 @@ $returnStr = <<<EOD
 						data-blapy-container-name="messagesList"
 						data-blapy-container-content="messagesListValues-$currentTime"
 						data-blapy-update="json"
+            data-blapy-template-init-purejson="0"
 >
 	[
 		{firstname: "John",	lastname: "Smith", 	date:'Yesterday', message:'Hello,<br>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...'},

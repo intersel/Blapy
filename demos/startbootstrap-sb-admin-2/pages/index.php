@@ -77,6 +77,7 @@
 						data-blapy-container-name="messagesList"
 						data-blapy-container-content="messagesListInit"
 						data-blapy-update="json"
+            data-blapy-template-init-purejson="0"
 					>
                         <li>
                             <a href="#">
@@ -113,6 +114,7 @@
 						data-blapy-container-name="tasksList"
 						data-blapy-container-content="tasksListInit"
 						data-blapy-update="json"
+            data-blapy-template-init-purejson="0"
                     >
                         <li>
                             <a href="#">
@@ -158,6 +160,7 @@
 						data-blapy-container-name="alertsList"
 						data-blapy-container-content="alertsListInit"
 						data-blapy-update="json"
+            data-blapy-template-init-purejson="0"
 					>
                         <li>
                             <a href="#">
@@ -183,6 +186,7 @@
 						data-blapy-container-name="userFeaturesList"
 						data-blapy-container-content="userFeaturesListInit"
                     	data-blapy-update="json"
+                      data-blapy-template-init-purejson="0"
                     >
                         <li class="${class}">
                         	<a href="${url}"><i class="fa fa-${featureIcon} fa-fw"></i> ${feature}</a>
@@ -201,6 +205,7 @@
 								data-blapy-container-name="sideMenusList"
 								data-blapy-container-content="sideMenusListInit"
 								data-blapy-update="json"
+                data-blapy-template-init-purejson="0"
 								>
                                 <li ${liInfo}>
                                     ${subMenuContent}
@@ -350,6 +355,7 @@
 																		data-blapy-container-name="areaChart"
 																		data-blapy-container-content="areaChartVoid"
 																		data-blapy-update="json"
+                                    data-blapy-template-init-purejson="0"
                                     >
                                     	<li class="${class}"><a href="${url}">${action}</a></li>
                                     </ul>
@@ -378,6 +384,7 @@
 										data-blapy-container-name="barChartExampleMenu"
 										data-blapy-container-content="barChartExampleMenuVoid"
 										data-blapy-update="json"
+                    data-blapy-template-init-purejson="0"
                                     >
                                      <blapyScriptJS>
 	                                    	if (!"${dontdisplay}")
@@ -439,6 +446,7 @@
 								data-blapy-container-content="timeLineVoid"
 								data-blapy-template-init="phpAPI/timeLineInit.php"
 								data-blapy-update="json"
+                data-blapy-template-init-purejson="0"
 								>
                                 <li  class="timeline-${timeblockPlace}">
                                     <div class="timeline-${timelineClass}"><i class="fa fa-${timelineType}"></i>
@@ -478,6 +486,7 @@
 														data-blapy-container-content="NotificationsPanelVoid"
 														data-blapy-template-init="phpAPI/NotificationsPanelInit.json"
 														data-blapy-update="json"
+                            data-blapy-template-init-purejson="0"
                             >
                                 <a href="${URL}" class="list-group-item">
                                     <i class="fa fa-fw ${class}"></i> ${TextNotification}
@@ -517,6 +526,7 @@
 								data-blapy-container-content="chatButtonVoid"
 								data-blapy-template-init="phpAPI/chatButtonInit.json"
 								data-blapy-update="json"
+                data-blapy-template-init-purejson="0"
                                 >
                                     <li class="${classLI}">
                                         <a href="${URL}">
@@ -535,6 +545,7 @@
 								data-blapy-container-content="chatTextListVoid"
 								data-blapy-template-init="phpAPI/chatTextListInit.json"
 								data-blapy-update="json"
+                data-blapy-template-init-purejson="0"
                             >
                             <xmp>
                                 <li class="left clearfix">

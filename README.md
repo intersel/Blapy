@@ -781,7 +781,7 @@ To work properly, you need to include the following javascript libraries:
   * `<script type="text/javascript" src="extlib/sammy/lib/sammy.js"></script>`
 * [json5](https://json5.org/) (optional if your json are "straight" json)
   * expands the syntax of JSON in order to be able to process less strict json input (made by humans for example)
-  * `<script type="text/javascript" src="extlib/json/index.min.js"></script>`
+  * `<script type="text/javascript" src="extlib/json5/index.min.js"></script>`
 * [jquery.appear](http://morr.github.io/appear.html) (optional if you don't need to init blocks when they become visible after a scroll)
   * `<script type="text/javascript" src="extlib/jquery.appear/jquery.appear.js"></script>`
 

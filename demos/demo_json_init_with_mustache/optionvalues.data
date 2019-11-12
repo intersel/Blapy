@@ -1,8 +1,3 @@
-<div id="results" 
-	data-blapy-container="true" 
-	data-blapy-container-name="fnameOptions" 
-	data-blapy-container-content="fnameOptionsNew"
->
 [
 	{firstname: "Choose a value",lastname: "None",selected:"checked"},
 	{firstname: "John",lastname: "Doe",selected:"false"},
@@ -10,4 +5,3 @@
 	{firstname: "Peter",lastname: "Rabbit",selected:"false"},
 	{firstname: "Nina",lastname: "Hagen",selected:"	"},
 ]
-</div>

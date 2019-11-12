@@ -1,7 +1,6 @@
-[
 	{ 	"blapy-container-name":"fnameOptions",
 		"blapy-container-content":"fnameOptionsNew",
-		"blapy-data": 
+		"blapy-data":
 		[
 			{"firstname": "Choose a value","lastname": "None","selected":"checked"},
 			{"firstname": "John","lastname": "Doe","selected":"false"},
@@ -11,4 +10,3 @@
 			{"firstname": "Robert","lastname": "deNiro","selected":""}
 		]
 	}
-]

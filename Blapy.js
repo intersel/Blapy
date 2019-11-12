@@ -8,6 +8,8 @@
  *
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/11/12 -  E.Podvin - 1.13.2
+ *   - fixes for compliance with non json blapy blocks after the json dev
  * - 2019/11/01 - E.Podvin - 1.13.1
  *   - alert when htmllBlapyBlock id is not found in embedHtmlPage
  *   - use of log.warn when error/warning
@@ -403,6 +405,16 @@
       return '';
     }
 
+    if (   ($(htmlBlapyBlock[0].outerHTML).attr('data-blapy-update') == 'json')
+        && ($(htmlBlapyBlock[0].outerHTML).attr("data-blapy-template-init-purejson") == "0")
+      )
+    {
+      try{
+        aHtmlSource = $(aHtmlSource).html();
+      } catch (e) {
+        this._log('embedHtmlPage: aHtmlSource is perhaps a pure json after all...?\n' + aHtmlSource, 1);
+      }
+    }
     //embed html source in an xmp to avoid any tampering by the browser
     aHtmlSource = '<xmp class="blapybin">'+utoa(aHtmlSource)+'</xmp>';
     aHtmlSource = $(htmlBlapyBlock[0].outerHTML).html(aHtmlSource);
@@ -1008,7 +1020,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
             pageContent = tmpPC;
 
             // if the received pageContent is pure json then build the equivalent in blapy block
-            if (pageContent instanceof Array) {
+            if ( pageContent instanceof Array) {
               var newContent = $("");
               var tmpRes = "";
               for (i = 0; i < pageContent.length; i++) {
@@ -1019,7 +1031,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
             }
             else if (typeof (pageContent) == "object") //then it's a json object? curious... should have been stringify previously
             {
-                pageContent = JSON.stringify(pageContent);
+                pageContent = this.opts.theBlapy.createBlapyBlock(pageContent);;
             }
             else
             {
@@ -1074,14 +1086,6 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                 }
                 if (!aBlapyContainer.attr('id')) aBlapyContainer.attr('id', myContainer.attr('id'));
 
-                //is our container embed in an xmp? if yes, remove it...
-                var tmpContainer = aBlapyContainer.children('xmp.blapybin');
-                if (tmpContainer.length) aBlapyContainer.html(atou(tmpContainer.html()));
-
-                //alert that the content of the block will change
-                if (myFSM.opts.beforeContentChange) myFSM.opts.beforeContentChange(myContainer);
-                myContainer.trigger('Blapy_beforeContentChange', this.myUIObject);
-
                 var dataBlapyUpdate = aBlapyContainer.attr('data-blapy-update');
                 var dataBlapyUpdateRuleIsLocal = false;
                 if (
@@ -1094,6 +1098,14 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                   dataBlapyUpdate = myContainer.attr('data-blapy-update');
                   dataBlapyUpdateRuleIsLocal = true;
                 }
+
+                //is our container embed in an xmp? if yes, remove it...
+                var tmpContainer = aBlapyContainer.children('xmp.blapybin');
+                if ((dataBlapyUpdate != 'json') && (tmpContainer.length)) aBlapyContainer.html(atou(tmpContainer.html()));
+
+                //alert that the content of the block will change
+                if (myFSM.opts.beforeContentChange) myFSM.opts.beforeContentChange(myContainer);
+                myContainer.trigger('Blapy_beforeContentChange', this.myUIObject);
 
                 //standard update
                 if (!dataBlapyUpdate ||
@@ -1172,6 +1184,34 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                   try {
                     var jsonDataObj = jsonFeatures.parse(jsonData);
                     jsonData = JSON.stringify(jsonDataObj);
+
+                    if ( (jsonDataObj['blapy-data']) && (jsonDataObj['blapy-container-name']) )
+                    {
+                      if (jsonDataObj['blapy-container-name'] != containerName)
+                      {
+                        myFSM.opts.theBlapy._log('blapy-data set: '+jsonData+'\n but not match with containerName '+containerName);
+                        return;
+                      }
+
+                      jsonDataObj = jsonDataObj['blapy-data'];
+                      jsonData = JSON.stringify(jsonDataObj);
+                    }
+                  } catch (e) {
+                    myFSM.opts.theBlapy._log('downloaded content can not be evaluated, so is not json data: ' + jsonData, 2);
+                    try {
+                      jsonData = $(jsonData).html();
+                      jsonData = jsonData.replace(/(\r\n|\n|\r)/g, "");
+                      jsonDataObj = jsonFeatures.parse(jsonData);
+                      jsonData = JSON.stringify(jsonDataObj);
+                    }
+                    catch (e) {
+                      myFSM.opts.theBlapy._log('try the subtext but content can not be evaluated either, so is not json data: ' + jsonData, 1);
+                      return;
+                    }
+                    myFSM.opts.theBlapy._log('use of sub text to get json data: ' + jsonData,2);
+                  }
+
+                  try {
                     if (myContainer.attr('data-blapy-template-init-fromproperty')
                         && (myContainer.attr('data-blapy-template-init-fromproperty') != "")
                       )
@@ -1208,9 +1248,10 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                         });
                       });
                     }
-                  } catch (e) {
-                    myFSM.opts.theBlapy._log('downloaded content can not be evaluated, so is not json data: ' + jsonData, 1);
-                    return;
+
+                  }
+                  catch (e) {
+                    myFSM.opts.theBlapy._log('init-search or init-property does not work well on json data of container: ' + myContainer.attr('id'), 1);
                   }
 
                   if (myContainer.attr('data-blapy-template-init-processdata')
