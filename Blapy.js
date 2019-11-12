@@ -1176,6 +1176,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                         && (myContainer.attr('data-blapy-template-init-fromproperty') != "")
                       )
                     {
+                      myFSM.opts.theBlapy._log('Apply data-blapy-template-init-fromproperty: '+myContainer.attr('data-blapy-template-init-fromproperty'));
                       jsonDataObj = myContainer
                                       .attr('data-blapy-template-init-fromproperty')
                                       .split('.')
@@ -1185,6 +1186,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                         && (myContainer.attr('data-blapy-template-init-search') != "")
                       )
                     {
+                      myFSM.opts.theBlapy._log('Apply data-blapy-template-init-search: '+myContainer.attr('data-blapy-template-init-search'));
                       //search -> "<property>==<value>[,<property>==<value>,...]"
                       //get array of objects matching the query
                       jsonDataObj = myContainer
@@ -1218,6 +1220,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                     aJsonDataFunction = myContainer.attr("data-blapy-template-init-processdata");
                     if (aJsonDataFunction)
                     {
+                      myFSM.opts.theBlapy._log('Apply data-blapy-template-init-processdata: '+aJsonDataFunction);
                       let previousJsonDataObj = jsonDataObj;
                       eval(   'if (typeof '+aJsonDataFunction+' === "function") '
                             + '   jsonDataObj='+aJsonDataFunction+'(jsonDataObj);'
@@ -1344,14 +1347,17 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                   }//else of htmlTplContent.length<3
 
                   if (myContainer.attr('data-blapy-template-header')) {
+                    myFSM.opts.theBlapy._log('Apply data-blapy-template-header');
                     newHtml = myContainer.attr('data-blapy-template-header') + newHtml;
                   }
                   if (myContainer.attr('data-blapy-template-footer')) {
+                    myFSM.opts.theBlapy._log('Apply data-blapy-template-footer');
                     newHtml = newHtml + myContainer.attr('data-blapy-template-footer');
                   }
 
                   //Wrap content if needed
                   if (myContainer.attr('data-blapy-template-wrap')) {
+                    myFSM.opts.theBlapy._log('Apply data-blapy-template-wrap');
                     newHtml = $(myContainer.attr('data-blapy-template-wrap')).html(newHtml)[0];
                     newHtml = newHtml.outerHTML;
                   }

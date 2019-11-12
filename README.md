@@ -500,7 +500,7 @@ To listen to Blapy events, you may use the jQuery 'on' function as in this examp
 	});
 	//assure that the event will be received by the new DOM object #mainContainer if it has been replaced by Blapy
 	$(document).on( "Blapy_afterContentChange","#mainContainer", function(event,aBlock) {
-			  alert( 'Blapy_afterContentChange of block '+aBlock.attr('id'));
+			  alert( 'Blapy_afterContentChange of block '+$(aBlock).attr('id'));//aBlock refer to the #mainContainer dom object
 			});
 ```
 
