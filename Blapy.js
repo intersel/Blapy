@@ -7,7 +7,16 @@
  * Blapy : jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) with almost no javascript coding to do it.
  *
  * -----------------------------------------------------------------------------------------
+ * @copyright Intersel 2015-2019
+ * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
+ * @see {@link https://github.com/intersel/Blapy}
+ * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
+ * @version : 1.13.3
+ * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
+ * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/11/14 - E.Podvin - 1.13.3
+ *    - use of event.currentTarget instead of event.target
  * - 2019/11/12 -  E.Podvin - 1.13.2
  *   - fixes for compliance with non json blapy blocks after the json dev
  * - 2019/11/01 - E.Podvin - 1.13.1
@@ -114,13 +123,6 @@
  * - 2015/07/31 - E.Podvin - V1.0.1 - general fixes
  * - 2015/07/25 - E.Podvin - V1.0.0 - Creation
  *
- * -----------------------------------------------------------------------------------------
- *
- * @copyright Intersel 2015-2016
- * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
- * @see {@link https://github.com/intersel/Blapy}
- * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.5.2
  * -----------------------------------------------------------------------------------------
  */
 
@@ -294,7 +296,7 @@
 
       $(document).on("click", "#" + myBlapy.myUIObjectID + " a[data-blapy-link]", function(event) {
         //if requested, filter the action to be processed only to the defined active blapy object for the link
-        if (($(event.target).attr("data-blapy-active-blapyid")) && ($(event.target).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID))
+        if (($(event.currentTarget).attr("data-blapy-active-blapyid")) && ($(event.currentTarget).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID))
           return;
 
         event.preventDefault();
@@ -309,7 +311,7 @@
       });
       $(document).on("submit", "#" + myBlapy.myUIObjectID + " form[data-blapy-link]", function(event) {
         //if requested, filter the action to be processed only to the defined active blapy object for the link
-        if (($(event.target).attr("data-blapy-active-blapyid")) && ($(event.target).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID))
+        if (($(event.currentTarget).attr("data-blapy-active-blapyid")) && ($(event.currentTarget).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID))
           return;
 
         event.preventDefault();
