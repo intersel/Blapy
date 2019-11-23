@@ -425,8 +425,11 @@ To define a Blapy Link, here are its attributes:
   * set to "**true**" (or void), Blapy will "get" the content of the link and will process the blapy blocks matching with the current application content
 
 **Remarks:** if data-blapy-link is set to a form, the "method" configuration (eg. "GET", "POST", "PUT", "DELETE") is used to get the content.
+You can add this proprety "method" to a A dom element to set the method to use when the link is clicked.
 
 * **data-blapy-href**: if not bound to a "A" or "FORM" tag, it tells the hyperlink to use.
+
+* **data-blapy-params**: a json string to set paramaters to send along to the link to call
 
 * **data-blapy-embedding-blockid**: tells to embed the return source of the link in a blapy block of the given name. Usefull for return sources that are not 'blapy' formatted and that address a specific block...
 * **data-blapy-active-blapyId**: useful in the case the link is embedded in several different blapy objects, it gives the correct blapy object for the link. If not set, the link will be processed by all the blapy objects that contain the link.
@@ -437,8 +440,17 @@ To define a Blapy Link, here are its attributes:
 ```html
 <ul>
 	<li><a href="content1.php" data-blapy-link="true">Content 1</a></li>
-	<li data-blapy-link="true" data-blapy-href="content2.php">Content 2</a></li>
-	<li><a href="jsoncontent3.php" data-blapy-link="true" data-blapy-embedding-blockid="mainContainerApp3">Content 3</a></li>
+	<li data-blapy-href="content2.php" data-blapy-link="true">Content 2</a></li>
+	<li>
+    <a href="jsoncontent3.php"     
+        data-blapy-link="true"
+        data-blapy-embedding-blockid="mainContainerApp3"
+        data-blapy-params='{"id":"12","label":"test"}'
+        method="POST"
+    >
+      Content 3
+    </a>
+  </li>
 </ul>
 ```
 

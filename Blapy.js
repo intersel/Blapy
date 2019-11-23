@@ -15,8 +15,11 @@
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/11/15 - E.Podvin - 1.13.4
+ *  - add data-blapy-params property for A tag element to specify data to send to url
  * - 2019/11/14 - E.Podvin - 1.13.3
  *    - use of event.currentTarget instead of event.target
+ *    - use of postData for blapy-link on tag A allowing to define "method" attribute
  * - 2019/11/12 -  E.Podvin - 1.13.2
  *   - fixes for compliance with non json blapy blocks after the json dev
  * - 2019/11/01 - E.Podvin - 1.13.1
@@ -299,12 +302,23 @@
         if (($(event.currentTarget).attr("data-blapy-active-blapyid")) && ($(event.currentTarget).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID))
           return;
 
+        //use JSON5 if present as JSON5.parse is more cool than JSON.parse (cf. https://github.com/json5/json5)
+        var jsonFeatures = null;
+        if (typeof(JSON5) == "undefined") jsonFeatures=JSON;else jsonFeatures=JSON5;
+
+        let params = $(this).attr("data-blapy-params");
+        if (params != undefined) params = jsonFeatures.parse(params);
+        else params = {};
+
+        if ($(this).attr('data-blapy-embedding-blockid'))
+          params = $.extend(params, {embeddingBlockId: $(this).attr('data-blapy-embedding-blockid')});
+
+
         event.preventDefault();
-        myBlapy.myUIObject.trigger('loadUrl', {
+        myBlapy.myUIObject.trigger('postData', {
           aUrl: myBlapy.hashURL($(this).attr('href')),
-          params: {
-            embeddingBlockId: $(this).attr('data-blapy-embedding-blockid')
-          },
+          params: params,
+          method: $(this).attr("method")||'GET',
           aObjectId: myBlapy.myUIObjectID,
           noBlapyData:$(this).attr("data-blapy-noblapydata")
         });
@@ -364,15 +378,28 @@
     /*global console:true */
 
     if (!this.opts.debug) return;
-    if ((arguments.length > 1) && (arguments[1] > this.opts.LogLevel)) return; //on ne continue que si le nv de message est <= LogLevel
-    if ((arguments.length <= 1) && (3 > this.opts.LogLevel)) return; // pas de niveau de msg défini => niveau notice (3)
+
+    let errorLevel = 3;
+
+    if (arguments.length > 1) errorLevel = arguments[1];
+
+    if (errorLevel > this.opts.LogLevel) return; //on ne continue que si le nv de message est <= LogLevel
 
     if (window.console && console.log) {
-      if ((arguments.length > 1) && (arguments[1] <= 2))
-        console.warn('[blapy] ' + message);
-      else
-        console.log('[blapy] ' + message);
-      if ((arguments[1] == 1) && this.opts.alertError) alert(message);
+      switch (errorLevel)
+      {
+        case 1:
+          console.error('[blapy] ' + message);
+          break;
+        case 2:
+          console.warn('[blapy] ' + message);
+          break;
+        default:
+        case 3:
+          console.log('[blapy] ' + message);
+          break;
+      }
+      if ((errorLevel == 1) && this.opts.alertError) alert(message);
     }
 
   }; //end Log
@@ -913,6 +940,11 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
           };
           else if (!params.blapyaction) params['blapyaction'] = 'update';
 
+          if ( ("embeddingBlockId" in params) && (!params.embeddingBlockId) )
+          {
+            myFSM.opts.theBlapy._log('[postData on '+aFSM.myUIObject.attr('id')+'] embeddingBlockId has been set but is undefined! must be an error...', 1);
+          }
+
           var aembeddingBlockId = params.embeddingBlockId;
 
           var method = data.method;
@@ -965,6 +997,11 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
         out_function: function(p, e, data) {
           if (!data) return;
           if (!data.params) data.params="";
+
+          if ( ("embeddingBlockId" in data.params) && (!data.params.embeddingBlockId) )
+          {
+            this.opts.theBlapy._log('[updateBlock on '+this.myUIObject.attr('id')+'] embeddingBlockId has been set but is undefined! must be an error...', 1);
+          }
           var aembeddingBlockId = data.params.embeddingBlockId;
 
           if (typeof (data.html) == "object") //then it's a json object
@@ -991,6 +1028,11 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
           var params = {};
           if (data) params = data.params;
+
+          if ( ("embeddingBlockId" in params) && (!params.embeddingBlockId) )
+          {
+            this.opts.theBlapy._log('[reloadBlock on '+this.myUIObject.attr('id')+'] embeddingBlockId has been set but is undefined! must be an error...', 1);
+          }
 
           // process json blocks
           this.opts.theBlapy.setBlapyJsonTemplates(true,params.embeddingBlockId,params.templateId);
@@ -1469,7 +1511,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
       loadUrl: //someone try to load an URL but page is not ready... try it later...
       {
         how_process_event: {
-          delay: 100,
+          delay: 20,
           preventcancel: true
         },
         propagate_event: true,
