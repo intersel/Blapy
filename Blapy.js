@@ -170,6 +170,8 @@
     var $defaults = {
       debug: true, //if true, then log things in the console
       LogLevel: 1, // log level: 1: error ; 2: warning; 3: notice
+      debugIfsm: true, // debug mode for ifsm
+      LogLevelIfsm: 3,
       alertError: false,
       //function Hooks
       pageLoadedFunction: null,
@@ -197,7 +199,12 @@
 
     // on charge les options passées en paramètre
     if (options == undefined) options = null;
-    this.opts = $.extend({}, $defaults, options || {});
+
+    this.opts     = $.extend({}, $defaults, options || {});
+    this.optsIfsm = $.extend({}, $defaults, options || {});
+    // redefine log options for ifsm
+    this.optsIfsm.debug     =  this.opts.debugIfsm;
+    this.optsIfsm.LogLevel  =  this.opts.LogLevelIfsm;
 
     /**
      * @param myUIObject	public - Target object of the FSM
@@ -288,14 +295,14 @@
         return true;
       };
 
-      this.myUIObject.iFSM(manageBlapy, this.opts);
+      this.myUIObject.iFSM(manageBlapy, this.optsIfsm);
       app.run();
     }
     else
     // no routing - standard blapy links management
     {
       //start Blapy Engine
-      this.myUIObject.iFSM(manageBlapy, this.opts);
+      this.myUIObject.iFSM(manageBlapy, this.optsIfsm);
 
       $(document).on("click", "#" + myBlapy.myUIObjectID + " a[data-blapy-link]", function(event) {
         //if requested, filter the action to be processed only to the defined active blapy object for the link
@@ -377,11 +384,12 @@
   theBlapy.prototype._log = function(message) {
     /*global console:true */
 
-    if (!this.opts.debug) return;
-
     let errorLevel = 3;
 
     if (arguments.length > 1) errorLevel = arguments[1];
+
+    //show only errors if debug is not set
+    if ( (errorLevel >= 2) && (!this.opts.debug) ) return;
 
     if (errorLevel > this.opts.LogLevel) return; //on ne continue que si le nv de message est <= LogLevel
 

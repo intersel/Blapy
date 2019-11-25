@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iFSM in action! a Finite State Machine for jQuery</title>
+<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="../extlib/jquery.dorequesttimeout.js"></script>
+<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+<script type="text/javascript" src="../iFSM.js"></script>
+<style type="text/css">
+html {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+	padding: 0 10px;
+}
+
+pre {
+	font-size: 12px;
+	background-color: black;
+	color: green;
+}
+</style>
+
+<script type="text/javascript" id="iFSMscript">
+
+/**
+ * States to manage the automatic animation
+ */
+var aStateAutomateSlideShow = {
+
+		NotAutomatic: 
+		{
+			mouseout: 'prepareAutomatic',
+			prepareAutomatic: 
+			{
+				next_state: 'PrepareAutomatic',	
+			},	
+		},
+		PrepareAutomatic:
+		{
+			enterState: 
+			{
+				propagate_event: 'prepareAutomatic',
+			},
+			prepareAutomatic: //will not be processed if we go back to "NotAutomatic" (delay will be cancelled if state changes)
+			{
+				how_process_event: {delay:5000},
+				next_state: 'Automatic', 
+				propagate_event: 'NextSlide',
+			},
+		},
+		Automatic: 
+		{
+			NextSlide:	
+			{
+				init_function: function(){this.myUIObject.trigger('goRight');},
+				propagate_event: 'prepareNext'
+			},
+			prepareNext:	
+			{
+				how_process_event: {delay:3000},
+				propagate_event: 'NextSlide'
+			},
+		},
+		DefaultState:
+		{
+			start:
+			{
+				next_state: 'NotAutomatic',
+				propagate_event: 'prepareAutomatic'
+			},
+			stopAutomatic:	
+			{
+				next_state: 'NotAutomatic',
+				propagate_event: 'prepareAutomatic'
+			},
+			mouseover: 
+			{
+				next_state: 'NotAutomatic',
+			},
+		}
+}
+
+/**
+ * States to manage the slide movements
+ */
+var aStateDefinitionSlideShow = {
+
+		BeginSlide: 
+		{
+			goLeft:	
+			{
+				next_state: 'GoEndSlide'
+			},
+			goRight:	
+			{
+				next_state: 'AddRight'
+			}
+		},
+		MiddleSlide: 
+		{
+			goLeft:	
+			{
+				next_state: 'AddLeft'
+			},
+			goRight:	
+			{
+				next_state: 'AddRight'
+			},
+		},
+		EndSlide: 
+		{
+			goLeft:	
+			{
+				next_state: 'AddLeft'
+			},
+			goRight:	
+			{
+				next_state: 'ResetSlide'
+			}
+		},
+		AddLeft: 
+		{
+			enterState:	
+			{
+				init_function: function() {
+					this.opts.current_Slide -= 1;
+					this.opts.sliderObj.trigger('goLeft');
+//					$('#status').html($('#status').html()+"<br>"+this.opts.current_Slide);
+				},
+				next_state_when: '(this.opts.current_Slide != 0)',
+				next_state: 'MiddleSlide',
+				propagate_event: 'beginSlide',
+			},
+			beginSlide:
+			{
+				next_state: 'BeginSlide',
+			},
+		},
+		AddRight: 
+		{
+			enterState:	
+			{
+				init_function: function() {
+					this.opts.current_Slide += 1;
+					this.opts.sliderObj.trigger('goRight');
+//					$('#status').html($('#status').html()+"<br>"+this.opts.current_Slide);
+				},
+				next_state_when: '(this.opts.current_Slide != this.opts.nb_Slides-1)',
+				next_state: 'MiddleSlide',
+				propagate_event: 'endSlide',
+			},
+			endSlide:
+			{
+				next_state: 'EndSlide',
+			},
+		},
+		ResetSlide: 
+		{
+			enterState:	
+			{
+				init_function: function() {
+					this.opts.current_Slide=0;
+					this.opts.sliderObj.trigger('goBegin');
+//					$('#status').html($('#status').html()+"<br>"+this.opts.current_Slide);
+				},
+				next_state: 'BeginSlide',
+			},
+		},
+		GoEndSlide: 
+		{
+			enterState:	
+			{
+				init_function: function() {
+					this.opts.current_Slide=this.opts.nb_Slides-1;
+					this.opts.sliderObj.trigger('goEnd',this.opts.current_Slide);
+//					$('#status').html($('#status').html()+"<br>"+this.opts.current_Slide);
+				},
+				next_state: 'EndSlide',
+			},
+		},
+		DefaultState: 
+		{
+			start:	
+			{
+				init_function: function() {
+					this.opts.nb_Slides=this.opts.sliderObj.find('div').length;
+					this.opts.current_Slide = 0;
+				},
+				next_state: 'BeginSlide'
+			},
+		}
+}
+
+/**
+ * States to move the slides
+ */
+var aStateDefinitionSlider = {
+
+		DefaultState:
+		{
+			goRight:	
+			{
+				init_function: function() {
+					this.myUIObject.animate({left: "-="+this.opts.offset}, 500);
+				}
+			},
+			goLeft:	
+			{
+				init_function: function() {
+					this.myUIObject.animate({left: "+="+this.opts.offset}, 500);
+				}
+			},
+			goBegin:	
+			{
+				init_function: function() {
+					this.myUIObject.animate({left: "0"}, 500);
+				}
+			},
+			goEnd:	
+			{
+				init_function: function(p,e,nb_slides) {
+					this.myUIObject.animate({left: "-="+(parseInt(this.opts.offset)*parseInt(nb_slides))}, 500);
+				}
+			}
+		}				
+}
+
+/**
+ * States to handle the click on buttons
+ */
+var aButtonActionStates = {
+
+		Wait500BeforeNextClick: //in order to let the animation ends after its 500ms and to not cumulate multiple clicks
+		{
+			click:	//cancel click
+			{
+			},
+			resetClick:
+			{
+				how_process_event: {delay:500},
+				next_state: 'DefaultState', 
+			}
+		},				
+		DefaultState:
+		{
+			click:	
+			{
+				init_function: function(){this.opts.sliderObj.trigger('stopAutomatic')}, //stop automatic animation if any 
+				out_function: function(){this.opts.sliderObj.trigger(this.opts.action)}, // do the click action
+				next_state: 'Wait500BeforeNextClick',
+				propagate_event: 'resetClick'
+			}
+		}				
+}
+
+
+
+$(document).ready(function() {
+	$('#myButton1'			).iFSM(aButtonActionStates,		{sliderObj:$('#slider_container'),action:'goLeft'}); 
+	$('#myButton2'			).iFSM(aButtonActionStates,		{sliderObj:$('#slider_container'),action:'goRight'}); 
+	$('#inner_slides'		).iFSM(aStateDefinitionSlider,	{offset:'600'}); 
+	$('#slider_container'	).iFSM(aStateAutomateSlideShow,	{sliderObj:$('#inner_slides')}); 
+	$('#slider_container'	).iFSM(aStateDefinitionSlideShow, {sliderObj:$('#inner_slides')}); 
+});
+ </script>
+ </head>
+<body style="margin:100px;">
+	<h1>A (not so) simple slideshow driven with iFSM </h1>
+	<div id="slider_container" class="slider1" style="position: relative;
+	top: 0px; left: 0px; width: 600px; height: 300px;">
+	    <!-- Slides Container -->
+	    <div id="slides" style="position: absolute; overflow: hidden;
+	    left: 0px; top: 0px; width: 600px; height: 300px;">
+	    	<div id="inner_slides" style="position:relative;width:3600px">
+		        <div style="float:left"><img src="../img/image1.jpg" /></div>
+		        <div style="float:left"><img src="../img/image2.jpg" /></div>
+		        <div style="float:left"><img src="../img/image3.jpg" /></div>
+		        <div style="float:left"><img src="../img/image1.jpg" /></div>
+		        <div style="float:left"><img src="../img/image2.jpg" /></div>
+		        <div style="float:left"><img src="../img/image3.jpg" /></div>
+		    </div>
+	    </div>
+	</div>
+	<button id="myButton1">Left</button>
+	<button id="myButton2">Right</button>
+	<div id="status"></div>
+<br>
+	<div id="adiv">a simple slideshow driven by iFSM:<br>
+	<ul>
+		<li>it goes right or left with the buttons</li>
+		<li>it starts automatically after 5 seconds of no user interaction with the slideshow</li>
+		<li>the slides change after 3secs</li>
+		<li>it stops each time we click on the right/left buttons</li>
+		<li>it stops when the mouse is over the slideshow</li>
+		<li>it restarts when the mouse leaves after 5secs</li>
+		<li>at the end of the slideshow, it goes back to the beginning</li>
+		<li>at the beginning of the slideshow, going left moves the slideshow to the end</li>
+	</ul>
+	</div>
+	<br>
+	<br>
+	<pre>
+	<script>
+		function escapeHtml(text) {
+			var map = {
+				'&': '&amp;',
+				'<': '&lt;',
+		    '>': '&gt;',
+				'"': '&quot;',
+				"'": '&#039;'
+			};
+
+			return text.replace(/[&<>"']/g, function(m) {
+				return map[m];
+			});
+		}
+		document.write(escapeHtml($('#iFSMscript').html()))
+	</script>
+    </pre>
+	<p>
+		provided by <a href="http://www.intersel.fr">Intersel</a>
+	</p>
+	</pre>
+</body>
+</html>

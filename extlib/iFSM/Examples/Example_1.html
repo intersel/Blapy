@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iFSM in action! countdown button managed with an FSM</title>
+<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+<script type="text/javascript" src="../iFSM.js"></script>
+
+<style type="text/css">
+  html {
+    font-family: Helvetica, Arial, sans-serif;
+  }
+  body {
+    padding: 0 20px;
+  }
+  button {
+    margin: 0 2px;
+    font-size: 20px;
+    border: 1px solid #333;
+    width: 70px;
+    text-shadow: 0 -1px 0 #333;
+    border-radius: 5px;
+  }
+  button.on {
+    color: #dfd;
+    background: #00aa00;
+    background: -moz-linear-gradient(top, rgba(0,153,0,1) 0%, rgba(0,119,0,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,153,0,1)), color-stop(100%,rgba(0,119,0,1)));
+    background: -webkit-linear-gradient(top, rgba(0,153,0,1) 0%,rgba(0,119,0,1) 100%);
+    background: -o-linear-gradient(top, rgba(0,153,0,1) 0%,rgba(0,119,0,1) 100%);
+    background: -ms-linear-gradient(top, rgba(0,153,0,1) 0%,rgba(0,119,0,1) 100%);
+    background: linear-gradient(top, rgba(0,153,0,1) 0%,rgba(0,119,0,1) 100%);
+  }
+  button.off {
+    color: #fdd;
+    background: #CC0000;
+    background: -moz-linear-gradient(top, rgba(204,0,0,1) 0%, rgba(153,0,0,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(204,0,0,1)), color-stop(100%,rgba(153,0,0,1)));
+    background: -webkit-linear-gradient(top, rgba(204,0,0,1) 0%,rgba(153,0,0,1) 100%);
+    background: -o-linear-gradient(top, rgba(204,0,0,1) 0%,rgba(153,0,0,1) 100%);
+    background: -ms-linear-gradient(top, rgba(204,0,0,1) 0%,rgba(153,0,0,1) 100%);
+    background: linear-gradient(top, rgba(204,0,0,1) 0%,rgba(153,0,0,1) 100%);
+  }
+</style>
+
+<script type="text/javascript" id="iFSMscript">
+
+var aStateDefinitionButton = {
+
+	ButtonDoCountdown		: 
+	{
+		enterState : 
+		{
+			init_function		: function (){this.myUIObject.html("on").attr({'class':'on'});this.opts.counter=3}
+		},
+		exitState : 
+		{
+			init_function		: function (){this.myUIObject.html("wait");}
+		},
+		click	:	
+		{
+			process_event_if		: '(this.opts.counter<=0)',
+			propagate_event_on_refused	: 'notReady',
+			next_state			: 'ButtonWaitNextCountdown'
+		},
+		notReady :
+		{
+			init_function		: function (){this.myUIObject.html(this.opts.counter);this.opts.counter=this.opts.counter-1;}
+		}
+	},
+	ButtonWaitNextCountdown		: 
+	{
+		enterState : 
+		{
+			init_function		: function (){this.trigger('setButtonOff');}
+		},
+		setButtonOff :
+		{
+			init_function		: function (){this.myUIObject.html("off").attr({'class':'off'});},
+			how_process_event	: {delay:1000}
+		},
+		click	:	
+		{
+			next_state		: 'ButtonDoCountdown'
+		}
+	},
+	DefaultState			:
+	{
+		start	:	
+		{
+			next_state		: 'ButtonDoCountdown'
+		}
+	}				
+}
+ 
+$(document).ready(function() {
+	 $(".onoff").iFSM(aStateDefinitionButton); //create the machine
+});
+ </script>
+ </head>
+<body style="margin:100px;">
+    <h2>On-Off Buttons:</h2>
+   
+    <button class="onoff" id="onoff_button1"></button>
+    <button class="onoff" id="onoff_button2"></button>
+    <button class="onoff" id="onoff_button3"></button>
+    <button class="onoff" id="onoff_button4"></button>
+    <button class="onoff" id="onoff_button5"></button>
+    
+        <br><br>
+	<pre>
+	<script>document.write($('#iFSMscript').html())</script>
+    </pre>
+    <p>iFSM provided by <a href="http://www.intersel.fr">Intersel</a></p>
+
+</body>
+</html>

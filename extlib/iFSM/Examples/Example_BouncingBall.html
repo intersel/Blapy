@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>iFSM in action! Bouncing Balls... </title>
+	<meta charset="utf-8">
+    <script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+    <script type="text/javascript" src="../extlib/jquery.dorequesttimeout.js"></script>
+    <script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+    <script type="text/javascript" src="../extlib/jcanvas.min.js"></script>
+    <script type="text/javascript" src="../iFSM.js"></script>
+	<style type="text/css">
+	  html {
+	    font-family: Helvetica, Arial, sans-serif;
+	  }
+	  body {
+	    padding: 0 20px;
+	  }
+	  button {
+	    margin: 0 2px;
+	    font-size: 20px;
+	    border: 1px solid #333;
+	    width: 100px;
+	    text-shadow: 0 -1px 0 #333;
+	    border-radius: 5px;
+	  }
+	  pre {
+		font-size: 12px;
+		background-color: black;
+		color: green;
+	  }
+	</style>
+    <script type="text/javascript">
+    var aGameObject = {
+    	WaitProcess:
+		{
+    		doProcess:
+    			{
+    				next_state:'Processing',
+    			},
+    	},
+    	Processing:
+		{
+    		enterState:
+			{
+				init_function:function(){
+					if (this.opts.process) this.opts.process(this);
+					},
+				next_state:'WaitDraw',
+			},
+		},
+		WaitDraw:
+		{
+			doDraw:
+			{
+				init_function:function(p,e,data){
+					this.opts.alertSenderData=data;
+					},
+   				next_state:'Drawing',
+   			},
+		},
+		Drawing:
+		{
+    		enterState:
+			{
+				init_function:function(){
+					if (this.opts.draw) this.opts.draw(this);
+					if (this.opts.alertSenderData.aEvent)
+						this.opts.alertSenderData.aFSM.trigger(this.opts.alertSenderData.aEvent);
+					},
+				next_state:'WaitProcess',
+			},
+		},
+        DefaultState        :
+        {
+            start:
+            {
+            	next_state: 'WaitProcess',
+            },
+            click:
+            {
+            	init_function:function(){
+            		alert('object clicked!');
+            	}
+            },
+            mousemove:
+            {
+            	init_function:function(p,e,layer){
+            		$('#status').html('object over: '+layer.eventX+'/'+layer.eventY);
+            	}
+            },
+
+        }
+    };
+
+    var aGameRound = {
+        	WaitStart:
+    		{
+        		enterState:
+    			{
+    				init_function:function()
+   	    			{
+						this._stateDefinition['NextRound']['doNextRound']['how_process_event'] = {delay: this.opts.speedOfGame};
+	   					this.opts.nbFSMObjects = this.opts.gameFSMObjects.length;
+	   					this.opts.counterIteration =0;
+	   					this.trigger('displayGame');
+    				}
+    			},
+   				StartStop:
+       			{
+       				next_state:'PlayGame',
+       				init_function:function(){
+       					this.opts.lastcounterIteration=0;
+    					this.trigger('displayFPS');
+       				}
+       			},
+                displayFPS:'restartDisplayFPS',
+                restartDisplayFPS:
+                {
+                },
+                click:
+                {
+                	init_function:function(){
+                		alert('canvas clicked!');
+                	}
+                }
+
+        	},
+        	PlayGame:
+    		{
+        		enterState:
+    			{
+    				init_function:function(){
+    					this.trigger('displayGame');
+    				},
+    				next_state:'WaitEndProcessing',
+    			},
+    		},
+    		WaitEndProcessing:
+   			{
+    			EndDoDraw:
+    			{
+    				next_state_when:'this.EventIteration>=this.opts.nbFSMObjects',
+       				next_state:'NextRound',
+    			},
+    		},
+    		NextRound:
+   			{
+    			enterState:
+    			{
+       				propagate_event:'doNextRound',
+    			},
+    			doNextRound:
+    			{
+       				how_process_event:{delay:10},
+       				next_state:'PlayGame',
+    			},
+    		},
+            DefaultState        :
+            {
+                start:
+                {
+                	next_state: 'WaitStart',
+                },
+                StartStop:
+                {
+                	next_state:'WaitStart',
+                },
+                displayFPS:
+                {
+       				how_process_event:{delay:1000},
+                	init_function:function(){
+                		var aCount=this.opts.counterIteration-this.opts.lastcounterIteration;
+                		this.opts.FPSCounter.html(aCount);
+                		this.opts.lastcounterIteration=this.opts.counterIteration;
+                		this.trigger('restartDisplayFPS');
+                	}
+                },
+        		displayGame:
+    			{
+    				init_function:function(){
+    					//this.myUIObject.clearCanvas();
+    					var myFSM=this;
+    					$.each(this.opts.gameFSMObjects,function(index,aFsmGame){
+    						aFsmGame.trigger('doProcess');
+    						aFsmGame.trigger('doDraw',{aFSM:myFSM,aEvent:'EndDoDraw'});
+    					});
+    					this.opts.counterIteration++;
+    					this.opts.counter.html(this.opts.counterIteration);
+    				},
+    			},
+                restartDisplayFPS:
+                {
+                	propagate_event:'displayFPS',
+                },
+                mousemove:
+                {
+    				init_function:function(p,anEvent){
+						$('#status').html('mouse position: '+anEvent.offsetX+'/'+anEvent.offsetY);
+    				}
+
+                }
+            }
+        };
+
+    /**
+     * @param BasicStatesUI
+     *  handles simple click event, that should be transfered 'toWho' with the 'sendWhat' event sent
+     *  it is configured with its option parameters:
+     *  @param toWho: 		a iFSM machine
+     *  @param sendWhat: 	an event name
+     *  @example $('#OkConnectionButton').iFSM(BasicStatesUI,{onClic:{toWho:ClicClacMachine,sendWhat:'okDoConnection'}});
+     */
+
+    var BasicStatesUI =
+    {
+    		Displayed:
+    		{
+    			enterState:
+    			{
+    				init_function:
+    	            	function(parameters, event, data)
+    	            	{
+    						this.myUIObject.show();
+    	            	}
+    			}
+    		},
+    		Hidden:
+    		{
+    			enterState:
+    			{
+    				init_function:
+    		        	function(parameters, event, data)
+    		        	{
+    						this.myUIObject.hide();
+    		        	}
+    			},
+    		},
+    		DefaultState:
+    		{
+    			click:
+    			{
+    				init_function:
+    	            	function(parameters, event, data)
+    	            	{
+    						this.opts.onClick.toWho.trigger(this.opts.onClick.sendWhat);
+    	            	}
+    			},
+    			show:
+    			{
+    				next_state: 'Displayed'
+    			},
+    			hide:
+    			{
+    				next_state: 'Hidden'
+    			},
+    			start:
+    			{
+    				process_event_if: 'this.opts.startState != undefined',
+    				init_function:
+    	            	function(parameters, event, data)
+    	            	{
+    						this.currentState = this.opts.startState;
+    	            	},
+    	            propagate_event_on_refused:'defaultState',
+
+    			},
+    			defaultState:
+    			{
+    				next_state:'Displayed',
+    			}
+    		},
+    }
+    $(document).ready(function() {
+
+        aBackGroundGame = $('#aBackground').iFSM(aGameObject,{
+										canvas:$('#canvas'),
+        								color: '#FAF7F8',
+        								width: 400,
+        								height: 300,
+        								process:null,
+        								draw:function(aFSM){
+        									aFSM.opts.canvas.drawRect({
+        									  fillStyle: aFSM.opts.color,
+        									  x: 0, y: 0,
+        									  width: aFSM.opts.width,
+        									  height: aFSM.opts.height,
+        									  fromCenter: false,
+        									});},
+        });
+
+        function doProcessBall(aFSM){
+			if (aFSM.opts.x + aFSM.opts.dx > aFSM.opts.widthScreen || aFSM.opts.x + aFSM.opts.dx < 0)
+				aFSM.opts.dx = -aFSM.opts.dx;
+				if (aFSM.opts.y + aFSM.opts.dy > aFSM.opts.heightScreen || aFSM.opts.y + aFSM.opts.dy < 0)
+					aFSM.opts.dy = -aFSM.opts.dy;
+
+				aFSM.opts.x += aFSM.opts.dx;
+				aFSM.opts.y += aFSM.opts.dy;
+		};
+		function doDrawBall(aFSM){
+			aFSM.opts.canvas.drawEllipse({
+				  fillStyle: aFSM.opts.color,
+				  x: aFSM.opts.x,
+				  y: aFSM.opts.y,
+				  width: aFSM.opts.width,
+				  height: aFSM.opts.height,
+				});
+		};
+        aBallGame = $('#aBall').iFSM(aGameObject,{
+			canvas:$('#canvas'),
+			color: '#770000',
+			width: 20,
+			height: 20,
+			widthScreen:400,
+			heightScreen:300,
+			x:0,
+			y:0,
+			dx:4,
+			dy:8,
+			process:doProcessBall,
+			draw:doDrawBall,
+		});
+        a2ndBallGame = $('#aSecondBall').iFSM(aGameObject,{
+			canvas:$('#canvas'),
+			color: '#007777',
+			width: 30,
+			height: 30,
+			widthScreen:400,
+			heightScreen:300,
+			x:50,
+			y:50,
+			dx:3,
+			dy:6,
+			process:doProcessBall,
+			draw:doDrawBall,
+		});
+        a3rdBallGame = $('#aThirdBall').iFSM(aGameObject,{
+			canvas:$('#canvas'),
+			color: '#007700',
+			width: 10,
+			height: 10,
+			widthScreen:400,
+			heightScreen:300,
+			x:250,
+			y:250,
+			dx:2,
+			dy:5,
+			process:doProcessBall,
+			draw:doDrawBall,
+		});
+
+        var aObjectList=[aBackGroundGame,aBallGame,a2ndBallGame,a3rdBallGame];
+
+        aGameFSM = $('#canvas').iFSM(aGameRound,{
+			gameFSMObjects:aObjectList,
+        	y:300,
+        	dx:2,
+        	dy:4,
+        	WIDTH:400,
+        	HEIGHT:300,
+        	counter:$('#counter'),
+        	FPSCounter:$('#FPSCounter'),
+        	speedOfGame:20,
+		});
+
+        $('#StartStop').iFSM(BasicStatesUI,{onClick:{toWho:aGameFSM,sendWhat:'StartStop'}});
+    });
+
+    </script>
+</head>
+<body style="margin:20px;">
+    <h1>The bouncing ball ....</h1>
+    <p>this example shows a game loop managed with iFsm, with bouncing balls as objects using canvas (jCanvas) to display them, using requestAnimationFrame calls instead of setTimeout</p>
+ 	<section>
+	    <div>
+	        <canvas id="canvas" width="400" height="300">
+	         This text is displayed if your browser
+	         does not support HTML5 Canvas.
+	        </canvas>
+			<button class="onoff" id="StartStop">Start/Stop Game</button>
+			<hr>
+			<div>FrameCounter: <span id='counter'></span></div>
+			<div>FPS: <span id='FPSCounter'></span></div>
+			<div>Status: <span id='status'></span></div>
+			<div id='aBackground'></div>
+			<div id='aBall'></div>
+			<div id='aSecondBall'></div>
+			<div id='aThirdBall'></div>
+	    </div>
+ 	</section>
+
+<pre>
+</pre>
+</body>
+</html>

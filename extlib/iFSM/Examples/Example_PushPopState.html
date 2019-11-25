@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iFSM in action! iFSM using push/pop states</title>
+<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+<script type="text/javascript" src="../iFSM.js"></script>
+<style type="text/css">
+html {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+	padding: 0 10px;
+}
+
+pre {
+	font-size: 12px;
+	background-color: black;
+	color: green;
+}
+</style>
+<script type="text/javascript" id="iFSMscript">
+	var aStateDefinition = {
+		IsDisplayed : {
+			enterState : {
+				init_function : function() {
+					this.opts.aDiv.show();
+				}
+			},
+			click : {
+				next_state : 'IsNotDisplayed',
+				pushpop_state : 'PushState',
+			}
+		},
+		IsNotDisplayed : {
+			enterState : {
+				init_function : function() {
+					this.opts.aDiv.hide();
+				}
+			},
+			click : {
+				pushpop_state : 'PopState',
+			}
+		},
+		DefaultState : {
+			start : {
+				next_state : 'IsDisplayed'
+			}
+		}
+	};
+
+	$(document).ready(function() {
+		$('#myButton').iFSM(aStateDefinition, {
+			aDiv : $('#adiv')
+		});
+	});
+</script>
+</head>
+<body style="margin: 10px;">
+	<h1>Tuto Example with a Push/Pop state machine...</h1>
+
+	<button id="myButton">Show/Hide Text</button>
+	<div id="adiv">a nice text to show the FSM capabilities with
+		PushPop state feature :-)</div>
+	<br>
+	<br>
+	<pre>
+	<script>
+		function escapeHtml(text) {
+			var map = {
+				'&' : '&amp;',
+				'<': '&lt;',
+		    '>' : '&gt;',
+				'"' : '&quot;',
+				"'" : '&#039;'
+			};
+
+			return text.replace(/[&<>"']/g, function(m) {
+				return map[m];
+			});
+		}
+		document.write(escapeHtml($('#iFSMscript').html()))
+	</script>
+    </pre>
+	<p>
+		provided by <a href="http://www.intersel.fr">Intersel</a>
+	</p>
+	</pre>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>iFSM in action! Checkbox example</title>
+	<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+	<script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+	<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+	<script type="text/javascript" src="../iFSM.js"></script>
+
+<style type="text/css">
+  html {
+	font-family: Helvetica, Arial, sans-serif;
+  }
+  body {
+	padding: 0 10px;
+  }
+  pre {
+	font-size: 12px;
+	background-color: black;
+	color: green;
+        /* DEFAULT state for MENU. */
+ 
+        div.menu {
+            height: 30px ;
+            position: relative ;
+            width: 200px ;
+            }
+ 
+        div.menu > a.header {
+            background-color: #F0F0F0 ;
+            border: 1px solid #999999 ;
+            border-radius: 5px 5px 5px 5px ;
+            color: #333333 ;
+            display: block ;
+            height: 30px ;
+            line-height: 30px ;
+            padding: 0px 10px 0px 10px ;
+            width: 180px ;
+            }
+ 
+        div.menu > ol.items {
+            border: 1px solid #999999 ;
+            border-width: 0px 1px 1px 1px ;
+            border-radius: 0px 0px 5px 5px ;
+            display: none ;
+            left: 0px ;
+            list-style-type: none ;
+            margin: 0px 0px 0px 0px ;
+            padding: 0px 0px 0px 0px ;
+            position: absolute ;
+            top: 30px ;
+            width: 200px ;
+            }
+ 
+        div.menu li.item {
+            border-top: 1px solid #999999 ;
+            cursor: pointer ;
+            height: 30px ;
+            line-height: 30px ;
+            margin: 0px 0px 0px 0px ;
+            padding: 0px 10px 0px 10px ;
+            }
+ 
+ 
+        /* HOVER state for MENU. */
+ 
+        div.menuInHover {}
+ 
+        div.menuInHover > a.header {
+            background-color: #EAEAEA ;
+            border-color: #333333 ;
+            }
+ 
+ 
+        /* ACTIVE state for MENU. */
+ 
+        div.menuInActive {}
+ 
+        div.menuInActive > a.header {
+            border-bottom-width: 0px ;
+            border-radius: 5px 5px 0px 0px ;
+            }
+ 
+        div.menuInActive > ol.items {
+            display: block ;
+            }
+ 
+        div.menuInActive li.item:hover {
+            background-color: #F0F0F0 ;
+            }
+   }
+</style>
+
+	<script type="text/javascript" id="iFSMscript">
+	var aStateDefinition = {
+		allOff: 
+		{
+			enterState:
+			{
+				propagate_event: 'isNotValid',
+			},
+			check1 :   
+			{
+				next_state: 'OnlyCheck1Checked'
+			},
+			check2 :   
+			{
+				next_state: 'OnlyCheck2Checked',
+				propagate_event: 'setcheck1',
+			}
+		}, 
+		OnlyCheck1Checked: 
+		{
+			enterState:
+			{
+				propagate_event: 'isValid',
+			},
+			check1 :   
+			{
+				next_state: 'allOff'
+			},
+			check2 :   
+			{
+				next_state: 'AllChecked'
+			}
+		},
+		OnlyCheck2Checked: 
+		{
+			enterState:
+			{
+				propagate_event: 'isNotValid',
+			},
+			check1 :   
+			{
+				next_state: 'AllChecked'
+			},
+			check2 :   
+			{
+				next_state: 'allOff',
+			}
+		},
+		AllChecked: 
+		{
+			enterState:
+			{
+				propagate_event: 'isValid',
+			},
+			check1 :   
+			{
+				next_state: 'OnlyCheck2Checked'
+			},
+			check2 :   
+			{
+				next_state: 'OnlyCheck1Checked',
+			},
+		},
+		DefaultState:
+		{
+			start :
+			{
+				next_state: 'allOff'
+			},
+			setcheck1:
+			{
+				init_function: function(){
+					this.opts.checkbox1.prop('checked', true);
+					this.trigger('check1');
+				},
+			},
+			setcheck2:
+			{
+				init_function: function(){
+					this.opts.checkbox2.prop('checked', true);
+					this.trigger('check2');
+				},
+			},
+			isValid:
+			{
+				init_function: function(){
+					this.opts.status.html('checkbox configuration is valid :-)');
+				},
+			},
+			isNotValid:
+			{
+				init_function: function(){
+					this.opts.status.html('checkbox configuration is NOT valid :-(');
+				},
+			},
+		}
+	};
+	
+	var myFSM=null;
+	$(document).ready(function() {
+		myFSM = $('#checkbox_list').iFSM(aStateDefinition,{status:$('#status'),checkbox1:$('#Checkbox1'),checkbox2:$('#Checkbox2')});
+	});
+
+	</script>
+</head>
+<body style="margin:10px;">
+<h1>Checkbox Example with iFSM... </h1>
+	<div id="checkbox_list">
+		a possible answer to <a href="http://stackoverflow.com/questions/23154231/small-fsm-like-code-in-javascript">question asked on StackOverFlow</a><br>
+		<INPUT type="checkbox" id="Checkbox1" onChange="myFSM.trigger('check1');"> Checkbox1<br>
+		<INPUT type="checkbox" id="Checkbox2" onChange="myFSM.trigger('check2');"> Checkbox2<br>
+		<div id="status"></div>
+	</div>
+	<br><br>
+	Propulsed by <a href="http://www.intersel.fr">Intersel</a>, iFSM is available on <a href="https://github.com/intersel/iFSM">Github (https://github.com/intersel/iFSM)</a>
+	<pre>
+		<script>
+		function escapeHtml(text) {
+			var map = {
+				'&' : '&amp;',
+				'<': '&lt;',
+		    '>' : '&gt;',
+				'"' : '&quot;',
+				"'" : '&#039;'
+			};
+
+			return text.replace(/[&<>"']/g, function(m) {
+				return map[m];
+			});
+		}
+		document.write(escapeHtml($('#iFSMscript').html()))
+		</script>
+	</pre>
+</body>
+</html>

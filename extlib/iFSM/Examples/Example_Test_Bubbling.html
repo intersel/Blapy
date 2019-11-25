@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>iFSM in action! Test on bubbling events on objects</title>
+    <script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+    <script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+    <script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+    <script type="text/javascript" src="../iFSM.js"></script>
+	<style type="text/css">
+	  html {
+	    font-family: Helvetica, Arial, sans-serif;
+	  }
+	  body {
+	    padding: 0 10px;
+	  }
+	  #ButtonContainerNoBubble {font-size: 12px;background-color: #AAA;margin:5px;padding:5px;}
+	  #ButtonContainerBubble {font-size: 12px;background-color: #CCC;width:300px;margin:5px;padding:5px;}
+	  pre {
+		font-size: 12px;
+		background-color: black;
+		color: green;
+	  }
+	</style>
+    <script type="text/javascript" id="iFSMscript">
+    var StateButton = {
+        IsOn     : 
+        {
+             enterState:
+            {
+                init_function: function(){this.myUIObject.html("I'm On");},
+	         	UI_event_bubble:true,
+            },
+            click:   
+            {
+            	UI_event_bubble:true,
+                next_state: 'IsOff'
+            }
+        }, 
+        IsOff      : 
+        {
+            enterState:   
+            {
+                init_function: function(){this.myUIObject.html("I'm Off");},
+	         	UI_event_bubble:true,
+            },
+            click:   
+            {
+            	UI_event_bubble:true,
+                next_state: 'IsOn'
+            }
+        },
+        DefaultState        :
+        {
+            start   :
+            {
+                next_state  : 'IsOn'
+            }
+        }
+    };
+    var StateBContainerBubble = {
+            WaitClick      : 
+            {
+                click:   
+                {
+                    init_function: function(){this.opts.status.html(this.opts.status.html()+"<br>click on ButtonContainerBubble!");},
+                    process_on_UItarget: false,
+                }
+            },
+            DefaultState        :
+            {
+                start   :
+                {
+                    next_state  : 'WaitClick'
+                }
+            }
+        };
+    var StateBContainerNoBubble = {
+            WaitClick      : 
+            {
+                click:   
+                {
+                    init_function: function(){this.opts.status.html(this.opts.status.html()+"<br>click on ButtonContainerNoBubble!");},
+                    process_on_UItarget: true,
+                }
+            },
+            DefaultState        :
+            {
+                start   :
+                {
+                    next_state  : 'WaitClick'
+                }
+            }
+        };
+
+    $(document).ready(function() {
+        $('.button').iFSM(StateButton);
+        $('#ButtonContainerNoBubble').iFSM(StateBContainerNoBubble,{status:$('#status')});
+        $('#ButtonContainerBubble').iFSM(StateBContainerBubble,{status:$('#status')});
+    });
+
+    </script>
+</head>
+<body style="margin:20px;">
+	<div id="ButtonContainerBubble">This container receives the click from the buttons and on its div container<br>ButtonContainerBubble
+		<div id="ButtonContainerNoBubble">This container does not receive the click from the buttons but does on its div container. As it does not consume the click button event, button event will bubble... <br>ButtonContainerNoBubble<br>
+	    	<button id="myButton1" class="button">I'm Displayed</button>
+	    	<button id="myButton2" class="button">I'm Displayed</button>
+	    </div>
+	   	<div id="status"></div>
+    </div>
+        <br><br>
+	<pre>
+	<script>document.write($('#iFSMscript').html())</script>
+    </pre>
+    <p>provided by <a href="http://www.intersel.fr">Intersel</a></p>
+
+</body>
+</html>

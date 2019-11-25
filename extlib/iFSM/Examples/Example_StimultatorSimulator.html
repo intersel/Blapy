@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iFSM in action! Finite state machines are great for
+	stimulation on simulation :-)</title>
+<meta charset="utf-8">
+<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+<script type="text/javascript" src="../iFSM.js"></script>
+<style type="text/css">
+html {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+	padding: 0 20px;
+}
+
+button {
+	margin: 0 2px;
+	font-size: 20px;
+	border: 1px solid #333;
+	width: 100px;
+	text-shadow: 0 -1px 0 #333;
+	border-radius: 5px;
+}
+
+button.on {
+	color: #dfd;
+	background: #00aa00;
+	background: -moz-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,
+		153, 0, 1)), color-stop(100%, rgba(0, 119, 0, 1)));
+	background: -webkit-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -o-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -ms-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+}
+
+button.off {
+	color: #fdd;
+	background: #CC0000;
+	background: -moz-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(204,
+		0, 0, 1)), color-stop(100%, rgba(153, 0, 0, 1)));
+	background: -webkit-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -o-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -ms-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+}
+
+pre {
+	font-size: 12px;
+	background-color: black;
+	color: green;
+}
+</style>
+<script type="text/javascript" id="iFSMscript">
+	var aSimulator = {
+		ReadInput : {
+			'e' : 'a',
+			'd' : 'a',
+			'c' : 'a',
+			'b' : 'a',
+			'a' : {
+				init_function : function() {
+					this.opts.InputRead.val(this.opts.InputRead.val()
+							+ this.currentUIEvent.type);
+				},
+			},
+			'reset' : {
+				init_function : function() {
+					this.opts.InputRead.val('');
+				},
+			},
+		},
+		DefaultState : {
+			start : {
+				next_state : 'ReadInput',
+			},
+		}
+	};
+
+	var aStimulator = {
+		WaitForStimulation : {
+			enterState : {
+				init_function : function() {
+					this.opts.stimulationStatus.html('Waiting for stimulation');
+				}
+			},
+			startStimulation : {
+				next_state : 'InitStimulation',
+			},
+		},
+		InitStimulation : {
+			enterState : {
+				init_function : function() {
+					this.opts.stimulationStatus.html('Init stimulation');
+					this.opts.input = this.opts.inputData().slice();
+					this.opts.simulator.trigger('reset');
+					//dynamically set the delay on each step of the stimulation by changing the state definition
+					this._stateDefinition['UpdateSimulation']['update']['how_process_event'] = {
+						delay : this.opts.speedOfStimulation()
+					};
+				},
+				next_state : 'StartStimulation',
+			},
+		},
+		StartStimulation : {
+			enterState : {
+				init_function : function() {
+					this.opts.stimulationStatus.html('Start stimulation');
+				},
+				next_state : 'ReadScenario',
+				propagate_event : 'newTurn',
+			},
+		},
+		ReadScenario : {
+			delegate_machines : {
+				ProcessScenario : {
+					submachine : {
+						UpdateInput : {
+							newTurn : {
+								next_state : 'TestIfNextInput',
+							},
+						},
+						TestIfNextInput : {
+							enterState : {
+								process_event_if : 'this.parentMachine.opts.input.length>0',
+								propagate_event_on_refused : 'scenarioEnded',
+								next_state : 'ReadInput',
+							},
+						},
+						ReadInput : {
+							enterState : {
+								init_function : function() {
+									this.parentMachine.opts.simulator
+											.trigger(this.parentMachine.opts.input
+													.shift());
+								},
+								next_state : 'EndRead',
+							},
+						},
+						EndRead : {
+							enterState : {
+								propagate_event : 'turnEnded',
+							},
+						},
+						DefaultState : {
+							start : {
+								next_state : 'UpdateInput',
+							},
+						}
+
+					},
+				},
+			},
+			turnEnded : {
+				next_state : 'UpdateSimulation',
+				propagate_event : 'update',
+			},
+			scenarioEnded : {
+				next_state : 'EndOfScenario',
+			},
+		},
+		UpdateSimulation : {
+			update : {
+				init_function : function() {
+					this.opts.stimulationStatus.html('update stimulation');
+				},
+				next_state : 'ReadScenario',
+				propagate_event : 'newTurn',
+			},
+		},
+		EndOfScenario : {
+			enterState : {
+				init_function : function() {
+					this.opts.stimulationStatus.html('end of stimulation');
+				},
+				next_state : 'WaitForStimulation',
+			},
+		},
+		DefaultState : {
+			start : {
+				next_state : 'WaitForStimulation',
+			},
+			'stop' : {
+				init_function : function() {
+					this.opts.stimulationStatus.html('stop stimulation');
+				},
+				next_state : 'EndOfScenario',
+			},
+			click : {
+				propagate_event : 'startStimulation',
+			},
+		},
+	}
+
+	$(document).ready(function() {
+		aSimultatorFSM = $('#aText').iFSM(aSimulator, {
+			InputRead : $('#aText')
+		});
+		$('#myButton').iFSM(aStimulator, {
+			inputData : function() {
+				return $('#iSend').val().split(",")
+			},
+			stimulationStatus : $('#stimulationStatus'),
+			simulator : aSimultatorFSM,
+			speedOfStimulation : function() {
+				return $('#speed').val();
+			},
+			LogLevel : 2,
+		});
+	});
+</script>
+</head>
+<body style="margin: 20px;">
+	<h1>Stimulator... Simulator....</h1>
+	<p>This example shows how to stimulate by triggering events to a
+		simulator, based on two state machines...</p>
+	<p>Choose the events to send separated by ','... The name of the
+		events here should be in 'a','b','c','d' or 'e'... they are those
+		understood by the simulator.
+	<p>
+	<p>Choose a speed to send the events</p>
+	<p>When clicking the Start button, events are send one by one
+		according to the speed. The simulator just displays the received
+		events for the demo</p>
+	<p>
+		Events to send: <input type="text" name="iSend" id="iSend"
+			value="a,b,c,d,e">
+	</p>
+	<p>
+		Speed to transmit: <input type="text" name="speed" id="speed"
+			value="500">
+	</p>
+	<p>
+		Events received: <input type="text" name="aText" id="aText" readonly>
+	</p>
+	<p>
+		Stimulation Status : <span id="stimulationStatus"></span>
+	</p>
+
+	<button id="myButton">Start</button>
+	<button id="Stop" onClick="$('#myButton').trigger('stop');"
+		style="width: 200px">Stop Stimulation</button>
+	<p id="result"></p>
+	<br>
+	<br>
+	<pre>
+	<script>
+		document.write($('#iFSMscript').html())
+	</script>
+    </pre>
+	<p>
+		provided by <a href="http://www.intersel.fr">Intersel</a>
+	</p>
+
+</body>
+</html>

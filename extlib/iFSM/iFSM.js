@@ -32,6 +32,8 @@
  * - 2017/10/17 - E.POdvin - 1.7.4 - change log level - by default, displays the state&event processing step in the console
  * - 2018/03/08 - E.POdvin - 1.7.5 - transfer data transmitted by trigger to enterEvent and exitEvent
  * - 2018/03/13 - E.Podvin - 1.7.6 - add some controls when starting the state machines: can't start if no id on the object or if still exists
+ * - 2019/11/22 - E.Podvin - 1.7.7 - prevent preventCancel event to stack if delayed again (see preventCancelSet)
+ *                                   add console.warn (instead of log) for errors message
  * -----------------------------------------------------------------------------------------
  *
  * @copyright Intersel 2013-2018
@@ -337,7 +339,7 @@ var nb_FSM = 0;
 var fsm_manager = window.fsm_manager = function (anObject, aStateDefinition, options)
 {
 	var $defaults = {
-			debug				: false,
+			debug				: true,
 			LogLevel			: 1,
 			AlertError			: false,
 			maxPushEvent		: 100,
@@ -439,6 +441,13 @@ var fsm_manager = window.fsm_manager = function (anObject, aStateDefinition, opt
 	this.childrenMachine	= new Array();
 	if (this.parentMachine) this.parentMachine.childrenMachine.push(this);//update the children of the parent if any
 
+/**
+ * preventCancelId to manage the preventcancel by creating a unique id for doTimeout
+ * @type {Number}
+ */
+  this.preventCancelId=0;
+
+
 	var aState;
 	var aEvent;
 	var theEvents	='';
@@ -493,7 +502,8 @@ var fsm_manager = window.fsm_manager = function (anObject, aStateDefinition, opt
 
 	//define a selector object if none defined
 	if ( 	(!anObject.selector)
-		&& 	(anObject.attr('id') )
+		&& 	(anObject.attr('id')
+    &&  (anObject.attr('id') != 'iFSMDocumentRoot'))
 		)
 		anObject.selector='#'+anObject.attr('id');// set to the #id
 	else anObject.selector='';
@@ -639,7 +649,7 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 	anEv[0] = fsm_manager_create_event(this.myUIObject,'',null); // to use it, just change anEv[0].type='an_event_name';
 	anEv[1] = data[1]; anEv[2]= data[2];
 
-	this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> START Processing Event',2,1);
+	this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> START Processing Event',3,1);
 
 	//targetFSM is sent through the this.trigger function
 	//we consider the sub FSMs of a machine as the same machine...
@@ -654,13 +664,13 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 				)
 		)
 	{
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> not for the current machine ---> exit',2);
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> not for the current machine ---> exit',3);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 		return; //not for this machine...
 	}
 
 	if (data.length > 1 && data[(data.length - 1)] != null && data[data.length-1].localMachine)
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> process event locally',2);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> process event locally',3);
 
 
 	// submachine needs to be active only if in the correct parent state where it was defined
@@ -674,16 +684,16 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 					)
 		)
 		{
-			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> submachine can\'t run if the parent state is not active for the submachine ---> exit',2);
-			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> submachine can\'t run if the parent state is not active for the submachine ---> exit',3);
+			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 			return; //not in the correct parent state
 		}
 	}
 
 	if (this._stateDefinition[currentState]==undefined)
 	{
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> currentState does not exist!',2);
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> currentState does not exist!',3);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 		return;
 	}
 
@@ -698,8 +708,8 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 			&& !$.isWindow(currentEvent.target)
 		)
 	{
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> object not a good target  ---> '+$(currentEvent.currentTarget).attr('id')+'---> exit',2);
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> object not a good target  ---> '+$(currentEvent.currentTarget).attr('id')+'---> exit',3);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 		return;
 	}
 	else
@@ -729,8 +739,8 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 		)
 	{
 		this.pushEvent(anEvent,data);
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event pushed (lastevent)---> '+this.lastevent+' --> exit',2);
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event pushed (lastevent)---> '+this.lastevent+' --> exit',3);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 		return;
 	}
 
@@ -745,13 +755,13 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 		var aSubMachineDefinition;
 		for(aSubMachine in this._stateDefinition[currentState].delegate_machines)
 		{
-			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> delegate to submachine---> '+aSubMachine,2);
+			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> delegate to submachine---> '+aSubMachine,3);
 			aSubMachineDefinition = this._stateDefinition[currentState].delegate_machines[aSubMachine];
 
 			//initialize the sub machines if needed
 			if (aSubMachineDefinition.myFSM == undefined)
 			{
-				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> process submachine ---> create FSM for the submachine '+aSubMachine,2);
+				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> process submachine ---> create FSM for the submachine '+aSubMachine,3);
 				this._stateDefinition[currentState].delegate_machines[aSubMachine].myFSM = new fsm_manager(this.myUIObject,aSubMachineDefinition.submachine,this.opts); //create the machine
 				this._stateDefinition[currentState].delegate_machines[aSubMachine].myFSM.opts.FSMParent=this;
 				this._stateDefinition[currentState].delegate_machines[aSubMachine].myFSM.subMachineName=aSubMachine;
@@ -779,17 +789,17 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 			else
 			{
 
-				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> process submachine  (event)---> '+aSubMachine+'('+anEvent+') Start',2);
+				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> process submachine  (event)---> '+aSubMachine+'('+anEvent+') Start',3);
 				aSubMachineDefinition.myFSM.processEvent(anEvent,data);
-				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> process submachine  (event)---> '+aSubMachine+'('+anEvent+') Processed',2);
+				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> process submachine  (event)---> '+aSubMachine+'('+anEvent+') Processed',3);
 
 				//current state changed during the process of the submachine...?
 				//not sure it is a normal behaviour... if it occurs, we exit...
 				if (currentState != this.currentState)
 				{
-					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> process submachine changed the current environment (event)',2);
+					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> process submachine changed the current environment (event)',3);
 					this.cleanExitProcess();
-					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 					return;
 				}
 
@@ -804,11 +814,11 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 						|| 	(anEvent == this.opts.startEvent)
 					)
 				{
-					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> submachine processed and exit due to prevent_bubble directive',2);
+					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> submachine processed and exit due to prevent_bubble directive',3);
 
 					this.cleanExitProcess();
-					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> submachine exit',2);
-					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> submachine exit',3);
+					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 					return;
 				}
 			}
@@ -822,12 +832,12 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 	//is the event to be processed?
 	if ( (currentState=='DefaultState') || (currentEventConfiguration == undefined) )
 	{
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> take Event '+anEvent+' configuration from DefaultState (not present in current state)',2);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> take Event '+anEvent+' configuration from DefaultState (not present in current state)',3);
 		currentEventConfiguration = this._stateDefinition.DefaultState[anEvent];
 		if (currentEventConfiguration == undefined) {
 			if ( ['start','enterState','exitState','exitMachine'].indexOf(anEvent) < 0)
 			{
-				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> take Event '+anEvent+' configuration from catchEvent',2);
+				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> take Event '+anEvent+' configuration from catchEvent',3);
 				currentEventConfiguration = this._stateDefinition.DefaultState["catchEvent"];
 				//we create the dummy event in the default state if it does not exist for the catchall
 				if (!this._stateDefinition['DefaultState'][anEvent])
@@ -836,9 +846,9 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 		}
 
 		if (currentEventConfiguration == undefined) {
-			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event '+anEvent+' does not exist and no catchEvent--> will exit',2);
+			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event '+anEvent+' does not exist and no catchEvent--> will exit',3);
 			this.cleanExitProcess();
-			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 			return;
 		}
 		currentStateEvent = 'DefaultState';
@@ -865,9 +875,9 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 			&& currentEventConfiguration.process_on_UItarget == true
 		)
 	{
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event '+anEvent+' does not address the correct UI target (see process_on_UItarget) will exit',2);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event '+anEvent+' does not address the correct UI target (see process_on_UItarget) will exit',3);
 		this.cleanExitProcess();
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 		return;
 	}
 
@@ -892,10 +902,10 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 			&& 	currentEventConfiguration.how_process_event.delay
 		)
 	{
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event '+anEvent+' delayed will exit',2);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event '+anEvent+' delayed will exit',3);
 		this.delayProcess(anEvent, currentEventConfiguration.how_process_event.delay, data);
 		this.cleanExitProcess();
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 		return;
 	}
 
@@ -911,25 +921,30 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 			&& 	(eval(currentEventConfiguration.process_event_if) == false)
 		)
 	{
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event '+anEvent+' event not allowed to process (process_event_if rule is not OK) will exit',2);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event '+anEvent+' event not allowed to process (process_event_if rule is not OK) will exit',3);
 		if 	(currentEventConfiguration.propagate_event_on_refused)
 		{
-			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event '+currentEventConfiguration.propagate_event_on_refused+' triggered on exit because of propagate_event_on_refused',2);
+			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Event '+currentEventConfiguration.propagate_event_on_refused+' triggered on exit because of propagate_event_on_refused',3);
 			this.trigger(currentEventConfiguration.propagate_event_on_refused,null,currentEventConfiguration.propagate_event_on_localmachine);
 		}
 		//exit as not accepted...
 		this.cleanExitProcess();
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 		return;
 	}
 
+  //*********************************************
 	//ok we will really process this event...
-	this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> currently processing',0);
+	//*********************************************
+	this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> currently processing',2);
 	var lastprocessEventStatus = this.processEventStatus;
 	this.processEventStatus = 'processing';
 
 	var funcReturn = true;
 	var localdata;
+
+  //clear any preventCancel tag
+  if (data && data[1] && data[1].preventCancelSet) delete(data[1].preventCancelSet);
 
 	//call to the action (init_function) before transition state
 	if (currentEventConfiguration.init_function)
@@ -937,7 +952,7 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 		localdata = [].slice.call(data);
 		localdata.unshift(currentEventConfiguration.properties_init_function);
 		funcReturn= currentEventConfiguration.init_function.apply(this,localdata);
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> init_function done',2);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> init_function done',3);
 	}
 
 	/*
@@ -954,13 +969,13 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 			switch(currentEventConfiguration.pushpop_state)
 			{
 			case 'PushState':
-				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Push state to state '+this.currentState,2);
+				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Push state to state '+this.currentState,3);
 				this.pushStateList.push(this.currentState); //do not use currentStateEvent!
 				break;
 			case 'PopState':
 				if (this.pushStateList.length > 0)
 				{
-					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Pop state to state '+currentEventConfiguration.next_state,2);
+					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Pop state to state '+currentEventConfiguration.next_state,3);
 					this.pushStateList.pop();
 				}
 				break;
@@ -992,7 +1007,11 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 		$.each(this._stateDefinition[this.currentState],
 				function(aKey,aValue)
 				{
-					if (aKey!='delegate_machines')
+          if (!thisFSM._stateDefinition[thisFSM.currentState][aKey])
+          {
+            thisFSM._log(aKey+" does not exist in state "+thisFSM.currentState,1);
+          }
+					else if (aKey!='delegate_machines')
 						thisFSM._stateDefinition[thisFSM.currentState][aKey].EventIteration =0;
 				});
 
@@ -1007,14 +1026,18 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 		}
 
 		/*
+    *********************************************
 		 * we change the current state Here!
+    *********************************************
 		 */
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Go to (see next_state) '+currentEventConfiguration.next_state,2);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Go to (see next_state) '+currentEventConfiguration.next_state,3);
 		this.lastState=this.currentState;
 		this.currentState = currentEventConfiguration.next_state;
 
 
-		//and now that we're entering the new state
+    //*********************************************
+		//and now  we're entering the new state
+    //*********************************************
 		anEv[0].type='enterState';
 		this.processEvent('enterState',anEv,true);
 
@@ -1027,7 +1050,7 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 			$.each(currentEventConfiguration.propagate_event,
 				function(aKey,aPropagateEvent)
 				{
-					thisFSM._log('processEvent: '+thisFSM.FSMName+':'+currentState+':'+anEvent+'-> trigger event (see propagate_event) ---> '+aPropagateEvent,2);
+					thisFSM._log('processEvent: '+thisFSM.FSMName+':'+currentState+':'+anEvent+'-> trigger event (see propagate_event) ---> '+aPropagateEvent,3);
 					if (aPropagateEvent === true)
 						thisFSM.trigger( anEvent, data[1],currentEventConfiguration.propagate_event_on_localmachine);
 					else
@@ -1049,7 +1072,7 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 		$.each(currentEventConfiguration.propagate_event,
 			function(aKey,aPropagateEvent)
 			{
-				thisFSM._log('processEvent: '+thisFSM.FSMName+':'+currentState+':'+anEvent+'-> trigger event (see propagate_event) ---> '+aPropagateEvent,2);
+				thisFSM._log('processEvent: '+thisFSM.FSMName+':'+currentState+':'+anEvent+'-> trigger event (see propagate_event) ---> '+aPropagateEvent,3);
 				if (aPropagateEvent === true)
 					thisFSM.trigger( anEvent, data[1], currentEventConfiguration.propagate_event_on_localmachine);
 				else
@@ -1061,20 +1084,20 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 	 */
 	else if ( (funcReturn == false) && (currentEventConfiguration.next_state_if_error) )
 	{
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> error in init_function',2);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> error in init_function',3);
 		//is this a Push/Pop State?
 		if (currentEventConfiguration.pushpop_state_if_error)
 		{
 			switch(currentEventConfiguration.pushpop_state_if_error)
 			{
 			case 'PushState':
-				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Push state to state '+this.currentState,2);
+				this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Push state to state '+this.currentState,3);
 				this.pushStateList.push(this.currentState); //do not use currentStateEvent!
 				break;
 			case 'PopState':
 				if (this.pushStateList.length > 0)
 				{
-					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Pop state to state '+currentEventConfiguration.next_state_if_error,2);
+					this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Pop state to state '+currentEventConfiguration.next_state_if_error,3);
 					this.pushStateList.pop();
 				}
 				break;
@@ -1082,9 +1105,11 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 		}
 
 		/*
+     *********************************************
 		 * we change the current state Here!
+     *********************************************
 		 */
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Go to (see next_state_if_error) '+currentEventConfiguration.next_state_if_error,2);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Go to (see next_state_if_error) '+currentEventConfiguration.next_state_if_error,3);
 		this.lastState=this.currentState;
 		this.currentState = currentEventConfiguration.next_state_if_error;
 
@@ -1095,7 +1120,7 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 	else
 	{
 		//nothing to do?
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> nothing to do',2);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> nothing to do',3);
 	}
 
 	// do the exit action
@@ -1104,13 +1129,13 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 		localdata = [].slice.call(data);
 		localdata.unshift(currentEventConfiguration.properties_out_function);
 		funcReturn= currentEventConfiguration.out_function.apply(this,localdata);
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> out_function done',2);
+		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> out_function done',3);
 	}
 
 	this.processEventStatus = lastprocessEventStatus; //we globally finished the job...
 
 	this.cleanExitProcess();
-	this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',2,-1);
+	this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> EXIT PROCESS',3,-1);
 
 };//end of processEvent
 
@@ -1165,7 +1190,7 @@ fsm_manager.prototype.popEvent	= function() {
 	if (this.pushEventList.length > 0)
 	{
 		anEventToProcess = this.pushEventList.shift();
-		this._log('popEvent:'+anEventToProcess.anEvent,2);
+		this._log('popEvent:'+anEventToProcess.anEvent,3);
 		if (anEventToProcess == undefined || anEventToProcess.anEvent == undefined) return false;
 		this.processEvent(anEventToProcess.anEvent,anEventToProcess.data);
 		return true;
@@ -1181,23 +1206,52 @@ fsm_manager.prototype.popEvent	= function() {
  * @param aDelay	: a delay to do the processing
  * @param data		: {event, data}
  */
-var aPreviousId=0;//to manage the preventcancel by creating a unique id for doTimeout
 fsm_manager.prototype.delayProcess	= function(anEvent, aDelay, data) {
 	this._log('delayProcess:  ---> '+anEvent);
 
-	aPreviousId++;
+	this.preventCancelId++;
 
-	var currentState = this.currentState;
+  //let aHashData = this.hashCode(JSON.stringify(data[1]));
+  let currentState = this.currentState;
+
+  let aDelayedProcessName=this.myUIObject.attr('id')+currentState+anEvent+this.preventCancelId;
 
 	if (!this._stateDefinition[this.currentState][anEvent]) currentState = "DefaultState";
 
 	if (!this._stateDefinition[currentState][anEvent].how_process_event.DelayedProcessNames)
-		this._stateDefinition[currentState][anEvent].how_process_event.DelayedProcessNames=[];
-	aDelayedProcessName=this.myUIObject.attr('id')+currentState+anEvent+aPreviousId;
+  {
+    this._stateDefinition[currentState][anEvent].how_process_event.DelayedProcessNames=[];
+  }
+
+  if (this._stateDefinition[currentState][anEvent].how_process_event.preventcancel)
+  {
+    if (data[1].preventCancelSet) aDelayedProcessName=data[1].preventCancelSet; // same request that needs to be delayed again
+    else data[1]['preventCancelSet']=aDelayedProcessName;
+  }
+
 	this._stateDefinition[currentState][anEvent].how_process_event.DelayedProcessNames[aDelayedProcessName]=aDelayedProcessName;
 	//setTimeout(this.launchProcess,aDelay,this,anEvent,data);
 	jQuery.doTimeout(aDelayedProcessName,aDelay,fsm_manager_launchProcess,this,anEvent,data);
 };
+
+
+/**
+ * hash function
+ * from https://stackoverflow.com/questions/6122571/simple-non-secure-hash-function-for-javascript
+ * @todo needed?
+**/
+fsm_manager.prototype.hashCode = function(source) {
+	let hash = 0;
+	if (source.length == 0) {
+		return hash;
+	}
+	for (var i = 0; i < source.length; i++) {
+		var char = source.charCodeAt(i);
+		hash = ((hash<<5)-hash)+char;
+		hash = hash & hash; // Convert to 32bit integer
+	}
+	return hash;
+}
 
 /**
  * cancelDelayedProcess - delete all delayed events of the current state except those declared as prevented
@@ -1214,6 +1268,12 @@ fsm_manager.prototype.cancelDelayedProcess	= function() {
 		currentState = this.currentState;
 
 		if (!this._stateDefinition[currentState][aEvent]) currentState = "DefaultState";
+
+    if (!this._stateDefinition[currentState][aEvent])
+    {
+      this._log('cancelDelayedProcess: '+aEvent+" has no definition for "+this.currentState,1);
+      return;
+    }
 
 		currentEventConfiguration = this._stateDefinition[currentState][aEvent];
 
@@ -1311,27 +1371,47 @@ fsm_manager.prototype.subMachinesRespectTargets = function (anEvent) {
  * @param add_offset (default:0) :
  * 		1 : add blank offset on the left of the message
  * 		-1 : remove left blank offset on the left of the message
+ * @remarks
+ * - this.opts.debug needs to be set to have errors raised
+ * - if this.opts.AlertError is set, then error message will raise an alert box
+ * - if this.opts.logFSM is set, and contains a FSM name list, then only FSM in this list will raise errors
  */
-var log_offsetstring='';
+fsm_manager.prototype.log_offsetstring='';
 fsm_manager.prototype._log = function (message) {
 	/*global console:true */
 
-	if (!this.opts.debug) return;
-	if ( (arguments.length > 1) && (arguments[1] > this.opts.LogLevel) ) return; //we continue if error_level  <= LogLevel
-	if ( (arguments.length <= 1) && (3 > this.opts.LogLevel) ) return;// no defined level => notice level used (3)
+  let error = (arguments[1])? arguments[1] : 3;
+
+  //show only errors if debug is not set
+  if ( (error >= 2) && (!this.opts.debug) ) return;
+	if ( error > this.opts.LogLevel) return; //we continue if error_level  <= LogLevel
+
+  // if logFSM is defined, only log the FSM listed in it
 	if ( this.opts.logFSM && this.opts.logFSM.indexOf(this.FSMName)<0) return;
+
 	if ( (arguments.length > 2) && (arguments[2] == -1))
-		log_offsetstring = log_offsetstring.replace('  ','');
+		this.log_offsetstring = this.log_offsetstring.replace('  ','');
 
 	if (window.console && console.log)
 	{
-		console.log('[fsm] ' + log_offsetstring + message);
-		if ( (arguments[1] == 1) && this.opts.AlertError) alert(message);
+    if (error == 1)
+    {
+      console.error('[fsm] ' + this.log_offsetstring + message);
+    }
+    else if (error == 2)
+    {
+      console.warn('[fsm] ' + this.log_offsetstring + message);
+    }
+    else
+    {
+      console.log('[fsm] ' + this.log_offsetstring + message);
+    }
+		if ( (error == 1) && this.opts.AlertError) alert(message);
 		if ( ( arguments.length > 2 ) && (arguments[2] == 1) )
-			log_offsetstring = log_offsetstring+"  ";
+			this.log_offsetstring = this.log_offsetstring+"  ";
 	}
 
-};//end of
+};//end of _log
 
 /*
  * functions that can be used for the events of a state machine
@@ -1432,6 +1512,12 @@ $.fn.iFSM = function(aStateDefinition, options)
 	return this.each(
 		function()
 		{
+      if ( ($(this)[0] ==  document) && !$(this).attr('id') )
+      {
+        // set an id to document... a iFSM needs one...
+        $(this).attr('id','iFSMDocumentRoot');
+      }
+
 			if ($(this).attr('id') != undefined)
 			{
 				if (iFSMList[$(this).attr('id')]==undefined)
@@ -1439,22 +1525,19 @@ $.fn.iFSM = function(aStateDefinition, options)
 					iFSMList[$(this).attr('id')]=[];
 				}
 
-				if (!$(this).getFSM(aStateDefinition))
-				{
-					var iFSM = new fsm_manager($(this), aStateDefinition, options);
-					iFSMList[$(this).attr('id')].push(iFSM) ;
-					if (options && options.initState  != undefined) iFSM.InitManager(options.initState);	//start it
-					else iFSM.InitManager();	//start it
-				}
-				else
-				{
-					console.log('[warn][fsm] state machine still in place for this state definition');
-				}
+        var iFSM = new fsm_manager($(this), aStateDefinition, options);
+        if ($(this).getFSM(aStateDefinition))
+        {
+          console.warn('[warn][fsm] state machine was already set for this state definition on '+$(this).attr('id'));
+        }
+				iFSMList[$(this).attr('id')].push(iFSM) ;
+				if (options && options.initState  != undefined) iFSM.InitManager(options.initState);	//start it
+				else iFSM.InitManager();	//start it
 			}
 			else
 			{
 				if (options && options.debug) alert('Can\'t initialized state machine because the DOM object has no "id" property');
-				console.log('[error][fsm] Can\'t initialized state machine because the DOM object has no "id" property');
+				console.warn('[error][fsm] Can\'t initialized state machine because the DOM object has no "id" property');
 			}
 	});
 };

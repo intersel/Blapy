@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iFSM in action! Checkbox example</title>
+<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+<script type="text/javascript" src="../iFSM.js"></script>
+
+<style type="text/css">
+html {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+	padding: 0 10px;
+}
+
+pre {
+	font-size: 12px;
+	background-color: black;
+	color: green;
+}
+/* DEFAULT state for MENU. */
+div.menu {
+	height: 30px;
+	position: relative;
+	width: 200px;
+}
+
+div.menu>a.header {
+	background-color: #F0F0F0;
+	border: 1px solid #999999;
+	border-radius: 5px 5px 5px 5px;
+	color: #333333;
+	display: block;
+	height: 30px;
+	line-height: 30px;
+	padding: 0px 10px 0px 10px;
+	width: 180px;
+}
+
+div.menu>ol.items {
+	border: 1px solid #999999;
+	border-width: 0px 1px 1px 1px;
+	border-radius: 0px 0px 5px 5px;
+	display: none;
+	left: 0px;
+	list-style-type: none;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	position: absolute;
+	top: 30px;
+	width: 200px;
+}
+
+div.menu li.item {
+	border-top: 1px solid #999999;
+	cursor: pointer;
+	height: 30px;
+	line-height: 30px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 10px 0px 10px;
+}
+
+/* HOVER state for MENU. */
+div.menuInHover {
+	
+}
+
+div.menuInHover>a.header {
+	background-color: #EAEAEA;
+	border-color: #333333;
+}
+
+/* ACTIVE state for MENU. */
+div.menuInActive {
+	
+}
+
+div.menuInActive>a.header {
+	border-bottom-width: 0px;
+	border-radius: 5px 5px 0px 0px;
+}
+
+div.menuInActive>ol.items {
+	display: block;
+	background-color: #FEFEFE;
+}
+
+div.menuInActive li.item:hover {
+	background-color: #F0F0F0;
+}
+</style>
+
+<script type="text/javascript" id="iFSMscript">
+	var DropdownMachine = {
+		subMenuHidden : {
+			enterState:{
+				init_function:function(){
+					this.opts.menu
+						.removeClass('menuInHover')
+						.removeClass('menuInActive');
+				},
+			},
+			mouseenter:{
+				next_state:'subMenuHiddenHover',
+			},
+		},
+		subMenuHiddenHover:{
+			enterState:{
+				init_function:function(){
+					this.opts.menu
+						.removeClass('menuInActive')
+						.addClass('menuInHover');
+					},
+			},
+			mouseleave:{
+				next_state:'subMenuHidden',
+			},
+			click:{
+				next_state:'subMenuHoverDisplayed',
+			},
+		},
+		subMenuDisplayed:{
+			enterState:{
+				init_function:function(){
+					this.opts.menu
+						.addClass('menuInActive')
+						.removeClass('menuInHover');
+					},
+			},
+			clickDoc:{
+				next_state:'subMenuHidden',
+			},
+			mouseenter:{
+				next_state:'subMenuHoverDisplayed',
+			},
+		},
+		subMenuHoverDisplayed:{
+			enterState:{
+				init_function:function(){
+					this.opts.menu
+						.addClass('menuInActive')
+						.addClass('menuInHover');
+					},
+			},
+			mouseleave:{
+				next_state:'subMenuDisplayed',
+			},
+			click:{
+				next_state:'subMenuHiddenHover',
+			},
+		},
+		DefaultState : {
+			start : {
+				next_state : 'subMenuHidden'
+			},
+		}
+	};
+
+	docMachine= {
+		DefaultState : {
+			click:{
+				init_function:function(){
+					this.opts.dropDown.trigger('clickDoc');
+				},
+				UI_event_bubble:true,
+			},
+		},
+	};
+	
+	submenuMachine= {
+			DefaultState : {
+				click:{
+					init_function:function(){
+						this.opts.dropDown.trigger('clickMenu');
+						this.opts.status.html(this.opts.status.html()
+											+'<br>'
+											+this.myUIObject.html()
+											+' clicked'
+										);
+					},
+				},
+			},
+		};
+	$(document).ready(function() {
+		$('#dropDown').iFSM(DropdownMachine, {debug:true,menu : $('#menu')});
+		$(document).iFSM(docMachine,{debug:true,dropDown:$('#dropDown')});
+		$('.item').iFSM(submenuMachine,{debug:true,dropDown:$('#dropDown'),status:$('#status')});
+	});
+</script>
+</head>
+<body style="margin: 10px;">
+	<h1>Dropdown menus Example with iFSM...</h1>
+	<p>This example is the implementation of <a href="http://www.bennadel.com/blog/2242-treating-user-interface-ui-widgets-like-finite-state-machines.htm">the example shown in this explanation</a> using a finite state machine to manage ""not so simple" graphic user interface...</p>
+	
+	
+	<!-- BEGIN: Menu Widget. -->
+	<div class="menu" id="menu">
+
+		<a href="#" class="header" id="dropDown"> My Awesome Friends </a>
+
+		<ol class="items" id="submenus">
+			<li class="item" id="submenu1">Anna Banana</li>
+			<li class="item" id="submenu2">Joanna</li>
+			<li class="item" id="submenu3">Tricia</li>
+		</ol>
+
+	</div>
+	<div id="status" ></div>
+	<br>
+	<br> Propulsed by
+	<a href="http://www.intersel.fr">Intersel</a>, iFSM is available on
+	<a href="https://github.com/intersel/iFSM">Github
+		(https://github.com/intersel/iFSM)</a>
+	<pre>
+		<script>
+			function escapeHtml(text) {
+				var map = {
+					'&' : '&amp;',
+					'<': '&lt;',
+		    '>' : '&gt;',
+					'"' : '&quot;',
+					"'" : '&#039;'
+				};
+
+				return text.replace(/[&<>"']/g, function(m) {
+					return map[m];
+				});
+			}
+			document.write(escapeHtml($('#iFSMscript').html()))
+		</script>
+	</pre>
+</body>
+</html>

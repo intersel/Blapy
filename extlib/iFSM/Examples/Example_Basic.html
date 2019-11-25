@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iFSM in action! Basic Example</title>
+<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+<script type="text/javascript" src="../iFSM.js"></script>
+<style type="text/css">
+html {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+	padding: 0 10px;
+}
+
+pre {
+	font-size: 12px;
+	background-color: black;
+	color: green;
+}
+</style>
+<script type="text/javascript" id="iFSMscript">
+	var aStateDefinition = {
+		StartState : {
+			click : {
+				next_state : 'FirstState'
+			}
+		},
+		FirstState : {
+			enterState : {
+				init_function : function() {
+					alert("Hello! \nFirst State");
+				}
+			},
+			click : {
+				next_state : 'NextState'
+			}
+		},
+		NextState : {
+			enterState : {
+				init_function : function() {
+					alert("Please to meet you! \nNext State");
+				}
+			},
+			click : {
+				next_state : 'FirstState'
+			}
+		},
+		DefaultState : {
+			start : {
+				next_state : 'StartState'
+			}
+		}
+	};
+	$(document).ready(function() {
+		$('#myButton').iFSM(aStateDefinition);
+	});
+</script>
+</head>
+<body style="margin: 20px;">
+	<h1>Hello World example</h1>
+	<button id="myButton">Button</button>
+	<br>
+	<br>
+	<pre>
+	<script>
+		function escapeHtml(text) {
+			var map = {
+				'&' : '&amp;',
+				'<': '&lt;',
+		    '>' : '&gt;',
+				'"' : '&quot;',
+				"'" : '&#039;'
+			};
+
+			return text.replace(/[&<>"']/g, function(m) {
+				return map[m];
+			});
+		}
+		document.write(escapeHtml($('#iFSMscript').html()))
+	</script>
+    </pre>
+	<p>
+		provided by <a href="http://www.intersel.fr">Intersel</a>
+	</p>
+</body>
+</html>

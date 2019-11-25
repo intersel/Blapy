@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iFSM in action! iFSM and submachines and promises...</title>
+<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+<script type="text/javascript" src="../iFSM.js"></script>
+
+<style type="text/css">
+  html {
+    font-family: Helvetica, Arial, sans-serif;
+  }
+  body {
+    padding: 0 20px;
+  }
+  button {
+    margin: 0 2px;
+    font-size: 20px;
+    border: 1px solid #333;
+    width: 70px;
+    text-shadow: 0 -1px 0 #333;
+    border-radius: 5px;
+  }
+  button.on {
+    color: #dfd;
+    background: #00aa00;
+    background: -moz-linear-gradient(top, rgba(0,153,0,1) 0%, rgba(0,119,0,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,153,0,1)), color-stop(100%,rgba(0,119,0,1)));
+    background: -webkit-linear-gradient(top, rgba(0,153,0,1) 0%,rgba(0,119,0,1) 100%);
+    background: -o-linear-gradient(top, rgba(0,153,0,1) 0%,rgba(0,119,0,1) 100%);
+    background: -ms-linear-gradient(top, rgba(0,153,0,1) 0%,rgba(0,119,0,1) 100%);
+    background: linear-gradient(top, rgba(0,153,0,1) 0%,rgba(0,119,0,1) 100%);
+  }
+  button.off {
+    color: #fdd;
+    background: #CC0000;
+    background: -moz-linear-gradient(top, rgba(204,0,0,1) 0%, rgba(153,0,0,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(204,0,0,1)), color-stop(100%,rgba(153,0,0,1)));
+    background: -webkit-linear-gradient(top, rgba(204,0,0,1) 0%,rgba(153,0,0,1) 100%);
+    background: -o-linear-gradient(top, rgba(204,0,0,1) 0%,rgba(153,0,0,1) 100%);
+    background: -ms-linear-gradient(top, rgba(204,0,0,1) 0%,rgba(153,0,0,1) 100%);
+    background: linear-gradient(top, rgba(204,0,0,1) 0%,rgba(153,0,0,1) 100%);
+  }
+</style>
+
+<script type="text/javascript" id="iFSMscript">
+
+var aStateDefinitionButton = {
+
+	ButtonCountdown		: 
+	{
+		enterState : 
+		{
+			init_function		: 
+				function (){
+					this.myUIObject.html("on").attr({'class':'on'});
+					this.opts.counter=3;
+					this.opts.andMachineTest.trigger('buttonRestart',this.myUIObject.attr('id'));
+				}
+		},
+		exitState : 
+		{
+			init_function		: 
+				function ()
+				{
+					this.myUIObject.html("wait");
+				}
+		},
+		click	:	
+		{
+			process_event_if		: '(this.opts.counter<=0)',
+			propagate_event_on_refused	: 'notReady',
+			next_state			: 'ButtonWait'
+		},
+		notReady :
+		{
+			init_function		: function (){this.myUIObject.html(this.opts.counter);this.opts.counter=this.opts.counter-1;}
+		},
+		start :
+		{
+			propagate_event: ['enterState','click'],
+		}
+	},
+	ButtonWait		: 
+	{
+		enterState : 
+		{
+			init_function		: 
+				function (){
+					this.myUIObject.trigger('setWait');
+					this.opts.andMachineTest.trigger('buttonWait',this.myUIObject.attr('id'));
+				}
+		},
+		setWait :
+		{
+			how_process_event	: {delay:1000},
+			next_state	: 'ButtonStop'
+		},
+	},
+	ButtonStop		: 
+	{
+		enterState : 
+		{
+			init_function		: 
+				function (){
+					this.myUIObject.html("off").attr({'class':'off'});
+					this.opts.andMachineTest.trigger('buttonOff',this.myUIObject.attr('id'));
+				},
+		},
+		click	:	
+		{
+			next_state		: 'ButtonCountdown'
+		}
+	},
+}
+
+var ManageFirstWaitButton =
+{
+	FirstTime :
+	{
+		testFirstTime :
+		{
+			init_function : function(){this.trigger('setText','You pass in "mode wait" for the first time!');},
+			next_state : 'NotFirstTime',
+		}
+	},
+	NotFirstTime :
+	{
+		testFirstTime :
+		{
+			init_function : function(){this.trigger('setText','It is not the first time you pass in "mode wait" for this button!');},
+		}
+	},
+	DefaultState :
+	{
+		start :
+		{
+			next_state : 'FirstTime',
+		},
+	}
+};
+
+var ButtonWaitEvents =
+{
+	enterState :
+	{
+		propagate_event : 'testFirstTime',
+	},
+	delegate_machines :
+	{
+		'manageFirstWait' : 
+		{
+			submachine 			: ManageFirstWaitButton,
+			no_reinitialisation	: true,
+		},
+	}
+}
+
+var ManageStatusButton1 =
+{
+	NoButtonWait	:{},
+	ButtonWait		: $.extend(true, {}, ButtonWaitEvents), 	//a way to use and share a unique definition of a State
+	ButtonOff		:{},
+	ButtonRestart	:{},
+	DefaultState	:
+	{
+		start	:	
+		{
+			next_state	: 'NoButtonWait'
+		},
+		onoff_button1_Wait :
+		{
+			next_state	: 'ButtonWait'
+		},
+		onoff_button1_Off :
+		{
+			next_state	: 'ButtonOff'
+		},
+		onoff_button1_Restart :
+		{
+			next_state	: 'ButtonRestart'
+		},
+	}				
+}
+var ManageStatusButton2 =
+{
+	NoButtonWait	:{},
+	ButtonWait		: $.extend(true, {}, ButtonWaitEvents),
+	ButtonOff		:{},
+	ButtonRestart	:{},
+	DefaultState			:
+	{
+		start	:	
+		{
+			next_state	: 'NoButtonWait'
+		},
+		onoff_button2_Wait :
+		{
+			next_state	: 'ButtonWait'
+		},
+		onoff_button2_Off :
+		{
+			next_state	: 'ButtonOff'
+		},
+		onoff_button2_Restart :
+		{
+			next_state	: 'ButtonRestart'
+		},
+	}				
+}
+var ManageStatusButton3 =
+{
+	NoButtonWait	:{},
+	ButtonWait		: $.extend(true, {}, ButtonWaitEvents),
+	ButtonOff		:{},
+	ButtonRestart	:{},
+	DefaultState			:
+	{
+		start	:	
+		{
+			next_state	: 'NoButtonWait'
+		},
+		onoff_button3_Wait :
+		{
+			next_state	: 'ButtonWait'
+		},
+		onoff_button3_Off :
+		{
+			next_state	: 'ButtonOff'
+		},
+		onoff_button3_Restart :
+		{
+			next_state	: 'ButtonRestart'
+		},
+	}				
+}
+
+var AndMachineTest =
+{
+		WaitForChange :
+		{
+			buttonWait	:
+			{
+				init_function 	: function(param,event,data) {this.trigger(data+'_Wait');},
+				next_state 		: 'TestToChangeB4',
+				propagate_event	: 'doTest',
+			},
+			buttonOff	:
+			{
+				init_function 	: function(param,event,data) {this.trigger(data+'_Off');},
+				next_state 		: 'TestToChangeB4',
+				propagate_event	: 'doTest',
+			},
+			buttonRestart	:
+			{
+				init_function 	: function(param,event,data) {this.trigger(data+'_Restart');},
+				next_state 		: 'TestToChangeB4',
+				propagate_event	: 'doTest',
+			}
+		},
+		TestToChangeB4 :
+		{
+			delegate_machines :
+			{
+				'manageButton1' : 
+				{
+					submachine 			: ManageStatusButton1,
+					no_reinitialisation	: true,
+				},
+				'manageButton2' : 
+				{
+					submachine 			: ManageStatusButton2,
+					no_reinitialisation	: true,
+				},
+				'manageButton3' : 
+				{
+					submachine 			: ManageStatusButton3,
+					no_reinitialisation	: true,
+				},
+			},
+			doTest :
+			{
+				next_state_on_target : 
+				{
+					condition 			: '&&',
+					submachines			: 
+					{
+						'manageButton1' 	: 
+						{
+							condition	: '',
+							target_list : ['ButtonWait'],
+						},
+						'manageButton2' 	: 
+						{
+							target_list : ['ButtonWait'],
+						},
+						'manageButton3' 	: 
+						{
+							condition	: 'not',
+							target_list : ['ButtonOff'],
+						},
+					},
+				},
+				next_state 		: 'changeButton4',
+				propagate_event : 'change',
+			},
+			'change': //we did not change state...
+			{
+				next_state		: 'WaitForChange',
+			},
+		},
+		changeButton4 :
+		{
+			'change' :
+			{
+				init_function: function(){$('#onoff_button4').trigger('click');},
+				next_state		: 'WaitForChange',
+			}
+		},
+		DefaultState	:
+		{
+			setText : 
+			{
+				init_function: function(param,event,data){$('#info').html(data)},
+				propagate_event : 'removeInfo',
+			},
+			removeInfo :
+			{
+				how_process_event : {delay:2000},
+				init_function: function(param,event,data){$('#info').html('')},
+			}
+		}
+}
+ 
+$(document).ready(function() {
+	$('#onoff_button5').iFSM(AndMachineTest,{initState:'WaitForChange'});
+	$(".onoff").iFSM(aStateDefinitionButton,{initState:'ButtonCountdown',andMachineTest:$('#onoff_button5').getFSM(AndMachineTest)});
+});
+ </script>
+ </head>
+<body style="margin:100px;">
+    <h2>Test on SubMachines and 'next state' with conditions on submachine states</h2>
+    <p>click on button will change their states (ButtonCountdown -> ButtonWait -> ButtonStop -> ButtonCountdown...)</p>
+    <p>when you click on Button 1, 2 and 3, a special machine store their status (countdown/wait/stop) in respective submachines</p>
+    <p>if button 1 and 2 are on 'wait' and button 3 is not 'Off', button 4 will change</p>
+    <button class="onoff" id="onoff_button1"></button>
+    <button class="onoff" id="onoff_button2"></button>
+    <button class="onoff" id="onoff_button3"></button>
+    <button class="onoff" id="onoff_button4"></button>
+    <button class="onoff" id="onoff_button5"></button>
+    <p id="info"></p>
+    <p>provided by <a href="http://www.intersel.fr">Intersel</a></p>
+    
+        <br><br>
+	<pre>
+	<script>document.write($('#iFSMscript').html())</script>
+    </pre>
+</body>
+</html>

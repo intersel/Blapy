@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iFSM in action! A Mastemind game made with iFSM</title>
+<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+<script type="text/javascript" src="../iFSM.js"></script>
+
+<style type="text/css">
+html {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+	padding: 0 20px;
+}
+
+button {
+	margin: 0 2px;
+	font-size: 20px;
+	border: 1px solid #333;
+	width: 100px;
+	text-shadow: 0 -1px 0 #333;
+	border-radius: 5px;
+}
+
+button.on {
+	color: #dfd;
+	background: #00aa00;
+	background: -moz-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,
+		153, 0, 1)), color-stop(100%, rgba(0, 119, 0, 1)));
+	background: -webkit-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -o-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -ms-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+}
+
+button.off {
+	color: #fdd;
+	background: #CC0000;
+	background: -moz-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(204,
+		0, 0, 1)), color-stop(100%, rgba(153, 0, 0, 1)));
+	background: -webkit-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -o-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -ms-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+}
+
+.selected_color,.hidden_color,.result {
+	width: 80px;
+	display: inline-block;
+	font-weight: bold;
+	text-align: center;
+	color: grey;
+	border-radius: 15px;
+	cursor: pointer;
+}
+
+.blue {
+	background-color: blue;
+	color: #AAAAFF;
+}
+
+.yellow {
+	background-color: yellow;
+	color: #991199;
+}
+
+.red {
+	background-color: red;
+	color: #991111;
+}
+
+.green {
+	background-color: green;
+	color: #55FF55;
+}
+
+pre {
+	font-size: 12px;
+	background-color: black;
+	color: green;
+}
+</style>
+
+<script>
+	SelectedColorEngine = {
+		DefaultState : {
+			resetTry : 'start',
+			start : {
+				init_function : function() {
+					this.myUIObject.html(this.myUIObject.data('color'));
+					this.myUIObject.addClass(this.myUIObject.data('color'));
+					this.opts.hidden_colors.trigger('resetTry');
+				},
+				next_state : 'waitForTry',
+			},
+
+		},
+		waitForTry : {
+			delegate_machines : {
+				SetColor : {
+					submachine : {
+						DefaultState : {
+							start : {
+								next_state : 'red',
+							},
+							click : {
+								init_function : function() {
+									this.myUIObject.removeClass(this.myUIObject
+											.data('color'));
+								},
+								propagate_event : 'next_color',
+							},
+							update_color : {
+								init_function : function() {
+									this.myUIObject.data('color',
+											this.currentState)
+									this.myUIObject.html(this.myUIObject
+											.data('color'));
+									this.myUIObject.addClass(this.myUIObject
+											.data('color'));
+								},
+							}
+						},
+						red : {
+							next_color : {
+								propagate_event : 'update_color',
+								next_state : 'blue',
+							},
+						},
+						blue : {
+							next_color : {
+								propagate_event : 'update_color',
+								next_state : 'yellow',
+							},
+						},
+						yellow : {
+							next_color : {
+								propagate_event : 'update_color',
+								next_state : 'green',
+							},
+						},
+						green : {
+							next_color : {
+								propagate_event : 'update_color',
+								next_state : 'red',
+							},
+						},
+					},
+				},
+			},
+			tryWhiteColor : {
+				init_function : function() {
+					var aColorObj = this;
+					var aPosition = this.myUIObject.data('position');
+					this.opts.hidden_colors.each(function() {
+						$(this).trigger('samePosition', {
+							position : aPosition,
+							selectedcolorObj : aColorObj,
+						});
+					});
+				},
+				next_state : 'waitPositionAnswer',
+			},
+			tryBlackColor : {
+				init_function : function() {
+					var aColorObj = this;
+					var aColor = this.myUIObject.data('color');
+					this.opts.hidden_colors.each(function() {
+						$(this).trigger('sameColor', {
+							color : aColor,
+							selectedcolorObj : aColorObj,
+						});
+					});
+				},
+				next_state : 'waitColorAnswer',
+			},
+		},
+		waitPositionAnswer : {
+			yes_sameposition : {
+				init_function : function(param, event, data) {
+					this.trigger('trySameColor', data);
+				},
+				next_state : 'PositionFound',
+			},
+			not_sameposition : {},
+		},
+		waitColorAnswer : {
+			yes_samecolor : {
+				init_function : function(param, event, data) {
+					data.aHiddenObj.trigger('selectHiddenColor');
+				},
+				next_state : 'ColorIsBlack',
+			},
+		},
+		PositionFound : {
+			trySameColor : {
+				init_function : function(param, event, data) {
+					var aColorObj = this;
+					var aColor = this.myUIObject.data('color');
+					data.aHiddenObj.trigger('sameColor', {
+						color : aColor,
+						selectedcolorObj : aColorObj,
+					});
+				},
+			},
+			yes_samecolor : {
+				init_function : function(param, event, data) {
+					data.aHiddenObj.trigger('selectHiddenColor');
+				},
+				next_state : 'ColorIsWhite',
+			},
+			not_samecolor : {
+				next_state : 'waitForTry',
+			},
+		},
+		ColorIsWhite : {
+			enterState : {
+				init_function : function() {
+					var bar_res = this.opts.selected_color_bars.find('#turn_'
+							+ this.opts.turn_number
+							+ ' #selected_color_bar #result_color_bar');
+					bar_res.html(bar_res.html() + ' W ');
+					this.opts.gameManager.trigger('addWhite');
+				},
+			},
+		},
+		ColorIsBlack : {
+			enterState : {
+				init_function : function() {
+					var bar_res = this.opts.selected_color_bars.find('#turn_'
+							+ this.opts.turn_number
+							+ ' #selected_color_bar #result_color_bar');
+					bar_res.html(bar_res.html() + ' B ');
+				},
+			},
+		},
+	};
+	HiddenColorEngine = {
+		DefaultState : {
+			start : {
+				init_function : function() {
+					var number = Math.floor(Math.random() * 4);
+					var colors = [ 'red', 'blue', 'yellow', 'green' ];
+					this.myUIObject.data('color', colors[number])
+					this.myUIObject.html(this.myUIObject.data('color'));
+					this.myUIObject.addClass(this.myUIObject.data('color'));
+				},
+				next_state : 'WaitTest',
+			},
+			resetTry : {
+				next_state : 'WaitTest',
+			},
+			sameColor : {
+				init_function : function(param, event, data) {
+					this.trigger(data.color, data);
+				},
+			},
+			samePosition : {
+				init_function : function(param, event, data) {
+					this.trigger(data.position, data);
+				},
+			},
+		},
+		WaitTest : {
+			delegate_machines : {
+				ColorStateM : {
+					submachine : {
+						red : {},
+						blue : {},
+						yellow : {},
+						green : {},
+						DefaultState : {
+							start : {
+								init_function : function(param, event, data) {
+									this.currentState = this.myUIObject
+											.data('color');
+									var aHiddenObj = this.myUIObject;
+									//we define the hidden color behaviour state and event
+									this._stateDefinition[this.currentState][this.currentState] = $
+											.extend(
+													true,
+													{},
+													{
+														init_function : function(
+																param, event,
+																data) {
+															data.selectedcolorObj
+																	.trigger(
+																			'yes_samecolor',
+																			{
+																				aHiddenObj : aHiddenObj
+																			});
+														},
+													});
+								},
+							},
+							red : 'green',
+							blue : 'green',
+							yellow : 'green',
+							green : {
+								init_function : function(param, event, data) {
+									var aHiddenObj = this.myUIObject;
+									data.selectedcolorObj.trigger(
+											'not_samecolor', {
+												aHiddenObj : aHiddenObj
+											});
+								},
+							},
+						},
+					},
+				},
+				PositionStateM : {
+					submachine : {
+
+						position_1 : {},
+						position_2 : {},
+						position_3 : {},
+						position_4 : {},
+						DefaultState : {
+							start : {
+								init_function : function(param, event, data) {
+									this.currentState = this.myUIObject
+											.data('position');
+									var aHiddenObj = this.myUIObject;
+									this._stateDefinition[this.currentState][this.currentState] = $
+											.extend(
+													true,
+													{},
+													{
+														init_function : function(
+																param, event,
+																data) {
+															data.selectedcolorObj
+																	.trigger(
+																			'yes_sameposition',
+																			{
+																				aHiddenObj : aHiddenObj
+																			});
+														},
+													});
+								},
+							},
+							position_1 : 'position_4',
+							position_2 : 'position_4',
+							position_3 : 'position_4',
+							position_4 : {
+								init_function : function(param, event, data) {
+									var aHiddenObj = this.myUIObject;
+									data.selectedcolorObj.trigger(
+											'not_sameposition', {
+												aHiddenObj : aHiddenObj
+											});
+								},
+							},
+						},
+					},
+				},
+			},
+			selectHiddenColor : {
+				next_state : 'ColorFound',
+			},
+		},
+		ColorFound : {
+			sameColor : {},//default behaviour redefined
+			samePosition : {},
+		},
+	};
+	TryButton = {
+		DefaultState : {
+			start : {
+				init_function : function() {
+					this.opts.turn_number++;
+					this.opts.template_color_bar_clone = this.opts.template_color_bar
+							.clone();
+				},
+				next_state : 'NoWhite',
+			},
+			click : {
+				init_function : function() {
+					this.opts.selected_colors.trigger('resetTry');
+					this.opts.selected_colors.trigger('tryWhiteColor');
+					this.opts.selected_colors.trigger('tryBlackColor');
+					this.trigger('next_turn');
+				},
+			},
+			next_turn : {
+				init_function : function() {
+				},
+				process_event_if : 'this.opts.turn_number<9',
+				propagate_event : 'add_newtable',
+				propagate_event_on_refused : 'endGame',
+			},
+			add_newtable : {
+				init_function : function() {
+					this.opts.turn_number++;
+					this.opts.selected_color_bars
+							.append('<div id="turn_'+this.opts.turn_number+'"></div>');
+					this.opts.template_color_bar_clone.clone().appendTo(
+							'#turn_' + this.opts.turn_number);
+					this.opts.selected_colors = $('#turn_'
+							+ this.opts.turn_number + ' .selected_color');
+					this.opts.selected_colors.iFSM(SelectedColorEngine, {
+						hidden_colors : this.opts.hidden_colors,
+						selected_color_bars : this.opts.selected_color_bars,
+						gameManager : $('#try'),
+						turn_number : this.opts.turn_number
+					});
+				},
+				next_state : 'NoWhite',
+			},
+			endGame : {
+				next_state : 'GameEnd',
+			}
+		},
+		NoWhite : {
+			addWhite : {
+				next_state : 'White1',
+			}
+		},
+		White1 : {
+			addWhite : {
+				next_state : 'White2',
+			}
+		},
+		White2 : {
+			addWhite : {
+				next_state : 'White3',
+			}
+		},
+		White3 : {
+			addWhite : {
+				next_state : 'White4',
+			}
+		},
+		White4 : {
+			enterState : {
+				init_function : function() {
+					$('#statusGame').html("Yes! you found it! ");
+					this.opts.show.trigger('click');
+				}
+			},
+			next_state : 'GameEnd',
+		},
+		GameEnd : {
+			enterState : {
+				init_function : function() {
+					$('#statusGame').html(
+							$('#statusGame').html() + "it's the end!");
+					this.opts.show.trigger('click');
+				}
+			},
+			next_turn : {},
+			add_newtable : {}
+		},
+	};
+	showSolution = {
+		DefaultState : {
+			click : {
+				init_function : function() {
+					this.opts.hidden_colorbar.toggle();
+				}
+			},
+		},
+	};
+
+	$(document).ready(function() {
+		$('#turn_1 .selected_color').iFSM(SelectedColorEngine, {
+			hidden_colors : $('.hidden_color'),
+			selected_color_bars : $('#selected_color_bars'),
+			gameManager : $('#try'),
+			turn_number : 1
+		});
+		$('.hidden_color').iFSM(HiddenColorEngine);
+		$('#try').iFSM(TryButton, {
+			selected_colors : $('#turn_1 .selected_color'),
+			turn_number : 0,
+			template_color_bar : $('#turn_1 #selected_color_bar'),
+			selected_color_bars : $('#selected_color_bars'),
+			hidden_colors : $('.hidden_color'),
+			show : $('#show')
+		});
+		$('#show').iFSM(showSolution, {
+			hidden_colorbar : $('#hidden_colorbar')
+		});
+	});
+</script>
+</head>
+<body style="margin: 10px;">
+	<h1>iFSM can make game intelligence... Mastermind</h1>
+	<p>Choose the color by click on the cells then do a "Try"...</p>
+	<p>B (black): found but not at correct place | W (white): found and
+		at the correct place</p>
+	<div id="selected_color_bars">
+		<div id="turn_1">
+			<div id="selected_color_bar">
+				<div class="selected_color" id="selected_color_1" data-color="red"
+					data-position="position_1">red</div>
+				<div class="selected_color" id="selected_color_2" data-color="red"
+					data-position="position_2">red</div>
+				<div class="selected_color" id="selected_color_3" data-color="red"
+					data-position="position_3">red</div>
+				<div class="selected_color" id="selected_color_4" data-color="red"
+					data-position="position_4">red</div>
+				<div id="result_color_bar" class="result"></div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div id="hidden_colorbar" style="display: none;">
+		<div class="hidden_color" id="hidden_color_1" data-color="blue"
+			data-position="position_1">blue</div>
+		<div class="hidden_color" id="hidden_color_2" data-color="blue"
+			data-position="position_2">blue</div>
+		<div class="hidden_color" id="hidden_color_3" data-color="green"
+			data-position="position_3">green</div>
+		<div class="hidden_color" id="hidden_color_4" data-color="red"
+			data-position="position_4">red</div>
+
+	</div>
+	<br>
+	<div id="statusGame"></div>
+	<br>
+	<button id="try">Try</button>
+	<button id="show">Solution</button>

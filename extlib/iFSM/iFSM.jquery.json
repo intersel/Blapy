@@ -1,0 +1,40 @@
+{
+  "name": "iFSM",
+  "title": "jQuery Finite State Machine",
+  "description": "a jQuery State Machine (FSM / HSM) to design and manage javascript web user interfaces, simulators, games...",
+  "keywords": [
+    "FSM",
+    "HSM",
+    "Machine",
+    "State"
+  ],
+  "version": "1.7.5",
+  "author": {
+    "name": "Emmanuel Podvin",
+    "url": "http://fr.linkedin.com/in/podvin"
+  },
+  "maintainers": [
+    {
+      "name": "Emmanuel Podvin",
+      "email": "jquery.ifsm@intersel.org",
+      "url": "http://www.intersel.fr"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "Intersel",
+      "url": "https://github.com/intersel/iFSM/blob/master/LICENSE"
+    }
+  ],
+  "bugs": "https://github.com/intersel/iFSM/issues",
+  "homepage": "https://github.com/intersel/iFSM",
+  "docs": "https://github.com/intersel/iFSM/",
+  "demo": "http://www.intersel.fr/ifsm-jquery-plugin-demos.html",
+  "download": "https://github.com/intersel/iFSM/archive/master.zip",
+  "dependencies": 
+  {
+    "jquery": ">=1.10",
+    "attrchange": ">= 1.0.1",
+    "dotimeout": ">= 1.0"
+  }
+}

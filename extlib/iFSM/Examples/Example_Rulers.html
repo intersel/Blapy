@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iFSM in action! a Rules Engine for jQuery :-)</title>
+<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+<script type="text/javascript" src="../iFSM.js"></script>
+
+<style type="text/css">
+html {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+	padding: 0 20px;
+}
+
+button {
+	margin: 0 2px;
+	font-size: 20px;
+	border: 1px solid #333;
+	width: 100px;
+	text-shadow: 0 -1px 0 #333;
+	border-radius: 5px;
+}
+
+button.on {
+	color: #dfd;
+	background: #00aa00;
+	background: -moz-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,
+		153, 0, 1)), color-stop(100%, rgba(0, 119, 0, 1)));
+	background: -webkit-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -o-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -ms-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+}
+
+button.off {
+	color: #fdd;
+	background: #CC0000;
+	background: -moz-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(204,
+		0, 0, 1)), color-stop(100%, rgba(153, 0, 0, 1)));
+	background: -webkit-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -o-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -ms-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+}
+
+#StatesImg {
+	width: 750px;
+	height: 550px;
+}
+
+#StatesImg img {
+	opacity: 0;
+	position: absolute;
+}
+
+pre {
+	font-size: 12px;
+	background-color: black;
+	color: green;
+}
+</style>
+
+<script type="text/javascript" id="iFSMscript">
+	var aRuleDefinition = {
+
+		WaitToTestAge : {
+			click : {
+				next_state : 'TestMinAge',
+			},
+		},
+		TestMinAge : {
+			enterState : {
+				process_event_if : 'this.opts.Age() >= this.opts.minAge',
+				propagate_event_on_refused : 'ageNotOk',
+				next_state : 'TestMaxAge',
+			},
+		},
+		TestMaxAge : {
+			enterState : {
+				process_event_if : 'this.opts.Age() <= this.opts.maxAge',
+				propagate_event_on_refused : 'ageNotOk',
+				next_state : 'AgeOk',
+			},
+		},
+		AgeOk : {
+			enterState : {
+				init_function : function() {
+					this.opts.outputRes
+							.html('Congratulations! You are between the ages of '
+									+ this.opts.minAge
+									+ ' and '
+									+ this.opts.maxAge + '!');
+				},
+				next_state : 'WaitToTestAge',
+			},
+		},
+		AgeNotOk : {
+			enterState : {
+				init_function : function() {
+					this.opts.outputRes
+							.html('Your age ('
+									+ this.opts.Age()
+									+ ') is not valid! You are NOT between the ages of '
+									+ this.opts.minAge + ' and '
+									+ this.opts.maxAge + '!');
+				},
+				next_state : 'WaitToTestAge',
+			},
+		},
+		DefaultState : {
+			start : {
+				next_state : 'WaitToTestAge',
+			},
+			ageNotOk : {
+				next_state : 'AgeNotOk',
+			}
+		}
+	};
+
+	KeyboardHandling = {
+		DefaultState : {
+			'key_13' : {
+				init_function : function() {
+					this.opts.aButton.trigger('click');
+				},
+			},
+			keypress : {
+				process_event_if : '(this.currentEvent.which>47 && this.currentEvent.which<58)||(this.currentEvent.which == 13)||(this.currentEvent.which == 8)||(this.currentEvent.which == 127)',
+				propagate_event_on_refused : 'notAuthorizedKey',
+				init_function : function(p, e) {
+					this.trigger('key_' + e.which);
+				},
+				UI_event_bubble : true,
+			},
+			notAuthorizedKey : //in order to cancel the event bubbling
+			{},
+			catchEvent: 
+			{
+				UI_event_bubble : true,
+			}
+		},
+	};
+
+	$(document).ready(function() {
+		$('#myButton').iFSM(aRuleDefinition, {
+			minAge : 18,
+			maxAge : 25,
+			Age : function() {
+				return $('#Age').val();
+			},
+			outputRes : $('#result'),
+			debug:true,
+		});
+		$('#Age').iFSM(KeyboardHandling, {
+			aButton : $('#myButton'),
+			debug:true
+		});
+	});
+</script>
+</head>
+<body style="margin: 10px;">
+	<h1>iFSM as a Rule Engine...</h1>
+	<p>
+		This short example shows how to use iFSM as a rule engine...<br>
+		This example was inspired from this php library: <a
+			href="https://github.com/bobthecow/Ruler" target="_blank">https://github.com/bobthecow/Ruler</a>
+	</p>
+	<p>You can also have a quick look on how to handle keyboard
+		events...</p>
+	<br> Give your age (should be between 18 and 25):
+	<input type="text" name="Age" id="Age">
+	<br>
+	<button id="myButton" style="width: 250px">Is my age valid?</button>
+	<p id="result"></p>
+
+	<h2>the State Definition</h2>
+	<br>
+	<br>
+	<pre>
+	<script>
+		function escapeHtml(text) {
+			var map = {
+				'&' : '&amp;',
+				'<': '&lt;',
+		    '>' : '&gt;',
+				'"' : '&quot;',
+				"'" : '&#039;'
+			};
+
+			return text.replace(/[&<>"']/g, function(m) {
+				return map[m];
+			});
+		}
+		document.write(escapeHtml($('#iFSMscript').html()))
+	</script>
+    </pre>
+	<p>
+		provided by <a href="http://www.intersel.fr">Intersel</a>
+	</p>
+
+
+
+</body>
+</html>

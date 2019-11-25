@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>iFSM in action! Basic example</title>
+	<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+	<script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+	<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+	<script type="text/javascript" src="../iFSM.js"></script>
+
+<style type="text/css">
+  html {
+    font-family: Helvetica, Arial, sans-serif;
+  }
+  body {
+    padding: 0 10px;
+  }
+  pre {
+	font-size: 12px;
+	background-color: black;
+	color: green;
+  }
+</style>
+
+    <script type="text/javascript" id="iFSMscript">
+    var aStateDefinition = {
+        IsDisplayed     :
+        {
+            enterState:
+            {
+                init_function: function(){this.opts.aDiv.show();}
+            },
+            click   :
+            {
+                next_state      : 'IsNotDisplayed'
+            }
+        },
+        IsNotDisplayed      :
+        {
+            enterState:
+            {
+                init_function: function(){this.opts.aDiv.hide();}
+            },
+            click   :
+            {
+                next_state      : 'IsDisplayed'
+            }
+        },
+        DefaultState        :
+        {
+            start   :
+            {
+                next_state  : 'IsDisplayed'
+            }
+        }
+    };
+
+	$(document).ready(function() {
+		$('#myButton').iFSM(aStateDefinition,{aDiv:$('#adiv')});
+	});
+
+    </script>
+</head>
+<body style="margin:10px;">
+<h1>Tuto Example... </h1>
+    <button id="myButton">Show/Hide Text</button>
+    <div id="adiv">a nice text to show the FSM capabilities :-)</div>
+    <br><br>
+	<pre>
+	<script>document.write($('#iFSMscript').html())</script>
+    </pre></body>
+</html>

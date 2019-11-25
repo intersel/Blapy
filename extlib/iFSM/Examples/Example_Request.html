@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iFSM in action! a request processing managed with iFSM</title>
+<script type="text/javascript" src="../extlib/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="../extlib/jquery.dotimeout.js"></script>
+<script type="text/javascript" src="../extlib/jquery.attrchange.js"></script>
+<script type="text/javascript" src="../iFSM.js"></script>
+
+<style type="text/css">
+html {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+	padding: 0 20px;
+}
+
+button {
+	margin: 0 2px;
+	font-size: 20px;
+	border: 1px solid #333;
+	width: 100px;
+	text-shadow: 0 -1px 0 #333;
+	border-radius: 5px;
+}
+
+button.on {
+	color: #dfd;
+	background: #00aa00;
+	background: -moz-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,
+		153, 0, 1)), color-stop(100%, rgba(0, 119, 0, 1)));
+	background: -webkit-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -o-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: -ms-linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+	background: linear-gradient(top, rgba(0, 153, 0, 1) 0%,
+		rgba(0, 119, 0, 1) 100%);
+}
+
+button.off {
+	color: #fdd;
+	background: #CC0000;
+	background: -moz-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(204,
+		0, 0, 1)), color-stop(100%, rgba(153, 0, 0, 1)));
+	background: -webkit-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -o-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: -ms-linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+	background: linear-gradient(top, rgba(204, 0, 0, 1) 0%,
+		rgba(153, 0, 0, 1) 100%);
+}
+
+#StatesImg {
+	width: 750px;
+	height: 550px;
+}
+
+#StatesImg img {
+	opacity: 0;
+	position: absolute;
+}
+
+pre {
+	font-size: 12px;
+	background-color: black;
+	color: green;
+}
+</style>
+
+<script type="text/javascript" id="iFSMscript">
+	var aRequestStates = {
+		Start : {
+			enterState : {
+				init_function : function() {
+					$('#original').animate({
+						'opacity' : '1'
+					}, 500)
+				},
+			},
+			Submit : {
+				next_state : 'Submitted',
+			},
+			exitState : {
+				init_function : function() {
+					$('#original').animate({
+						'opacity' : '0'
+					}, 500)
+				},
+			}
+		},
+		Submitted : {
+			enterState : {
+				init_function : function() {
+					$('#submitted').animate({
+						'opacity' : '1'
+					}, 500)
+				},
+			},
+			Duplicate : {
+				next_state : 'Duplicate',
+			},
+			Open : {
+				next_state : 'Opened',
+			},
+			Close : {
+				next_state : 'Closed',
+			},
+			exitState : {
+				init_function : function() {
+					$('#submitted').animate({
+						'opacity' : '0'
+					}, 500)
+				},
+			}
+		},
+		Duplicate : {
+			enterState : {
+				init_function : function() {
+					$('#duplicate').animate({
+						'opacity' : '1'
+					}, 500)
+				},
+			},
+			Open : {
+				next_state : 'Opened',
+			},
+			Close : {
+				next_state : 'Closed',
+			},
+			exitState : {
+				init_function : function() {
+					$('#duplicate').animate({
+						'opacity' : '0'
+					}, 500)
+				},
+			}
+		},
+		Opened : {
+			enterState : {
+				init_function : function() {
+					$('#opened').animate({
+						'opacity' : '1'
+					}, 500)
+				},
+			},
+			Close : {
+				next_state : 'Closed',
+			},
+
+			exitState : {
+				init_function : function() {
+					$('#opened').animate({
+						'opacity' : '0'
+					}, 500)
+				},
+			}
+		},
+		Closed : {
+			enterState : {
+				init_function : function() {
+					$('#closed').animate({
+						'opacity' : '1'
+					}, 500)
+				},
+			},
+			Reopen : {
+				next_state : 'Opened',
+			},
+			exitState : {
+				init_function : function() {
+					$('#closed').animate({
+						'opacity' : '0'
+					}, 500)
+				},
+			}
+		},
+		DefaultState : {
+			start : {
+				next_state : 'Start'
+			},
+			Reset : {
+				next_state : 'Start'
+			}
+		}
+	};
+
+	var aEventButton = {
+
+		DefaultState : {
+			click : {
+				init_function : function() {
+					this.opts.MainFSM.trigger(this.myUIObject.attr('id'))
+				},
+			},
+		}
+	}
+
+	$(document).ready(function() {
+		$('#StatesImg').iFSM(aRequestStates);
+		$(".onoff").iFSM(aEventButton, {
+			'MainFSM' : $('#StatesImg').getFSM(aRequestStates)
+		}); //create the machine
+		$('#Reset').trigger('click');
+	});
+</script>
+</head>
+<body style="margin: 10px;">
+	<h1>FSM Demo</h1>
+	<p>
+		Open a new Request with the "Submit" button<br> Then change state
+		by clicking the event you like<br> Then, when finished, you can
+		reset, then do a new "Submit"...
+	</p>
+	<div id="StatesImg">
+		<img id="original" src="../img/EnhancementRequest_original.jpg">
+		<img id="submitted" src="../img/EnhancementRequest_submitted.jpg">
+		<img id="duplicate" src="../img/EnhancementRequest_duplicate.jpg">
+		<img id="opened" src="../img/EnhancementRequest_opened.jpg"> <img
+			id="closed" src="../img/EnhancementRequest_closed.jpg">
+	</div>
+	<h2>Event Buttons:</h2>
+	<button class="onoff" id="Reset">Reset</button>
+	<button class="onoff" id="Submit">Submit</button>
+	<button class="onoff" id="Open">Open</button>
+	<button class="onoff" id="Reopen">Reopen</button>
+	<button class="onoff" id="Duplicate">Duplicate</button>
+	<button class="onoff" id="Close">Close</button>
+	<h2>the State Definition</h2>
+	<br>
+	<br>
+	<pre>
+	<script>
+		function escapeHtml(text) {
+			var map = {
+				'&' : '&amp;',
+				'<': '&lt;',
+		    '>' : '&gt;',
+				'"' : '&quot;',
+				"'" : '&#039;'
+			};
+
+			return text.replace(/[&<>"']/g, function(m) {
+				return map[m];
+			});
+		}
+		document.write(escapeHtml($('#iFSMscript').html()))
+	</script>
+    </pre>
+	<p>
+		provided by <a href="http://www.intersel.fr">Intersel</a>
+	</p>
+</body>
+</html>
