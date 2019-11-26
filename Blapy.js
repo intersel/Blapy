@@ -11,10 +11,13 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.13.3
+ * @version : 1.13.5
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2019/11/26 - E.Podvin - 1.13.5
+ *  - different log level between ifsm and blapy
+ *  - fix in postData when console log on embeddingBLockId not set (use of aFSM instead of myFSM)
  * - 2019/11/15 - E.Podvin - 1.13.4
  *  - add data-blapy-params property for A tag element to specify data to send to url
  * - 2019/11/14 - E.Podvin - 1.13.3
@@ -255,6 +258,7 @@
           return;
 
         this.params['embeddingBlockId'] = myBlapy.extractembeddingBlockIdName(myBlapy.hashURL());
+        if (!this.params['embeddingBlockId']) delete(this.params['embeddingBlockId']);
 
         myBlapy.myUIObject.trigger('loadUrl', {
           aUrl: myBlapy.hashURL(),
@@ -269,6 +273,7 @@
           return;
 
         this.params['embeddingBlockId'] = myBlapy.extractembeddingBlockIdName(myBlapy.hashURL(this.path));
+        if (!this.params['embeddingBlockId']) delete(this.params['embeddingBlockId']);
 
         myBlapy.myUIObject.trigger('postData', {
           aUrl: myBlapy.hashURL(this.path),
@@ -282,6 +287,8 @@
         if (($(this.target).attr("data-blapy-active-blapyid")) && ($(this.target).attr("data-blapy-active-blapyid") != myBlapy.myUIObjectID))
           return;
         this.params['embeddingBlockId'] = myBlapy.extractembeddingBlockIdName(myBlapy.hashURL(this.path));
+        if (!this.params['embeddingBlockId']) delete(this.params['embeddingBlockId']);
+
         myBlapy.myUIObject.trigger('postData', {
           aUrl: myBlapy.hashURL(this.path),
           params: myBlapy.filterAttributes(this.params),
@@ -950,7 +957,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
           if ( ("embeddingBlockId" in params) && (!params.embeddingBlockId) )
           {
-            myFSM.opts.theBlapy._log('[postData on '+aFSM.myUIObject.attr('id')+'] embeddingBlockId has been set but is undefined! must be an error...', 1);
+            aFSM.opts.theBlapy._log('[postData on '+aFSM.myUIObject.attr('id')+'] embeddingBlockId has been set but is undefined! must be an error...', 1);
           }
 
           var aembeddingBlockId = params.embeddingBlockId;
