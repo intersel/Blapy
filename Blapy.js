@@ -1368,8 +1368,11 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                   //get the rendering
                   var newHtml = '';
                   if (htmlTplContent.length < 3)
+                  {
                     //no defined template?
+                    myFSM.opts.theBlapy._log('Template is void...? ' + myContainer.attr('data-blapy-container-name'), 1);
                     newHtml = jsonData;
+                  }
                   else
                   {
                     //template defined...
