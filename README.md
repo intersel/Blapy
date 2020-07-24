@@ -17,15 +17,15 @@ Blapy is json compliant too and eases the integration of ajax/rest API with temp
 The best of all is that your web application will be fully SEO compliant as Blapy uses normal URLs to do the routing and your html rendering output from your server to update your application blocks!
 
 # Have a look on the "Hello World" demo and other demos
-[Go and see the demo: http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/](http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/)
+[Go and see the demo: https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/helloworld/](https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/helloworld/)
 
-You can have a look on a more complete example based on the [SB Admin 2 - Free Bootstrap Admin Theme](http://www.intersel.net/demos/intersel/Blapy/demos/startbootstrap-sb-admin-2/pages/) (you can see the original one [here](http://startbootstrap.com/template-overviews/sb-admin-2/))
+You can have a look on a more complete example based on the [SB Admin 2 - Free Bootstrap Admin Theme](https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/startbootstrap-sb-admin-2/pages/) (you can see the original one [here](http://startbootstrap.com/template-overviews/sb-admin-2/))
 
-or test the ["To do list" web Apps demo](http://www.intersel.net/demos/intersel/Blapy/demos/todomvc/) made with Blapy and inspired from [TodoMVC](http://todomvc.com/)
+or test the ["To do list" web Apps demo](https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/demos/todomvc/) made with Blapy and inspired from [TodoMVC](http://todomvc.com/)
 
-[This one allows to dynamically load and display blapy block contents](http://intersel.net/demos/intersel/Blapy/demos/bootstrap-four-column-gallery/) that were hidden and which need to be displayed as they became visible.
+[This one allows to dynamically load and display blapy block contents](https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/bootstrap-four-column-gallery/) that were hidden and which need to be displayed as they became visible.
 
-All the demos found in the demos directory can be tested there : [http://www.intersel.net/demos/intersel/Blapy/demos/](http://www.intersel.net/demos/intersel/Blapy/demos/)
+All the demos found in the demos directory can be tested there : [https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/](https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/)
 
 We invite you to have a deep look in the code source of the demos as they use quite every possible features and configurations available in Blapy as they are used to test the library.
 
@@ -1307,7 +1307,7 @@ Blapy will remove the "|" according to the level of parsing... and this way to n
 
 ### Demo
 
-Have a look to the full demonstration in [demos/demo_json_nested_blocks/index.html](http://intersel.net/demos/intersel/Blapy/demos/demo_json_nested_blocks/)
+Have a look to the full demonstration in [demos/demo_json_nested_blocks/index.html](https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/demo_json_nested_blocks/)
 
 # Problem resolutions
 ## My blapy block does not update from my external content...
