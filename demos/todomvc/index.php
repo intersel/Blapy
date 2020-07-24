@@ -2,7 +2,7 @@
 <html lang="en" data-framework="javascript">
 	<head>
 		<meta charset="utf-8">
-		<base href="<?php echo dirname("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI])").'/' ?>">
+		<base href="<?php echo dirname("//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI])").'/' ?>">
 		<title>Blapy • TodoMVC</title>
 		<link rel="stylesheet" href="node_modules/todomvc-common/base.css">
 		<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">

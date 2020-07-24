@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-	<base href="<?php echo dirname("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI])").'/' ?>">
+	<base href="<?php echo dirname("//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI])").'/' ?>">
 
     <title>SB Admin 2 - Bootstrap Admin Theme Using Blapy :-)</title>
 
