@@ -21,7 +21,7 @@ The best of all is that your web application will be fully SEO compliant as Blap
 
 You can have a look on a more complete example based on the [SB Admin 2 - Free Bootstrap Admin Theme](https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/startbootstrap-sb-admin-2/pages/) (you can see the original one [here](http://startbootstrap.com/template-overviews/sb-admin-2/))
 
-or test the ["To do list" web Apps demo](https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/demos/todomvc/) made with Blapy and inspired from [TodoMVC](http://todomvc.com/)
+or test the ["To do list" web Apps demo](https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/todomvc/) made with Blapy and inspired from [TodoMVC](http://todomvc.com/)
 
 [This one allows to dynamically load and display blapy block contents](https://www.intersel.fr/assets_intersel_a/gitdemos/Blapy/demos/bootstrap-four-column-gallery/) that were hidden and which need to be displayed as they became visible.
 
