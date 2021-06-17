@@ -98,7 +98,7 @@ else
 					data-blapy-container-content="aSubContent"
 					data-blapy-update="replace"
 			>
-				<div data-blapy-container="true"
+				<div id ="mainContainerApp1" data-blapy-container="true"
 					data-blapy-container-name="mainContainerApp1"
 					data-blapy-container-content="aContent"
 					<?php echo 'data-blapy-update="'.$appword.'"';?>

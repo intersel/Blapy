@@ -34,13 +34,15 @@
  * - 2018/03/13 - E.Podvin - 1.7.6 - add some controls when starting the state machines: can't start if no id on the object or if still exists
  * - 2019/11/22 - E.Podvin - 1.7.7 - prevent preventCancel event to stack if delayed again (see preventCancelSet)
  *                                   add console.warn (instead of log) for errors message
+ * - 2020/06/18 - E.Podvin - 1.7.8 - Add alert when next_state does not exist (not defined)
+ * - 2021/04/19 - E.Podvin - 1.7.9 - fix delayProcess when data is not set
  * -----------------------------------------------------------------------------------------
  *
- * @copyright Intersel 2013-2018
+ * @copyright Intersel 2013-2021
  * @fileoverview : iFSM : a finite state machine with jQuery
  * @see {@link https://github.com/intersel/iFSM}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.7.6
+ * @version : 1.7.9
  * -----------------------------------------------------------------------------------------
  */
 
@@ -48,7 +50,7 @@
  * How to use it :
  * ===============
  * <code>
- * <script type="text/javascript" src="jquery-3.2.0.min.js"></script>
+ * <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
  * <script type="text/javascript" src="jquery.dorequesttimeout.js"></script>
  * <script type="text/javascript" src="jquery.attrchange.js"></script>
  * <script type="text/javascript" src="ifsm.js"></script>
@@ -1030,9 +1032,20 @@ fsm_manager.prototype.processEvent= function(anEvent,data,forceProcess) {
 		 * we change the current state Here!
     *********************************************
 		 */
-		this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Go to (see next_state) '+currentEventConfiguration.next_state,3);
-		this.lastState=this.currentState;
-		this.currentState = currentEventConfiguration.next_state;
+		if (this._stateDefinition[currentEventConfiguration.next_state])
+		{
+			this._log('processEvent: '+this.FSMName+':'+currentState+':'+anEvent+'-> Go to (see next_state) '+currentEventConfiguration.next_state,3);
+
+			this.lastState=this.currentState;
+			this.currentState = currentEventConfiguration.next_state;
+		}
+		else
+		{
+			this._log('processEvent: '+this.FSMName+':'+currentEventConfiguration.next_state+'-> DOES NOT EXIST!',1);
+
+			this.lastState=this.currentState;
+
+		}
 
 
     //*********************************************
@@ -1216,7 +1229,9 @@ fsm_manager.prototype.delayProcess	= function(anEvent, aDelay, data) {
 
   let aDelayedProcessName=this.myUIObject.attr('id')+currentState+anEvent+this.preventCancelId;
 
-	if (!this._stateDefinition[this.currentState][anEvent]) currentState = "DefaultState";
+  if (!data[1]) data[1]={};//no data defined.... so define one
+
+  if (!this._stateDefinition[this.currentState][anEvent]) currentState = "DefaultState";
 
 	if (!this._stateDefinition[currentState][anEvent].how_process_event.DelayedProcessNames)
   {

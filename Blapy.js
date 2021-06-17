@@ -15,6 +15,8 @@
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2021/06/17 - E.Podvin - 1.13.6
+ *  -
  * - 2019/11/26 - E.Podvin - 1.13.5
  *  - different log level between ifsm and blapy
  *  - fix in postData when console log on embeddingBLockId not set (use of aFSM instead of myFSM)
@@ -173,8 +175,8 @@
     var $defaults = {
       debug: true, //if true, then log things in the console
       LogLevel: 1, // log level: 1: error ; 2: warning; 3: notice
-      debugIfsm: true, // debug mode for ifsm
-      LogLevelIfsm: 3,
+      debugIfsm: false, // debug mode for ifsm
+      LogLevelIfsm: 1,
       alertError: false,
       //function Hooks
       pageLoadedFunction: null,
@@ -456,7 +458,7 @@
       try{
         aHtmlSource = $(aHtmlSource).html();
       } catch (e) {
-        this._log('embedHtmlPage: aHtmlSource is perhaps a pure json after all...?\n' + aHtmlSource, 1);
+        this._log('embedHtmlPage: aHtmlSource is perhaps a pure json after all...?\n' + aHtmlSource, 3);
       }
     }
     //embed html source in an xmp to avoid any tampering by the browser
@@ -766,11 +768,13 @@
           .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '') == "") {
         //look for partial template file
         var tplFile = myContainer.attr("data-blapy-template-file");
+        var blapyData = (myContainer.attr("data-blapy-noblapydata") == '1')//don't send any blapy info
+                          ? '' : "blapycall=1&blapyaction=loadTpl&blapyobjectid=" + myContainer.attr('id');
         if (tplFile) {
           $.get(
             {
               url: tplFile,
-              data: "blapycall=1&blapyaction=loadTpl&blapyobjectid=" + myContainer.attr('id'),
+              data: blapyData,
               success: function(htmlTplContent) {
                 //replace img by anything in order that the system don't want to load them... same for script
                 // as we only want to know if there are siblings...

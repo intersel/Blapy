@@ -43,7 +43,7 @@ else if ($ChangeBlapyBlock==-1)
 	<p></p>
 	<div style="border:solid 1px green;margin:20px;padding:0 20px 20px;">
 		<h4>"myBlapyApp1" Blapy blocks</h4>
-		<div id="bp1_mainContainerApp1" 
+		<div id="bp1_mainContainerApp1"
 				data-blapy-container="true"
 				data-blapy-container-name="mainContainerApp1"
 				data-blapy-container-content="aContent"
@@ -60,13 +60,15 @@ if ($GetMore)
 else if ($ChangeBlapyBlock==1)
 {
 ?>
-		<div 	data-blapy-container="true"
+		<div id="submainContainerApp1"
+		 		data-blapy-container="true"
 				data-blapy-container-name="submainContainerApp1"
 				data-blapy-container-content="aSubContent"
 		>
 		This is a Sub Content
 		</div>
-		<div 	data-blapy-container="true"
+		<div id="mainContainerApp3"
+				data-blapy-container="true"
 				data-blapy-container-name="mainContainerApp3"
 				data-blapy-container-content="aSubContent"
 				data-blapy-update="force-update"
