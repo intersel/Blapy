@@ -7,16 +7,17 @@
  * Blapy : jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) with almost no javascript coding to do it.
  *
  * -----------------------------------------------------------------------------------------
- * @copyright Intersel 2015-2019
+ * @copyright Intersel 2015-2021
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.13.5
+ * @version : 1.13.7
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
  * - 2021/07/12 - E.Podvin - 1.13.7
- *   - fix bad injection of xmp when template file contains them 
+ *   - fix bad injection of xmp when template file contains them
+ *   - fix on sending blapy data according to the status of "noblapy-data"
  * - 2021/06/17 - E.Podvin - 1.13.6
  *  - add log when template void
  * - 2019/11/26 - E.Podvin - 1.13.5
