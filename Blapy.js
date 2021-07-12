@@ -15,8 +15,10 @@
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2021/07/12 - E.Podvin - 1.13.7
+ *   - fix bad injection of xmp when template file contains them 
  * - 2021/06/17 - E.Podvin - 1.13.6
- *  -
+ *  - add log when template void
  * - 2019/11/26 - E.Podvin - 1.13.5
  *  - different log level between ifsm and blapy
  *  - fix in postData when console log on embeddingBLockId not set (use of aFSM instead of myFSM)
@@ -778,12 +780,15 @@
               success: function(htmlTplContent) {
                 //replace img by anything in order that the system don't want to load them... same for script
                 // as we only want to know if there are siblings...
-                if ($(htmlTplContent
+                let tmpHtmlContent = htmlTplContent
                           .split("script")
                           .join("scriptblapy")
                           .split("img")
-                          .join("imgblapy"))
-                      .siblings('[data-blapy-container-tpl="true"]').length == 0)
+                          .join("imgblapy");
+                if (
+                        $(tmpHtmlContent).siblings('[data-blapy-container-tpl="true"]').length == 0
+                    &&  $(tmpHtmlContent).prop("tagName") != "XMP"
+                  )
                 {
                   //store the template in comment in a hidden xmp
                   myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
