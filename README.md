@@ -536,7 +536,8 @@ This event allows you to call a URL.
 $('#<id of the blapy application tag>').trigger('loadUrl',{
   aUrl:<aURL to call>,
   params:{
-    embeddingBlockId:<a Blapy Block Id>
+    embeddingBlockId:<a Blapy Block Id>,
+    templateId:<a xmp id of a json template>
   },
   noBlapyData:"<0|1>"
 });
@@ -547,6 +548,7 @@ $('#<id of the blapy application tag>').trigger('loadUrl',{
 * **aUrl**: the Url to call
 * **params**:
   * **embeddingBlockId** (optional): a block container name (data-blapy-container-name)
+  * **templateId** (optional): an id of an xmp object that describes a json template of a json block. Remarks: "embeddingBlockId" needs to be defined.
 * **noBlapyData**: if set to "1", no blapy information are sent (default: blapy data are sent)
 
 ### Example
@@ -563,7 +565,8 @@ $('#myBlapy').trigger('loadUrl',{
 $('#<id of the blapy application tag>').trigger('postData',{
   aUrl:"<aURL to call>",
   params:{
-    embeddingBlockId:"<aContainerName>"
+    embeddingBlockId:"<aContainerName>",
+    templateId:<a xmp id of a json template>
   },
   method:"<http method>",
   noBlapyData:"<0|1>"
@@ -575,6 +578,7 @@ $('#<id of the blapy application tag>').trigger('postData',{
 * **aUrl**: the Url to call
 * **params**:
   * **embeddingBlockId** (optional): a block container name (data-blapy-container-name)
+  * **templateId** (optional): an id of an xmp object that describes a json template of a json block. Remarks: "embeddingBlockId" needs to be defined.
   * any property/value to send to the server
 * **method** (option)
   * 'post' (default)
