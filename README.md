@@ -599,7 +599,10 @@ This event allows you to call Blapy to directly update a Blapy block.
 ```javascript
 $('#<id of the blapy application tag>').trigger('updateBlock',{
   html:<a blapy content>,
-  params:{embeddingBlockId:<a Blapy Block Container Name>}
+  params:{
+    embeddingBlockId:<a Blapy Block Container Name>,
+    templateId:<a xmp id of a json template>
+  }
 });
 ```
 
@@ -609,6 +612,7 @@ $('#<id of the blapy application tag>').trigger('updateBlock',{
   * any blapy content (blapy blocks, json string or objects, ...)
 * **params**:
   * **embeddingBlockId** (optional): a block container name (data-blapy-container-name)
+  * **templateId** (optional): an id of an xmp object that describes a json template of a json block. Remarks: "embeddingBlockId" needs to be defined.
 
 ### Example
 
@@ -636,7 +640,7 @@ $('#<id of the blapy application tag>').trigger('reloadBlock',{
 
 * **params**:
   * **embeddingBlockId** (optional): a block container name (data-blapy-container-name). If none given, all the json blocks are reloaded.
-  * **templateId** (optional): an id of an xmp object that describes a json template of a json block. if "embeddingBlockId" set, then only this block will be updated, else all the blocks will be updated with this new setting.
+  * **templateId** (optional): an id of an xmp object that describes a json template of a json block. Remarks: "embeddingBlockId" needs to be defined.
 
 ### Example
 
@@ -743,14 +747,14 @@ The "data-blapy-template-default-id" property may be used to set the default tem
 >
   <xmp style="display:none" data-blapy-container-tpl="true" data-blapy-container-tpl-id="firstTPL">
     My name is {{firstname}}!<br>
-  <xmp>
+  </xmp>
   <xmp style="display:none" data-blapy-container-tpl="true" data-blapy-container-tpl-id="secondTPL">
     Is {{firstname}} your firstname?<br>
-  <xmp>
+  </xmp>
 </section>
 ```
 
-You may call the "reloadBlock" event message to change the template. It will reload the json data from the server too.
+You may call the "reloadBlock" or "updateBlock" event messages to change the template to use. It will reload the json data from the server and display them with the updated template.
 
 
 # Blapy animation plugin functions
