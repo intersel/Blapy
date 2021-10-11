@@ -11,10 +11,14 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.13.7
+ * @version : 1.13.8
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2021/10/11 - E.Podvin - 1.13.8 -
+ *    - fix on xmp detection for multi templating
+ *    - add 'templateId' parameter in 'params' for 'postData' and 'updateBlock' events
+ *      to manage template changes
  * - 2021/07/12 - E.Podvin - 1.13.7
  *   - fix bad injection of xmp when template file contains them
  *   - fix on sending blapy data according to the status of "noblapy-data"
@@ -979,6 +983,15 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
           var aembeddingBlockId = params.embeddingBlockId;
 
+          //define template to use if given
+          if (aembeddingBlockId && params.templateId)
+          {
+            $(this.myUIObject)
+              .find("[data-blapy-container-name='"+aembeddingBlockId+"']")
+              .attr('data-blapy-template-default-id',params.templateId);
+          }
+
+
           var method = data.method;
           if (!method) method = 'post';
 
@@ -1039,6 +1052,14 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
           if (typeof (data.html) == "object") //then it's a json object
           {
               data.html = JSON.stringify(data.html);
+          }
+
+          //define template to use if given
+          if (aembeddingBlockId && data.params.templateId)
+          {
+            $(this.myUIObject)
+              .find("[data-blapy-container-name='"+aembeddingBlockId+"']")
+              .attr('data-blapy-template-default-id',data.params.templateId);
           }
 
           if (aembeddingBlockId) data.html = this.opts.theBlapy.embedHtmlPage(data.html, aembeddingBlockId);
