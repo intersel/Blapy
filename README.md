@@ -734,7 +734,7 @@ It starts from 1... if json data is not an array, then blapyIndex is set to 0.
 ## Multiple templates
 According to the context, you may need to change the template of your block to display differently your data.
 
-It is so possible to define several templates for the same block. These templates can be selected through the Blapy API with the message "reloadBlock".
+It is so possible to define several templates for the same block. These templates can be selected through the Blapy API with the messages "updateBlock", "postData", "reloadBlock"...
 
 The way to describe them needs the use of the XMP tag and the "data-blapy-container-tpl" (to be set to true) and "data-blapy-container-tpl-id" properties, like in the following example:
 
@@ -758,8 +758,22 @@ The "data-blapy-template-default-id" property may be used to set the default tem
 </section>
 ```
 
-You may call the "reloadBlock" or "updateBlock" event messages to change the template to use. It will reload the json data from the server and display them with the updated template.
+You may call the "reloadBlock", "postData" or "updateBlock" event messages to change the template to use. It will reload the json data from the server and display them with the updated template.
 
+eg: this example will use "secondTPL" template to display the data in "results" block.
+```javascript
+$('#myBlapy').trigger('postData',
+  {
+    "aUrl": "testForm.php",
+    "params":{
+      "embeddingBlockId":"results",
+      "templateId": "secondTPL",
+      "firstname":$("select[name=firstname]",'#myForm').val(),
+      "lastname":$('input[name=lastname]:checked', '#myForm').val()
+    }
+  }
+);
+```
 
 # Blapy animation plugin functions
 
