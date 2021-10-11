@@ -768,12 +768,14 @@
           .toString().trim()
           .replace(/(\r\n|\n|\r)/g, "")
           .replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, '')
-          .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '') == "") {
+          .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '') == "")
+      {
         //look for partial template file
         var tplFile = myContainer.attr("data-blapy-template-file");
         var blapyData = (myContainer.attr("data-blapy-noblapydata") == '1')//don't send any blapy info
                           ? '' : "blapycall=1&blapyaction=loadTpl&blapyobjectid=" + myContainer.attr('id');
-        if (tplFile) {
+        if (tplFile)
+        {
           $.get(
             {
               url: tplFile,
@@ -781,53 +783,58 @@
               success: function(htmlTplContent) {
                 //replace img by anything in order that the system don't want to load them... same for script
                 // as we only want to know if there are siblings...
+                htmlTplContent = htmlTplContent.replace(/<!--(.*?)-->/gm, "").replaceAll("\n\n",'\n').replaceAll("\t\t","\t");
                 let tmpHtmlContent = htmlTplContent
+                          .replace(/{{(.*?)}}/gm, "")
                           .split("script")
                           .join("scriptblapy")
                           .split("img")
                           .join("imgblapy");
                 if (
-                        $(tmpHtmlContent).siblings('[data-blapy-container-tpl="true"]').length == 0
-                    &&  $(tmpHtmlContent).prop("tagName") != "XMP"
+                      $(tmpHtmlContent).prop("tagName") != "XMP"
                   )
                 {
                   //store the template in comment in a hidden xmp
-                  myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
+                  myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>');
                 }
                 else
                 {
-                  myContainer.html(htmlTplContent.replace(/<!--(.*?)-->/gm, ""));
+                  myContainer.html(htmlTplContent);
                 }
 
                 postDataFunc();
               },
               async: false,
             });
-        } else // no defined template...?
+        }//end if (tplFile)
+        else // no defined template...?
         {
           postDataFunc();
         }
-      } else //template is defined in the block
+      }//end if
+      else //template is defined in the block
       {
-        //replace img by anything in order that the system don't want to load them... same for script
-        // as we only want to know if there are siblings...
-        if ($(htmlTplContent
+        htmlTplContent = htmlTplContent.replace(/<!--(.*?)-->/gm, "").replaceAll("\n\n",'\n').replaceAll("\t\t","\t");
+        let tmpHtmlContent = htmlTplContent
+                  .replace(/{{(.*?)}}/gm, "")
                   .split("script")
                   .join("scriptblapy")
                   .split("img")
-                  .join("imgblapy"))
-              .siblings('[data-blapy-container-tpl="true"]').length == 0)
+                  .join("imgblapy");
+        if (
+              $(tmpHtmlContent).prop("tagName") != "XMP"
+          )
         {
           //store the template in comment in a hidden xmp
-          myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent.replace(/<!--(.*?)-->/gm, "") + '</xmp>');
+          myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>');
         }
         else
         {
-          myContainer.html(htmlTplContent.replace(/<!--(.*?)-->/gm, ""));
+          myContainer.html(htmlTplContent);
         }
         postDataFunc();
-      }
-    }
+      }//end else //template is defined in the block
+    }//end if (htmlTpl.length == 0)
     else if (forceReload)
     {
       postDataFunc(forceReload);
