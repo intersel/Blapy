@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (empty($_REQUEST['blapycall'])) 
+if (empty($_REQUEST['blapycall']))
 {
 	header('Location: ../index.php');
 	exit;
@@ -56,7 +56,7 @@ switch ($getAction)
 		{
 			$todo_actions[$aAction['actionId']]['completedStatus'] = $toggleStatus;
 		}
-		
+
 		break;
 	case 'deleteAction':
 		unset ($todo_actions[$actionId]);
@@ -65,6 +65,8 @@ switch ($getAction)
 		unset ($todo_actions);
 		$_SESSION['filter']='all';
 		$todo_actions=array();
+		break;
+	default:
 		break;
 }
 
@@ -80,39 +82,39 @@ foreach($todo_actions as $aAction)
 	$aVarArray['completedStatus']			= $aAction['completedStatus']?'completed':'';
 	$aVarArray['completedStatusChecked']	= $aAction['completedStatus']?'checked=""':'';
 	$aVarArray['actionLabel']				= $aAction['actionLabel'];
-		
+
 	if ( !$aVarArray['completedStatus'] )
 		$aVarArray['numberOfLeftItems']++;
-	
+
 	if ( $aVarArray['completedStatus'] && $_SESSION['filter'] == 'active' )  continue;
 	if ( !$aVarArray['completedStatus'] && $_SESSION['filter'] == 'completed' )  continue;
-	
+
 	$liToDoActions .= getTemplateLi($liTemplate, $aVarArray);
 }
 
 //process the action items
 $returnStr .= '<ul class="todo-list"
-					data-blapy-container="true" 
+					data-blapy-container="true"
 					data-blapy-container-name="todo-list"
 					data-blapy-container-content="todo-list-'.$tagId.'">'.$liToDoActions.'</ul>';
-//process the number of left actions 
-$returnStr .= '<span data-blapy-container="true" 
+//process the number of left actions
+$returnStr .= '<span data-blapy-container="true"
 					 data-blapy-container-name="numberOfItems"
 					 data-blapy-container-content="numberOfItems-'.$aVarArray['numberOfLeftItems'].'">'.$aVarArray['numberOfLeftItems'].'</span>';
 
 //Process if we need to display the button for "clear completed" block if any completed action there
 if ($aVarArray['numberOfLeftItems'] != $aVarArray['numberOfItems'])
 	$returnStr .= <<<EOD
-		<button class="clear-completed" 
-				data-blapy-container="true" 
+		<button class="clear-completed"
+				data-blapy-container="true"
 				data-blapy-container-name="showClear"
 				data-blapy-container-content="showClear-True"
 				onclick="$('#myBlapy').trigger('loadUrl',{aUrl:'php/clearCompleted.php'});">Clear completed</button>'
 EOD;
-else 
+else
 	$returnStr .= <<<EOD
-		<button class="clear-completed" 
-				data-blapy-container="true" 
+		<button class="clear-completed"
+				data-blapy-container="true"
 				data-blapy-container-name="showClear"
 				data-blapy-container-content="showClear-False"
 				style="display:none">Clear completed</button>'
@@ -131,6 +133,6 @@ function getTemplateLi($aTemplateString, $varArray)
 	{
 		$aTemplateString = str_replace("[[$aVarName]]",$aVarValue,$aTemplateString);
 	}
-	
+
 	return $aTemplateString;
 }

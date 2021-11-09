@@ -12,7 +12,13 @@
 			<header class="header">
 				<h1>todos</h1>
 				<input class="new-todo" placeholder="What needs to be done?" autofocus
-						 onkeypress="if (event.keyCode==13) { $('#myBlapy').trigger('postData',{aUrl:'php/addAction.php',params:{actionName:$(this).val()}}); $(this).val('')}">
+						 onkeypress="if (event.keyCode==13) {
+						 							$('#myBlapy').trigger('postData',
+														{aUrl:'php/addAction.php',params:{actionName:$(this).val()}}
+													);
+													$(this).val('');
+												}"
+				>
 			</header>
 			<section class="main">
 				<input id="selectAllToggle"
