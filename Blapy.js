@@ -892,6 +892,7 @@
     }
     else
     {
+      myBlapy.myFSM.trigger('blapyJsonTemplatesIsSet');
     }
 
   };
