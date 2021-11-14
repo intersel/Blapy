@@ -56,6 +56,7 @@
 						data-blapy-template-init-params="{'action':'search','firstname':'{{firstname}}'}"
 						data-blapy-template-mustache-delimiterStart="{%"
 						data-blapy-template-mustache-delimiterEnd="%}"
+						data-blapy-updateblock-ondisplay="true"
 					>
 					<|xmp style="display:none">
 						<tr><td>
@@ -71,6 +72,7 @@
 									data-blapy-template-mustache-delimiterStart="{$"
 									data-blapy-template-mustache-delimiterEnd="$}"
 									data-blapy-template-init-processdata="ShouldNinaTalk"
+									data-blapy-updateblock-ondisplay="true"
 								>
 								<||xmp style="display:none">
 									<tr><td>
@@ -86,6 +88,19 @@
 
 									</td></tr>
 								<||/xmp>
+							</div>
+							<div id="results4"
+									data-blapy-container="true"
+									data-blapy-container-name="results_level2bis_{{blapyIndex}}_{%blapyIndex%}"
+									data-blapy-container-content="results_level2bis"
+									data-blapy-update="json"
+									data-blapy-template-init="arrayvalues.data.php"
+									data-blapy-template-init-params="{'action':'search','lastname':'{%lastname%}'}"
+									data-blapy-template-mustache-delimiterStart="{$"
+									data-blapy-template-mustache-delimiterEnd="$}"
+									data-blapy-updateblock-ondisplay="true"
+									data-blapy-template-file="results.tpl"
+								>
 							</div>
 
 						</td></tr>
