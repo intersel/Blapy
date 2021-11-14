@@ -11,10 +11,13 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.13.8
+ * @version : 1.14.0
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2021/11/14 - E.Podvin - 1.14.0
+ *    - Load template files asynchronously
+ *    - if reused in an other blapy block, load only once a given template file
  * - 2021/10/11 - E.Podvin - 1.13.8 -
  *    - fix on xmp detection for multi templating
  *    - add 'templateId' parameter in 'params' for 'postData' and 'updateBlock' events
@@ -661,28 +664,30 @@
     $(myBlapy.myUIObject).off('appear');
     $(myBlapy.myUIObject).find('[data-blapy-updateblock-ondisplay]').appear();
 
-    $(myBlapy.myUIObject).on('appear', '[data-blapy-updateblock-ondisplay]', function(event, $all_appeared_elements) {
-      if (!$(this).attr("data-blapy-appear"))
-          $(this).attr("data-blapy-appear", 'done');
-      else return;
+    $(myBlapy.myUIObject).on('appear', '[data-blapy-updateblock-ondisplay]',
+      function(event, $all_appeared_elements) {
+        if (!$(this).attr("data-blapy-appear"))
+            $(this).attr("data-blapy-appear", 'done');
+        else return;
 
-      if ($(this).attr("data-blapy-href"))
-      {
-        myBlapy.myUIObject.trigger('loadUrl', {
-          aUrl: $(this).attr("data-blapy-href"),
-          noBlapyData:$(this).attr("data-blapy-noblapydata")
-        });
+        if ($(this).attr("data-blapy-href"))
+        {
+          myBlapy.myUIObject.trigger('loadUrl', {
+            aUrl: $(this).attr("data-blapy-href"),
+            noBlapyData:$(this).attr("data-blapy-noblapydata")
+          });
+        }
+        else if ($(this).attr("data-blapy-template-init"))
+        {
+          let myContainerName = $(this).attr("data-blapy-container-name");
+          myBlapy.myUIObject.trigger('reloadBlock',{
+            params:{
+              embeddingBlockId:myContainerName,
+            }
+          });
+        }
       }
-      else if ($(this).attr("data-blapy-template-init"))
-      {
-        let myContainerName = $(this).attr("data-blapy-container-name");
-        myBlapy.myUIObject.trigger('reloadBlock',{
-          params:{
-            embeddingBlockId:myContainerName,
-          }
-        });
-      }
-    });
+    );
 
     $.force_appear();
 
@@ -780,10 +785,11 @@
             .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '') == "")
         {
           //look for partial template file
-          var tplFile = myContainer.attr("data-blapy-template-file");
-          var blapyData = (myContainer.attr("data-blapy-noblapydata") == '1')//don't send any blapy info
+          let tplFile = myContainer.attr("data-blapy-template-file");
+          let myBlapy = this;
+          let blapyData = (myContainer.attr("data-blapy-noblapydata") == '1')//don't send any blapy info
                             ? '' : "blapycall=1&blapyaction=loadTpl&blapyobjectid=" + myContainer.attr('id');
-          if (tplFile)
+          if (tplFile && (!myBlapy.tplFile || !myBlapy.tplFile[tplFile]))
           {
             $.get(
               {
@@ -804,18 +810,26 @@
                     )
                   {
                     //store the template in comment in a hidden xmp
-                    myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>');
+                    htmlTplContent = '<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>';
+                    myContainer.html(htmlTplContent);
                   }
                   else
                   {
                     myContainer.html(htmlTplContent);
                   }
 
+                  if (!myBlapy.tplFile) myBlapy.tplFile={};
+                  myBlapy.tplFile[tplFile] = htmlTplContent;
+
                   postDataFunc();
                 },
                 //async: false,
               });
           }//end if (tplFile)
+          else if (tplFile && myBlapy.tplFile && myBlapy.tplFile[tplFile]) {
+            myContainer.html(myBlapy.tplFile[tplFile]);
+            postDataFunc();
+          }
           else // no defined template...?
           {
             postDataFunc();
@@ -1149,7 +1163,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
           //@todo for block types other than json blocks
           //init blapy block that should be initialized on display
-//          this.opts.theBlapy.setBlapyUpdateOnDisplay();
+          this.opts.theBlapy.setBlapyUpdateOnDisplay();
         },
       }//reloadBlock
     },//PageReady state
@@ -1578,6 +1592,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                     });
                     myFSM.trigger('blapyJsonTemplatesIsSet');
 
+
                   })();
 
                   //reset container to its original jquery object
@@ -1601,6 +1616,8 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
                 //process interval updates
                 myFSM.opts.theBlapy.setBlapyUpdateIntervals();
+
+                myFSM.opts.theBlapy.setBlapyUpdateOnDisplay();
 
                 if (myFSM.opts.afterContentChange) myFSM.opts.afterContentChange(myContainer);
                 //try to send to the new object the alert
