@@ -11,10 +11,13 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.13.8
+ * @version : 1.14.0
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2021/11/14 - E.Podvin - 1.14.0
+ *    - Load template files asynchronously
+ *    - if reused in an other blapy block, load only once a given template file
  * - 2021/10/11 - E.Podvin - 1.13.8 -
  *    - fix on xmp detection for multi templating
  *    - add 'templateId' parameter in 'params' for 'postData' and 'updateBlock' events
@@ -311,14 +314,14 @@
         return true;
       };
 
-      this.myUIObject.iFSM(manageBlapy, this.optsIfsm);
+      this.myFsm = this.myUIObject.iFSM(manageBlapy, this.optsIfsm);
       app.run();
     }
     else
     // no routing - standard blapy links management
     {
       //start Blapy Engine
-      this.myUIObject.iFSM(manageBlapy, this.optsIfsm);
+      this.myFsm = this.myUIObject.iFSM(manageBlapy, this.optsIfsm);
 
       $(document).on("click", "#" + myBlapy.myUIObjectID + " a[data-blapy-link]", function(event) {
         //if requested, filter the action to be processed only to the defined active blapy object for the link
@@ -661,28 +664,30 @@
     $(myBlapy.myUIObject).off('appear');
     $(myBlapy.myUIObject).find('[data-blapy-updateblock-ondisplay]').appear();
 
-    $(myBlapy.myUIObject).on('appear', '[data-blapy-updateblock-ondisplay]', function(event, $all_appeared_elements) {
-      if (!$(this).attr("data-blapy-appear"))
-          $(this).attr("data-blapy-appear", 'done');
-      else return;
+    $(myBlapy.myUIObject).on('appear', '[data-blapy-updateblock-ondisplay]',
+      function(event, $all_appeared_elements) {
+        if (!$(this).attr("data-blapy-appear"))
+            $(this).attr("data-blapy-appear", 'done');
+        else return;
 
-      if ($(this).attr("data-blapy-href"))
-      {
-        myBlapy.myUIObject.trigger('loadUrl', {
-          aUrl: $(this).attr("data-blapy-href"),
-          noBlapyData:$(this).attr("data-blapy-noblapydata")
-        });
+        if ($(this).attr("data-blapy-href"))
+        {
+          myBlapy.myUIObject.trigger('loadUrl', {
+            aUrl: $(this).attr("data-blapy-href"),
+            noBlapyData:$(this).attr("data-blapy-noblapydata")
+          });
+        }
+        else if ($(this).attr("data-blapy-template-init"))
+        {
+          let myContainerName = $(this).attr("data-blapy-container-name");
+          myBlapy.myUIObject.trigger('reloadBlock',{
+            params:{
+              embeddingBlockId:myContainerName,
+            }
+          });
+        }
       }
-      else if ($(this).attr("data-blapy-template-init"))
-      {
-        let myContainerName = $(this).attr("data-blapy-container-name");
-        myBlapy.myUIObject.trigger('reloadBlock',{
-          params:{
-            embeddingBlockId:myContainerName,
-          }
-        });
-      }
-    });
+    );
 
     $.force_appear();
 
@@ -695,154 +700,169 @@
    * @return {[type]}             [description]
    */
   theBlapy.prototype.setBlapyContainerJsonTemplate = function(myContainer, myBlapy, forceReload) {
-    this._log('setBlapyContainerJsonTemplate');
+    return new Promise(resolve => {
 
-    if (forceReload == undefined) forceReload=false;
+      this._log('setBlapyContainerJsonTemplate');
 
-    /**
-     * postDataFunc - activate the initialization of the json block
-     * @return {[type]} [description]
-     */
-    var postDataFunc = function(forceReload) {
+      if (forceReload == undefined) forceReload=false;
 
-      //use JSON5 if present as JSON5.parse is more cool than JSON.parse (cf. https://github.com/json5/json5)
-      var jsonFeatures = null;
-      if (typeof(JSON5) == "undefined") jsonFeatures=JSON;else jsonFeatures=JSON5;
+      /**
+       * postDataFunc - activate the initialization of the json block
+       * @return {[type]} [description]
+       */
+      var postDataFunc = function(forceReload) {
 
-      //do we have to get the data only when block is displayed?
-      if (   !forceReload
-          &&  myContainer.attr("data-blapy-updateblock-ondisplay")
-          &&  (myContainer.attr("data-blapy-appear") != 'done')
-        )
-      {
-        //$(document).scroll();//force appear to work...
-        return;
-      }
+        //use JSON5 if present as JSON5.parse is more cool than JSON.parse (cf. https://github.com/json5/json5)
+        var jsonFeatures = null;
+        if (typeof(JSON5) == "undefined") jsonFeatures=JSON;else jsonFeatures=JSON5;
 
-      let aInitURL = myContainer.attr("data-blapy-template-init");
-      if (aInitURL)
-      {
-        let aInitURL_Param = myContainer.attr("data-blapy-template-init-params");
-        if (aInitURL_Param != undefined) aInitURL_Param = jsonFeatures.parse(aInitURL_Param);
-        else aInitURL_Param = {};
-
-        let aInitURL_EmbeddingBlockId = myContainer.attr("data-blapy-template-init-purejson");
-        if ( (aInitURL_EmbeddingBlockId !== "0") ) //default: pure blapy json
-          aInitURL_Param = $.extend({'embeddingBlockId':myContainer.attr("data-blapy-container-name")}, aInitURL_Param);
-
-        let noBlapyData = myContainer.attr("data-blapy-noblapydata");
-        if ( (noBlapyData == undefined) ) noBlapyData = "0";
-
-        let aInitURL_Method = myContainer.attr("data-blapy-template-init-method");
-        if (aInitURL_Method == undefined) aInitURL_Method = "GET";
-
-        $('#' + myBlapy.myUIObjectID).trigger('postData', {
-          "aUrl": aInitURL,
-          "params":aInitURL_Param,
-          "method":aInitURL_Method,
-          'noBlapyData':noBlapyData
-        });
-      }
-    };
-
-
-    //if block is declared json, then we take local update rule (json)
-    myContainer.attr('data-blapy-update-rule', 'local');
-
-    //Search for a template container already defined within the blapy container
-    var htmlTpl = myContainer.children('[data-blapy-container-tpl]'); // if still processed, a block data-blapy-container-tpl will be inside
-    if (htmlTpl.length == 0) // ok so not processed, so let's do it
-    {
-      var htmlTplContent = myContainer.html();
-
-      //remove any xmp tags (used to escape html in a template definition that could generate errors if not escaped)
-      //htmlTplContent = htmlTplContent.replace(/(\r\n|\n|\r)?<\/?xmp[^>]*>(\r\n|\n|\r)?/gi, '');
-      try {
-        if ($(htmlTplContent).prop("tagName") == "XMP") htmlTplContent = $(htmlTplContent).html();
-      }
-      catch(error) {
-        //htmlTplContent is not html???...
-        this._log("htmlTplContent from "+myContainer.attr("id")+" is not html template...?\n"+htmlTplContent,1);
-      }
-
-      //if no template defined within the block
-      if (htmlTplContent
-          .replace(/\s{2,}/g, ' ')
-          .replace(/\t/g, ' ')
-          .toString().trim()
-          .replace(/(\r\n|\n|\r)/g, "")
-          .replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, '')
-          .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '') == "")
-      {
-        //look for partial template file
-        var tplFile = myContainer.attr("data-blapy-template-file");
-        var blapyData = (myContainer.attr("data-blapy-noblapydata") == '1')//don't send any blapy info
-                          ? '' : "blapycall=1&blapyaction=loadTpl&blapyobjectid=" + myContainer.attr('id');
-        if (tplFile)
-        {
-          $.get(
-            {
-              url: tplFile,
-              data: blapyData,
-              success: function(htmlTplContent) {
-                //replace img by anything in order that the system don't want to load them... same for script
-                // as we only want to know if there are siblings...
-                htmlTplContent = htmlTplContent.replace(/<!--(.*?)-->/gm, "").replaceAll("\n\n",'\n').replaceAll("\t\t","\t");
-                let tmpHtmlContent = htmlTplContent
-                          .replace(/{{(.*?)}}/gm, "")
-                          .split("script")
-                          .join("scriptblapy")
-                          .split("img")
-                          .join("imgblapy");
-                if (
-                      $(tmpHtmlContent).prop("tagName") != "XMP"
-                  )
-                {
-                  //store the template in comment in a hidden xmp
-                  myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>');
-                }
-                else
-                {
-                  myContainer.html(htmlTplContent);
-                }
-
-                postDataFunc();
-              },
-              async: false,
-            });
-        }//end if (tplFile)
-        else // no defined template...?
-        {
-          postDataFunc();
-        }
-      }//end if
-      else //template is defined in the block
-      {
-        htmlTplContent = htmlTplContent.replace(/<!--(.*?)-->/gm, "").replaceAll("\n\n",'\n').replaceAll("\t\t","\t");
-        let tmpHtmlContent = htmlTplContent
-                  .replace(/{{(.*?)}}/gm, "")
-                  .split("script")
-                  .join("scriptblapy")
-                  .split("img")
-                  .join("imgblapy");
-        if (
-              $(tmpHtmlContent).prop("tagName") != "XMP"
+        //do we have to get the data only when block is displayed?
+        if (   !forceReload
+            &&  myContainer.attr("data-blapy-updateblock-ondisplay")
+            &&  (myContainer.attr("data-blapy-appear") != 'done')
           )
         {
-          //store the template in comment in a hidden xmp
-          myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>');
+          //$(document).scroll();//force appear to work...
+          return;
         }
-        else
+
+        let aInitURL = myContainer.attr("data-blapy-template-init");
+        if (aInitURL)
         {
-          myContainer.html(htmlTplContent);
+          let aInitURL_Param = myContainer.attr("data-blapy-template-init-params");
+          if (aInitURL_Param != undefined) aInitURL_Param = jsonFeatures.parse(aInitURL_Param);
+          else aInitURL_Param = {};
+
+          let aInitURL_EmbeddingBlockId = myContainer.attr("data-blapy-template-init-purejson");
+          if ( (aInitURL_EmbeddingBlockId !== "0") ) //default: pure blapy json
+            aInitURL_Param = $.extend({'embeddingBlockId':myContainer.attr("data-blapy-container-name")}, aInitURL_Param);
+
+          let noBlapyData = myContainer.attr("data-blapy-noblapydata");
+          if ( (noBlapyData == undefined) ) noBlapyData = "0";
+
+          let aInitURL_Method = myContainer.attr("data-blapy-template-init-method");
+          if (aInitURL_Method == undefined) aInitURL_Method = "GET";
+
+          $('#' + myBlapy.myUIObjectID).trigger('postData', {
+            "aUrl": aInitURL,
+            "params":aInitURL_Param,
+            "method":aInitURL_Method,
+            'noBlapyData':noBlapyData
+          });
         }
-        postDataFunc();
-      }//end else //template is defined in the block
-    }//end if (htmlTpl.length == 0)
-    else if (forceReload)
-    {
-      postDataFunc(forceReload);
-    }
+        else {
+        }
+        resolve();//promise is fullfilled
+      };
+
+
+      //if block is declared json, then we take local update rule (json)
+      myContainer.attr('data-blapy-update-rule', 'local');
+
+      //Search for a template container already defined within the blapy container
+      var htmlTpl = myContainer.children('[data-blapy-container-tpl]'); // if still processed, a block data-blapy-container-tpl will be inside
+      if (htmlTpl.length == 0) // ok so not processed, so let's do it
+      {
+        var htmlTplContent = myContainer.html();
+
+        //remove any xmp tags (used to escape html in a template definition that could generate errors if not escaped)
+        //htmlTplContent = htmlTplContent.replace(/(\r\n|\n|\r)?<\/?xmp[^>]*>(\r\n|\n|\r)?/gi, '');
+        try {
+          if ($(htmlTplContent).prop("tagName") == "XMP") htmlTplContent = $(htmlTplContent).html();
+        }
+        catch(error) {
+          //htmlTplContent is not html???...
+          this._log("htmlTplContent from "+myContainer.attr("id")+" is not html template...?\n"+htmlTplContent,1);
+        }
+
+        //if no template defined within the block
+        if (htmlTplContent
+            .replace(/\s{2,}/g, ' ')
+            .replace(/\t/g, ' ')
+            .toString().trim()
+            .replace(/(\r\n|\n|\r)/g, "")
+            .replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, '')
+            .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '') == "")
+        {
+          //look for partial template file
+          let tplFile = myContainer.attr("data-blapy-template-file");
+          let myBlapy = this;
+          let blapyData = (myContainer.attr("data-blapy-noblapydata") == '1')//don't send any blapy info
+                            ? '' : "blapycall=1&blapyaction=loadTpl&blapyobjectid=" + myContainer.attr('id');
+          if (tplFile && (!myBlapy.tplFile || !myBlapy.tplFile[tplFile]))
+          {
+            $.get(
+              {
+                url: tplFile,
+                data: blapyData,
+                success: function(htmlTplContent) {
+                  //replace img by anything in order that the system don't want to load them... same for script
+                  // as we only want to know if there are siblings...
+                  htmlTplContent = htmlTplContent.replace(/<!--(.*?)-->/gm, "").replaceAll("\n\n",'\n').replaceAll("\t\t","\t");
+                  let tmpHtmlContent = htmlTplContent
+                            .replace(/{{(.*?)}}/gm, "")
+                            .split("script")
+                            .join("scriptblapy")
+                            .split("img")
+                            .join("imgblapy");
+                  if (
+                        $(tmpHtmlContent).prop("tagName") != "XMP"
+                    )
+                  {
+                    //store the template in comment in a hidden xmp
+                    htmlTplContent = '<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>';
+                    myContainer.html(htmlTplContent);
+                  }
+                  else
+                  {
+                    myContainer.html(htmlTplContent);
+                  }
+
+                  if (!myBlapy.tplFile) myBlapy.tplFile={};
+                  myBlapy.tplFile[tplFile] = htmlTplContent;
+
+                  postDataFunc();
+                },
+                //async: false,
+              });
+          }//end if (tplFile)
+          else if (tplFile && myBlapy.tplFile && myBlapy.tplFile[tplFile]) {
+            myContainer.html(myBlapy.tplFile[tplFile]);
+            postDataFunc();
+          }
+          else // no defined template...?
+          {
+            postDataFunc();
+          }
+        }//end if
+        else //template is defined in the block
+        {
+          htmlTplContent = htmlTplContent.replace(/<!--(.*?)-->/gm, "").replaceAll("\n\n",'\n').replaceAll("\t\t","\t");
+          let tmpHtmlContent = htmlTplContent
+                    .replace(/{{(.*?)}}/gm, "")
+                    .split("script")
+                    .join("scriptblapy")
+                    .split("img")
+                    .join("imgblapy");
+          if (
+                $(tmpHtmlContent).prop("tagName") != "XMP"
+            )
+          {
+            //store the template in comment in a hidden xmp
+            myContainer.html('<xmp style="display:none" data-blapy-container-tpl="true">' + htmlTplContent + '</xmp>');
+          }
+          else
+          {
+            myContainer.html(htmlTplContent);
+          }
+          postDataFunc();
+        }//end else //template is defined in the block
+      }//end if (htmlTpl.length == 0)
+      else if (forceReload)
+      {
+        postDataFunc(forceReload);
+      }
+    });//end Promise
   };
 
 
@@ -867,15 +887,28 @@
     // set the default template
     if (aTemplateId)
     {
-      $(myBlapy.myUIObject).find('[data-blapy-update="json"]'+aEmbeddingBlock).attr('data-blapy-template-default-id',aTemplateId);
+      $(myBlapy.myUIObject).find('[data-blapy-update="json"]'+aEmbeddingBlock)
+                           .attr('data-blapy-template-default-id',aTemplateId);
     }
 
     //for any json template block
-    $(myBlapy.myUIObject).find('[data-blapy-update="json"]'+aEmbeddingBlock).each(function() {
-      var myContainer = $(this);
+    let jsonBlocks = $(myBlapy.myUIObject).find('[data-blapy-update="json"]'+aEmbeddingBlock);
+    if (jsonBlocks.length > 0)
+    {
+      (function(){
+        jsonBlocks.each(async function() {
+          var myContainer = $(this);
 
-      myBlapy.setBlapyContainerJsonTemplate(myContainer, myBlapy, forceReload);
-    });
+          await myBlapy.setBlapyContainerJsonTemplate(myContainer, myBlapy, forceReload);
+        });
+        myBlapy.myFSM.trigger('blapyJsonTemplatesIsSet');
+      })();
+    }
+    else
+    {
+      myBlapy.myFSM.trigger('blapyJsonTemplatesIsSet');
+    }
+
   };
 
 /**
@@ -919,13 +952,17 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
     PageLoaded: {
       enterState: {
         init_function: function() {
+
+          //store the iFSM in Blapy
+          this.opts.theBlapy.myFSM = this;
+
           //process interval updates
           this.opts.theBlapy.setBlapyUpdateIntervals();
 
           if (this.opts.pageLoadedFunction) this.opts.pageLoadedFunction();
           this.myUIObject.trigger('Blapy_PageLoaded');
         },
-        next_state: 'PageReady',
+        next_state: 'PreparePage',
       },
 /*      postData: 'loadUrl',
       updateBlock: 'loadUrl',
@@ -936,17 +973,51 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
       },
 */
     },
-    PageReady: {
+    PreparePage: {
       enterState: {
+        init_function: function() {
+        },
+        propagate_event: 'setBlapyUrl'
+      },
+      setBlapyUrl: {
         init_function: function() {
           // set #tag to the Blapy url
           this.opts.theBlapy.setBlapyUrl();
-          // process json blocks
+        },
+        next_state : 'PreparePage_setBlapyJsonTemplates',
+      },
+    },//PreparePage state
+    PreparePage_setBlapyJsonTemplates: {
+      enterState: {
+        init_function: function() {
           this.opts.theBlapy.setBlapyJsonTemplates();
-
+        },
+        next_state:'PreparePage_setBlapyUpdateOnDisplay',
+      },
+    },
+    PreparePage_setBlapyUpdateOnDisplay: {
+      blapyJsonTemplatesIsSet: {
+        init_function: function() {
           //init blapy block that should be initialized on display
           this.opts.theBlapy.setBlapyUpdateOnDisplay();
-
+        },
+        next_state : 'PageReady',
+      },
+      reloadBlock: 'loadUrl',
+      updateBlock: 'loadUrl',
+      postData: 'loadUrl',
+      loadUrl: //someone try to load an URL but page is not ready... try it later...
+      {
+        how_process_event: {
+          delay: 50,
+          preventcancel: true
+        },
+        propagate_event: true,
+      },
+    },//setBlapyJsonTemplates state
+    PageReady: {
+      enterState: {
+        init_function: function() {
           //alert that blapy page is ready
           if (this.opts.pageReadyFunction) this.opts.pageReadyFunction();
           this.myUIObject.trigger('Blapy_PageReady');
@@ -1092,10 +1163,10 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
           //@todo for block types other than json blocks
           //init blapy block that should be initialized on display
-//          this.opts.theBlapy.setBlapyUpdateOnDisplay();
+          this.opts.theBlapy.setBlapyUpdateOnDisplay();
         },
       }//reloadBlock
-    },
+    },//PageReady state
     ProcessPageChange: {
       enterState: {},
       pageLoaded: {
@@ -1512,16 +1583,23 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
                   // initialize the sub blapy blocks found in the new content if any
                   var myBlapy = myFSM.opts.theBlapy;
-                  myContainer.find('[data-blapy-update="json"]').each(function() {
-                    var mySubContainer = $(this);
+                  myFSM.trigger('blapyJsonTemplatesToSet');
+                  (function(){
+                    myContainer.find('[data-blapy-update="json"]').each(async function() {
+                      var mySubContainer = $(this);
 
-                    myBlapy.setBlapyContainerJsonTemplate(mySubContainer, myBlapy);
-                  });
+                      await myBlapy.setBlapyContainerJsonTemplate(mySubContainer, myBlapy);
+                    });
+                    myFSM.trigger('blapyJsonTemplatesIsSet');
+
+
+                  })();
 
                   //reset container to its original jquery object
                   myContainer = aBlapyContainer;
 
-                } else {
+                } // json
+                else {
                   var pluginUpdateFunction = eval("myFSM.opts.theBlapy." + aBlapyContainer.attr('data-blapy-update'));
 
                   if (pluginUpdateFunction) {
@@ -1538,6 +1616,8 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
                 //process interval updates
                 myFSM.opts.theBlapy.setBlapyUpdateIntervals();
+
+                myFSM.opts.theBlapy.setBlapyUpdateOnDisplay();
 
                 if (myFSM.opts.afterContentChange) myFSM.opts.afterContentChange(myContainer);
                 //try to send to the new object the alert
@@ -1567,12 +1647,12 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
       loadUrl: //someone try to load an URL but page is not ready... try it later...
       {
         how_process_event: {
-          delay: 20,
+          delay: 50,
           preventcancel: true
         },
         propagate_event: true,
       },
-    },
+    },//ProcessPageChange state
     DefaultState: {
       start: {
         next_state: 'PageLoaded',
