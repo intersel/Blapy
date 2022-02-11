@@ -15,6 +15,8 @@
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2022/02/11 - E.Podvin - 1.14.1
+ *    - data-blapy-template-init-processdata may contain several functions to be applied on received json data
  * - 2021/11/14 - E.Podvin - 1.14.0
  *    - Load template files asynchronously
  *    - if reused in an other blapy block, load only once a given template file
@@ -1430,17 +1432,19 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                     if (aJsonDataFunction)
                     {
                       myFSM.opts.theBlapy._log('Apply data-blapy-template-init-processdata: '+aJsonDataFunction);
-                      let previousJsonDataObj = jsonDataObj;
-                      eval(   'if (typeof '+aJsonDataFunction+' === "function") '
-                            + '   jsonDataObj='+aJsonDataFunction+'(jsonDataObj);'
-                            + 'else '
-                            +'    myFSM.opts.theBlapy._log("'+aJsonDataFunction+' does not exist :(! '
-                                      +'Have a look on the : data-blapy-template-init-processdata of container '
-                                      + myContainer.attr('id') +'", 1);');
-                      if (typeof jsonDataObj !== 'object') {
+                      aJsonDataFunction.split(',').forEach(function(aFunctionName){
+                        let previousJsonDataObj = jsonDataObj;
+                        eval(   'if (typeof '+aFunctionName+' === "function") '
+                        + '   jsonDataObj='+aFunctionName+'(jsonDataObj);'
+                        + 'else '
+                        +'    myFSM.opts.theBlapy._log("'+aFunctionName+' does not exist :(! '
+                        +'Have a look on the : data-blapy-template-init-processdata of container '
+                        + myContainer.attr('id') +'", 1);');
+                        if (typeof jsonDataObj !== 'object') {
                           myFSM.opts.theBlapy._log('returned Json Data was not a json structure :(! Perhaps it is due to the processing of this function on them: ' + aJsonDataFunction, 1);
                           jsonDataObj = previousJsonDataObj;
-                      }
+                        }
+                      });
                     }
                   }
 
