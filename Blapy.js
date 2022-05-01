@@ -7,7 +7,7 @@
  * Blapy : jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) with almost no javascript coding to do it.
  *
  * -----------------------------------------------------------------------------------------
- * @copyright Intersel 2015-2021
+ * @copyright Intersel 2015-2022
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
@@ -15,6 +15,7 @@
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2022/05/01 - E.Podvin - 1.14.2 - Fix on detecting if template is provided or not in the blapy block
  * - 2022/02/11 - E.Podvin - 1.14.1
  *    - data-blapy-template-init-processdata may contain several functions to be applied on received json data
  * - 2021/11/14 - E.Podvin - 1.14.0
@@ -779,12 +780,13 @@
 
         //if no template defined within the block
         if (htmlTplContent
+            .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '')
             .replace(/\s{2,}/g, ' ')
             .replace(/\t/g, ' ')
-            .toString().trim()
             .replace(/(\r\n|\n|\r)/g, "")
             .replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, '')
-            .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '') == "")
+            .trim()
+            == "")
         {
           //look for partial template file
           let tplFile = myContainer.attr("data-blapy-template-file");
