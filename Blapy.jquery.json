@@ -1,12 +1,16 @@
 {
-  "name": "Blapy",
-  "title": "create and manage ajax web application without javascript coding",
-  "description": "Blapy is a jQuery plugin that helps you to create and manage an ajax web application. The web application is built the usual way of generating web pages like with php or any standard CMS and Blapy will transform it into a dynamic web application with ajaxified contents and without coding any javascript.",
+  "name": "blapy",
+  "title": "jQuery plugin that helps you to manage ajax and single page web applications (SPA)",
+  "description": "Blapy is a jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) with almost no javascript code to do it.",
   "keywords": [
-    "Application",
+  	"jquery-plugin",
+  	"ecosystem:jquery",
+    "Web App",
+    "Web applications",
+    "dynamic web",
     "Ajax"
   ],
-  "version": "1.13.5",
+  "version": "1.13.7",
   "author": {
     "name": "Emmanuel Podvin",
     "url": "http://fr.linkedin.com/in/podvin"
@@ -27,16 +31,17 @@
   "bugs": "https://github.com/intersel/Blapy/issues",
   "homepage": "https://github.com/intersel/Blapy",
   "docs": "https://github.com/intersel/Blapy/",
-  "demo": "http://www.intersel.net/demos/intersel/Blapy/demos/",
+  "repository": "https://github.com/intersel/Blapy/",
+  "demo": "http://www.intersel.net/demos/intersel/Blapy/demos/helloworld/",
   "download": "https://github.com/intersel/Blapy/archive/master.zip",
   "dependencies":
   {
-    "jquery": ">=1.10",
-    "iFSM": ">=1.6",
-    "attrchange": ">= 1.0.1",
-    "dotimeout": ">= 1.0",
-    "sammy": ">= 1.0",
-    "json2html": ">= 1.0",
- 	  "jquery.appear": ">=0.3.6"
+    "jquery": ">=3.0",
+    "iFSM": ">=1.7",
+    "sammy": ">= 0.7",
+    "json2html": ">= 0.0",
+    "jquery.appear": ">=1.0",
+    "Mustache": ">=3.0.0",
+    "json5": ">=2.1.0"
   }
 }

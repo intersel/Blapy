@@ -368,7 +368,7 @@ To define a Blapy Block, you need to use the following attributes:
           * id==2, will get all objects that have their 'id' property equals to '2'
           * id==  , will get all objects that have an 'id' property
           * ==2, will get all objects that have properties equals to '2'
-        * **data-blapy-template-init-processdata** (option): one or several function names separated with a comma. These functions take a json object and should return a json object. They will be called once the json data is received from the url and before to be processed in its blapy block.
+        * **data-blapy-template-init-processdata** (option): a function name that take a json object and should return a json object. It will be called once the json data is received from the url and before to be processed in its blapy block.
         * **data-blapy-template-init-purejson** (option): '0' ("blapy oriented" json) || '1' (default) (not "blapy oriented" json),
   * **remove**:  if the container-name is found from the external content, then the Blapy block is to be removed.
   * **custom**:  if the container-name is found from the external content, then we call the custom change 'doCustomChange' if defined
@@ -486,9 +486,15 @@ Triggered before a Blapy block content change and sent to the (jquery) **blapy B
   * the Blapy block
 
 ## Blapy_afterContentChange
-Triggered after a a Blapy block content has changed and sent to the (jquery) **blapy Block** that has changed..
+Triggered after a Blapy block content has changed and sent to the (jquery) **blapy Block** that has changed..
 * Parameters:
   * the Blapy block
+
+## Blapy_templateReady
+Triggered after a Blapy block content has its template loaded and ready, sent to the (jquery) **blapy Block**..
+* Parameters:
+  * the Blapy block
+
 
 ## Blapy_doCustomChange
 Triggered if data-blapy-update='custom', sent to the object that should change its content

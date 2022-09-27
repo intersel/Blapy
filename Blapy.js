@@ -11,10 +11,13 @@
  * @fileoverview : Blapy is a jQuery plugin that helps you to create and manage an ajax web application.
  * @see {@link https://github.com/intersel/Blapy}
  * @author : Emmanuel Podvin - emmanuel.podvin@intersel.fr
- * @version : 1.14.2
+ * @version : 1.15.0
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2022/09/06 - E.Podvin - 1.15.0 - now trigger a message 'Blapy_templateReady' when a block has its template ready (loaded)
+ *    + change use of var to let
+ *    + small fixes 
  * - 2022/05/01 - E.Podvin - 1.14.2 - Fix on detecting if template is provided or not in the blapy block
  * - 2022/02/11 - E.Podvin - 1.14.1
  *    - data-blapy-template-init-processdata may contain several functions to be applied on received json data
@@ -161,7 +164,7 @@
    * @param {string} b64
    * @return {string}
    */
-  var atou = function(b64) {
+  let atou = function(b64) {
     return decodeURIComponent(escape(atob(b64)));
   }
 
@@ -170,7 +173,7 @@
    * @param {string} data
    * @return {string}
    */
-  var utoa = function (data) {
+  let utoa = function (data) {
     return btoa(unescape(encodeURIComponent(data)));
   }
 
@@ -183,9 +186,9 @@
    * - myUIObject: Target object of the blapy's FSM
    * - myUIObjectID: Id of the target objet
    */
-  var theBlapy = window.theBlapy = function(anObject, options) {
+  let theBlapy = window.theBlapy = function(anObject, options) {
 
-    var $defaults = {
+    let $defaults = {
       debug: true, //if true, then log things in the console
       LogLevel: 1, // log level: 1: error ; 2: warning; 3: notice
       debugIfsm: false, // debug mode for ifsm
@@ -251,7 +254,7 @@
   theBlapy.prototype.InitApplication = function() {
     this._log('InitApplication');
 
-    var myBlapy = this;
+    let myBlapy = this;
 
     if (myBlapy.opts.fsmExtension) {
       $.extend(true,manageBlapy, myBlapy.opts.fsmExtension)
@@ -265,7 +268,7 @@
         return false;
       }
 
-      var app = Sammy('#' + this.myUIObjectID);
+      let app = Sammy('#' + this.myUIObjectID);
 
       app.get(/(.*)\#blapylink/, function() {
         //filter the action to be processed only on the defined active blapy object for the link
@@ -332,7 +335,7 @@
           return;
 
         //use JSON5 if present as JSON5.parse is more cool than JSON.parse (cf. https://github.com/json5/json5)
-        var jsonFeatures = null;
+        let jsonFeatures = null;
         if (typeof(JSON5) == "undefined") jsonFeatures=JSON;else jsonFeatures=JSON5;
 
         let params = $(this).attr("data-blapy-params");
@@ -359,10 +362,10 @@
 
         event.preventDefault();
         // get all the inputs into an array.
-        var $inputs = $(this).serializeArray();
+        let $inputs = $(this).serializeArray();
 
         // get an associative array of the values in the form and send it
-        var formValues = {};
+        let formValues = {};
         $.each($inputs, function() {
           formValues[this.name] = this.value;
         });
@@ -521,7 +524,7 @@
   $.fn.Blapy = function(options) {
     if (!this.length) alert("The jquery selector '" + this.selector + "' is void!?\n\n Can\'t start Blapy...\n\n :-(");
     return this.each(function() {
-      var Blapy = new theBlapy($(this), options);
+      let Blapy = new theBlapy($(this), options);
       Blapy.InitApplication(); //start it
     });
   };
@@ -533,9 +536,9 @@
    *
    */
   theBlapy.prototype.filterAttributes = function(aSammyObject) {
-    //var sammyKeys=aSammyObject.keys();
-    var mySammyObject = aSammyObject;
-    var returnObject = {};
+    //let sammyKeys=aSammyObject.keys();
+    let mySammyObject = aSammyObject;
+    let returnObject = {};
     $.each(aSammyObject.keys(),
       function(key, value) {
         if ((typeof mySammyObject[value] != 'function') && (typeof mySammyObject[value] != 'object')) {
@@ -554,12 +557,12 @@
   theBlapy.prototype.setBlapyUrl = function() {
     this._log('setBlapyUrl');
 
-    var myBlapy = this;
+    let myBlapy = this;
 
     //change href on blapy-link within the blapy object
     $('#' + myBlapy.myUIObjectID + ' [data-blapy-link]').each(function() {
 
-      var aHref;
+      let aHref;
 
       //in case a blapy object is within another blapy object, we need to tell which active blapy object to listen...
       if (($(this).attr("data-blapy-active-blapyId")) && ($(this).attr("data-blapy-active-blapyId") != myBlapy.myUIObjectID))
@@ -593,7 +596,7 @@
           if ((aHref.charAt(0) != '/') &&
             (aHref.substring(0, 4) != "http")
           ) {
-            var aBaseHref = $('base').attr('href');
+            let aBaseHref = $('base').attr('href');
             if (aBaseHref)
               aHref = aBaseHref + aHref;
             else
@@ -622,8 +625,8 @@
   theBlapy.prototype.setBlapyUpdateIntervals = function() {
     this._log('setBlapyUpdateIntervals');
 
-    var myBlapy = this;
-    var intervalSetId = 0;
+    let myBlapy = this;
+    let intervalSetId = 0;
 
     //clear all intervals set
     for (i = 0; i < myBlapy.intervalsSet.length; i++) {
@@ -632,9 +635,9 @@
 
     //for any template block
     $('#' + myBlapy.myUIObjectID + ' [data-blapy-updateblock-time]').each(function() {
-      var myContainer = $(this);
-      var aUpdateBlockTime = myContainer.attr("data-blapy-updateblock-time");
-      var aUpdateBlockHrefURL = myContainer.attr("data-blapy-href")+'?blapyContainerName='+myContainer.attr('data-blapy-container-name');
+      let myContainer = $(this);
+      let aUpdateBlockTime = myContainer.attr("data-blapy-updateblock-time");
+      let aUpdateBlockHrefURL = myContainer.attr("data-blapy-href")+'?blapyContainerName='+myContainer.attr('data-blapy-container-name');
       if (aUpdateBlockTime) {
         myBlapy.intervalsSet[intervalSetId] = setInterval(function() {
           $('#' + myBlapy.myUIObjectID).trigger('loadUrl', {
@@ -662,7 +665,7 @@
       return;
     }
 
-    var myBlapy = this;
+    let myBlapy = this;
 
     $(myBlapy.myUIObject).off('appear');
     $(myBlapy.myUIObject).find('[data-blapy-updateblock-ondisplay]').appear();
@@ -706,6 +709,7 @@
     return new Promise(resolve => {
 
       this._log('setBlapyContainerJsonTemplate');
+      localBlapy = this;
 
       if (forceReload == undefined) forceReload=false;
 
@@ -713,10 +717,10 @@
        * postDataFunc - activate the initialization of the json block
        * @return {[type]} [description]
        */
-      var postDataFunc = function(forceReload) {
+      let postDataFunc = function(forceReload) {
 
         //use JSON5 if present as JSON5.parse is more cool than JSON.parse (cf. https://github.com/json5/json5)
-        var jsonFeatures = null;
+        let jsonFeatures = null;
         if (typeof(JSON5) == "undefined") jsonFeatures=JSON;else jsonFeatures=JSON5;
 
         //do we have to get the data only when block is displayed?
@@ -756,6 +760,12 @@
         else {
         }
         resolve();//promise is fullfilled
+
+        //alert that template of blapy block is loaded and ready
+        if (myContainer.attr('id'))
+          $('#' + myContainer.attr('id')).trigger('Blapy_templateReady', myContainer);
+        // localBlapy._log("Blapy_templateReady\n"+myContainer.attr('id'),1);
+
       };
 
 
@@ -763,10 +773,10 @@
       myContainer.attr('data-blapy-update-rule', 'local');
 
       //Search for a template container already defined within the blapy container
-      var htmlTpl = myContainer.children('[data-blapy-container-tpl]'); // if still processed, a block data-blapy-container-tpl will be inside
+      let htmlTpl = myContainer.children('[data-blapy-container-tpl]'); // if still processed, a block data-blapy-container-tpl will be inside
       if (htmlTpl.length == 0) // ok so not processed, so let's do it
       {
-        var htmlTplContent = myContainer.html();
+        let htmlTplContent = myContainer.html();
 
         //remove any xmp tags (used to escape html in a template definition that could generate errors if not escaped)
         //htmlTplContent = htmlTplContent.replace(/(\r\n|\n|\r)?<\/?xmp[^>]*>(\r\n|\n|\r)?/gi, '');
@@ -826,6 +836,7 @@
                   myBlapy.tplFile[tplFile] = htmlTplContent;
 
                   postDataFunc();
+
                 },
                 //async: false,
               });
@@ -882,7 +893,7 @@
   theBlapy.prototype.setBlapyJsonTemplates = function(forceReload,aEmbeddingBlock,aTemplateId) {
     this._log('setBlapyJsonTemplates');
 
-    var myBlapy = this;
+    let myBlapy = this;
     if (forceReload == undefined) forceReload=false;
 
     if (aEmbeddingBlock) aEmbeddingBlock="[data-blapy-container-name='"+aEmbeddingBlock+"']";
@@ -901,7 +912,7 @@
     {
       (function(){
         jsonBlocks.each(async function() {
-          var myContainer = $(this);
+          let myContainer = $(this);
 
           await myBlapy.setBlapyContainerJsonTemplate(myContainer, myBlapy, forceReload);
         });
@@ -927,8 +938,8 @@
  * this.getObjects(js,'','SGML');// look for any sub object that contains a property with the value == 'SGML'
  */
 theBlapy.prototype.getObjects = function (obj, key, val) {
-    var objects = [];
-    for (var i in obj) {
+    let objects = [];
+    for (let i in obj) {
         if (!obj.hasOwnProperty(i)) continue;
         if (typeof obj[i] == 'object') {
             objects = objects.concat(this.getObjects(obj[i], key, val));
@@ -946,13 +957,13 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
     return objects;
 }
 
-  /* var & function definitions */
+  /* let & function definitions */
 
   /**
    * manageBlapy
    * @type {Object} Blapy state machine definition
    */
-  var manageBlapy = {
+  let manageBlapy = {
     PageLoaded: {
       enterState: {
         init_function: function() {
@@ -1039,13 +1050,13 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
           this.myUIObject.trigger('Blapy_beforePageLoad', data);
         },
         out_function: function(p, e, data) {
-          var aFSM = this;
-          var aUrl = data.aUrl;
-          var noBlapyData = data.noBlapyData;
-          var aObjectId = data.aObjectId ? data.aObjectId : e.currentTarget.id;
+          let aFSM = this;
+          let aUrl = data.aUrl;
+          let noBlapyData = data.noBlapyData;
+          let aObjectId = data.aObjectId ? data.aObjectId : e.currentTarget.id;
           if ( (aObjectId == undefined) && (typeof(e.currentTarget.attr) != "undefined") ) aObjectId = e.currentTarget.attr('id');
-          var urlparams = $.extend({}, data.params);
-          var params = $.extend({}, data.params);
+          let urlparams = $.extend({}, data.params);
+          let params = $.extend({}, data.params);
           if (!params) params = {
             blapyaction: 'update'
           };
@@ -1056,7 +1067,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
             aFSM.opts.theBlapy._log('[postData on '+aFSM.myUIObject.attr('id')+'] embeddingBlockId has been set but is undefined! must be an error...', 1);
           }
 
-          var aembeddingBlockId = params.embeddingBlockId;
+          let aembeddingBlockId = params.embeddingBlockId;
 
           //define template to use if given
           if (aembeddingBlockId && params.templateId)
@@ -1067,7 +1078,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
           }
 
 
-          var method = data.method;
+          let method = data.method;
           if (!method) method = 'post';
 
           params = $.extend(params, {
@@ -1122,7 +1133,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
           {
             this.opts.theBlapy._log('[updateBlock on '+this.myUIObject.attr('id')+'] embeddingBlockId has been set but is undefined! must be an error...', 1);
           }
-          var aembeddingBlockId = data.params.embeddingBlockId;
+          let aembeddingBlockId = data.params.embeddingBlockId;
 
           if (typeof (data.html) == "object") //then it's a json object
           {
@@ -1154,7 +1165,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
       reloadBlock:{
         init_function: function(p, e, data) {
 
-          var params = {};
+          let params = {};
           if (data) params = data.params;
 
           if ( ("embeddingBlockId" in params) && (!params.embeddingBlockId) )
@@ -1175,12 +1186,12 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
       enterState: {},
       pageLoaded: {
         init_function: function(p, e, data) {
-          var pageContent = data.htmlPage;
-          var params = data.params;
-          var aObjectId = this.myUIObject.attr('id');
-          var myFSM = this;
-          var tmpPC = null;
-          var jsonFeatures = null;
+          let pageContent = data.htmlPage;
+          let params = data.params;
+          let aObjectId = this.myUIObject.attr('id');
+          let myFSM = this;
+          let tmpPC = null;
+          let jsonFeatures = null;
 
           //use JSON5 if present as JSON5.parse is more cool than JSON.parse (cf. https://github.com/json5/json5)
           if (typeof(JSON5) == "undefined") jsonFeatures=JSON;else jsonFeatures=JSON5;
@@ -1193,8 +1204,8 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
             // if the received pageContent is pure json then build the equivalent in blapy block
             if ( pageContent instanceof Array) {
-              var newContent = $("");
-              var tmpRes = "";
+              let newContent = $("");
+              let tmpRes = "";
               for (i = 0; i < pageContent.length; i++) {
                 tmpRes = this.opts.theBlapy.createBlapyBlock(pageContent[i]);
                 newContent = newContent.add(tmpRes);
@@ -1221,9 +1232,9 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
               this.myUIObject.find('[data-blapy-container]').each(function() {
 
-                var myContainer = $(this);
+                let myContainer = $(this);
                 if (!params['force-update']) params['force-update'] = 0;
-                var containerName = myContainer.attr('data-blapy-container-name');
+                let containerName = myContainer.attr('data-blapy-container-name');
 
                 try {
 
@@ -1243,7 +1254,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                   return;
                 } else if (aBlapyContainer.attr('data-blapy-applyon') != undefined) {
                   //if the container specifies the accepted applications and we're not processing the correct one (aObjectId), then exit
-                  var aListOfApplications = aBlapyContainer.attr('data-blapy-applyon').split(",");
+                  let aListOfApplications = aBlapyContainer.attr('data-blapy-applyon').split(",");
                   if ((aListOfApplications.length > 0) &&
                     ($.inArray(aObjectId, aListOfApplications) == -1)
                   ) return;
@@ -1258,8 +1269,8 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                 }
                 if (!aBlapyContainer.attr('id')) aBlapyContainer.attr('id', myContainer.attr('id'));
 
-                var dataBlapyUpdate = aBlapyContainer.attr('data-blapy-update');
-                var dataBlapyUpdateRuleIsLocal = false;
+                let dataBlapyUpdate = aBlapyContainer.attr('data-blapy-update');
+                let dataBlapyUpdateRuleIsLocal = false;
                 if (
                   (myContainer.attr('data-blapy-update-rule') == 'local') ||
                   (
@@ -1272,7 +1283,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                 }
 
                 //is our container embed in an xmp? if yes, remove it...
-                var tmpContainer = aBlapyContainer.children('xmp.blapybin');
+                let tmpContainer = aBlapyContainer.children('xmp.blapybin');
                 if ((dataBlapyUpdate != 'json') && (tmpContainer.length)) aBlapyContainer.html(atou(tmpContainer.html()));
 
                 //alert that the content of the block will change
@@ -1339,13 +1350,13 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                 }
                 //remove update
                 else if (dataBlapyUpdate == 'remove') {
-                  var myContainerParent = myContainer.parent();
+                  let myContainerParent = myContainer.parent();
                   myContainer.replaceWith(''); //replace content with the new one
                   myContainer = myContainerParent;
                 }
                 //json update
                 else if (dataBlapyUpdate == 'json') {
-                  var jsonData = null;
+                  let jsonData = null;
                   if (tmpContainer.length)
                     jsonData = atou(tmpContainer.html());//
                   else
@@ -1451,10 +1462,10 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                   }
 
                   // Get the json Template
-                  var htmlTpl = $();
-                  var htmlAllTpl = myContainer.children('[data-blapy-container-tpl]');
+                  let htmlTpl = $();
+                  let htmlAllTpl = myContainer.children('[data-blapy-container-tpl]');
 
-                  var tplId = myContainer.attr('data-blapy-template-default-id');
+                  let tplId = myContainer.attr('data-blapy-template-default-id');
                   if ( (tplId != undefined) && (tplId != "") )
                   {
                     //get tpl from the tplId of the object
@@ -1481,7 +1492,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                   }
 
                   //get the rendering
-                  var newHtml = '';
+                  let newHtml = '';
                   if (htmlTplContent.length < 3)
                   {
                     //no defined template?
@@ -1499,7 +1510,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
                     // so is it a json array?
                     if (jsonDataObj.length)
                     {
-                      for( var i=0; i< jsonDataObj.length; i++) {
+                      for( let i=0; i< jsonDataObj.length; i++) {
                         if (jsonDataObj[i].blapyIndex == undefined)
                           jsonDataObj[i].blapyIndex = (function(in_i){return in_i+1;})(i);
                       }
@@ -1521,9 +1532,9 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
                     if ( (typeof(Mustache) != "undefined") )
                     {
-                      var mustacheStartDelimiter = '{{';
-                      var mustacheEndDelimiter = '}}';
-                      var newDelimiters = '';
+                      let mustacheStartDelimiter = '{{';
+                      let mustacheEndDelimiter = '}}';
+                      let newDelimiters = '';
                       if (myContainer.attr('data-blapy-template-mustache-delimiterStart')
                           && (myContainer.attr('data-blapy-template-mustache-delimiterStart') != "")
                         )
@@ -1582,17 +1593,17 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
                   //prepare to replace the content by the new parsed one
                   //get the available templates
-                  var tplList = "";
+                  let tplList = "";
                   htmlAllTpl.each(function(){tplList += this.outerHTML});
                   //replace content with the new one
                   myContainer.html(tplList + newHtml);
 
                   // initialize the sub blapy blocks found in the new content if any
-                  var myBlapy = myFSM.opts.theBlapy;
+                  let myBlapy = myFSM.opts.theBlapy;
                   myFSM.trigger('blapyJsonTemplatesToSet');
                   (function(){
                     myContainer.find('[data-blapy-update="json"]').each(async function() {
-                      var mySubContainer = $(this);
+                      let mySubContainer = $(this);
 
                       await myBlapy.setBlapyContainerJsonTemplate(mySubContainer, myBlapy);
                     });
@@ -1606,7 +1617,7 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
                 } // json
                 else {
-                  var pluginUpdateFunction = eval("myFSM.opts.theBlapy." + aBlapyContainer.attr('data-blapy-update'));
+                  let pluginUpdateFunction = eval("myFSM.opts.theBlapy." + aBlapyContainer.attr('data-blapy-update'));
 
                   if (pluginUpdateFunction) {
                     if (aBlapyContainer.attr('data-blapy-container-content') != myContainer.attr('data-blapy-container-content') ||
