@@ -67,7 +67,7 @@
 		</footer>
 
 
-		<script type="text/javascript" src="../../extlib/jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" src="../../extlib/jquery.js"></script>
 		<script type="text/javascript" src="../../extlib/sammy/lib/sammy.js"></script>
 		<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.dotimeout.js"></script>
 		<script type="text/javascript" src="../../extlib/iFSM/extlib/jquery.attrchange.js"></script>
