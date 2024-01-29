@@ -15,6 +15,7 @@
  * @license : donationware - see https://github.com/intersel/Blapy/blob/master/LICENSE
  * -----------------------------------------------------------------------------------------
  * Modifications :
+ * - 2024/01/29 - E.Podvin - 1.16.0 - add blapyFirst and blapyLast data if the json data received by rest point is an array
  * - 2022/09/06 - E.Podvin - 1.15.0 - now trigger a message 'Blapy_templateReady' when a block has its template ready (loaded)
  *    + change use of var to let
  *    + small fixes 
@@ -1506,13 +1507,20 @@ theBlapy.prototype.getObjects = function (obj, key, val) {
 
                     let parsed=false;
 
+                    // if json is an array
                     // create an "idx" property to access to the index of the array
+                    // and add a blapyFirst and blapyLast boolean data
                     // so is it a json array?
                     if (jsonDataObj.length)
                     {
                       for( let i=0; i< jsonDataObj.length; i++) {
                         if (jsonDataObj[i].blapyIndex == undefined)
-                          jsonDataObj[i].blapyIndex = (function(in_i){return in_i+1;})(i);
+                        {
+                          // jsonDataObj[i].blapyIndex = (function (in_i) { return in_i + 1; })(i);//was it for fun?
+                          jsonDataObj[i].blapyIndex = i + 1; 
+                        }
+                        if (i == 0) jsonDataObj[i].blapyFirst = true;
+                        if (i == (jsonDataObj.length-1)) jsonDataObj[i].blapyLast = true;
                       }
                     }
                     else
