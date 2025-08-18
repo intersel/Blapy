@@ -1,8 +1,12 @@
 # Blapy
 
+> [!WARNING]
+> **Deprecation notice**
+>
+> This version is now deprecated and will no longer be updated.  
+> Upgrade to [Blapy2](https://github.com/intersel/Blapy2), the fully refactored and latest official release of Blapy.
 
 > If you like Blapy, I'll be pleased that you star it :-)
-
 
 Blapy is a jQuery plugin that helps you to create and manage ajax and single page web applications (SPA) with almost no javascript coding to do it.
 
